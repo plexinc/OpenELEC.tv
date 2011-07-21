@@ -1,0 +1,38 @@
+# this is used to automate the install process
+# this file can be copied to the same directory
+# as atv_installer.sh as 'control' and then
+# uncommented to be taken into effect.
+#
+# Also you can pass an option to atv_installer.sh
+# -c || --control <file>
+# which takes into account the same variables.
+# The variables in the custom --control specified
+# file take precedence over those in the installer
+# directory.
+#
+# Note that the files are sourced so be carefull!!!
+
+
+# default: false
+# chooses to install ELEC, and use standard partition sizes
+# selecting a device is still mandatory
+#AUTOMATED_INSTALL=true
+
+
+
+# default: ask
+#INSTALL_ELEC=true
+
+
+# default: ask
+#INSTALL_DEVICE=/dev/sdX
+
+
+# default: ask
+# if AUTOMATED_INSTALL=true then defaults to 150
+#RECOVERY_SIZE=
+
+
+# default: ask
+# if AUTOMATED_INSTALL=true then defaults to the end of INSTALL_DEVICE
+#STORAGE_END=

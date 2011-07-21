@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>Background Color</key>
+        <integer>0</integer>
+        <key>Boot Fail Logo</key>
+        <string></string>
+        <key>Boot Logo</key>
+        <string>%bootlogo%</string>
+        <key>Kernel</key>
+        <string>MACH_KERNEL</string>
+        <key>Kernel Flags</key>
+        <!--<string>boot=%boot_device%%recovery_partition_number% disk=%boot_device%%storage_partition_number% %extra_kernel_flags%</string>-->
+        <string>boot=%boot_string% disk=%disk_string% %extra_kernel_flags%</string>
+</dict>
+</plist>
