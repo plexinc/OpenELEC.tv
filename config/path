@@ -32,6 +32,9 @@ TARGET_PREFIX=$ROOT/$TOOLCHAIN/bin/$TARGET_NAME-
 
 FAKEROOT_SCRIPT=$ROOT/.fakeroot.$PROJECT.$TARGET_ARCH
 
+INSTALL_ROOT=$ROOT/$BUILD/image/initramfs/root-image
+INSTALL_SYSTEM=$ROOT/$BUILD/image/system
+
 . config/sources
 
 if [ "$OPENELEC_VERSION" = devel ]; then
