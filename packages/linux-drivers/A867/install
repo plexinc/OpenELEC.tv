@@ -24,5 +24,5 @@
 
 VER=`ls $BUILD/linux*/modules/lib/modules`
 
-mkdir -p $INSTALL/lib/modules/$VER/A867
-  cp $PKG_BUILD/dvb-usb-a867.ko $INSTALL/lib/modules/$VER/A867/
+mkdir -p $INSTALL_SYSTEM/lib/modules/$VER/A867
+  cp $PKG_BUILD/dvb-usb-a867.ko $INSTALL_SYSTEM/lib/modules/$VER/A867/
