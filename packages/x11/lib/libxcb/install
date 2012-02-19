@@ -22,7 +22,7 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/src/.libs/libxcb.so* $INSTALL/usr/lib
-  cp -P $PKG_BUILD/src/.libs/libxcb-*.so* $INSTALL/usr/lib
-    rm -rf $INSTALL/usr/lib/libxcb-*.so*T
+mkdir -p $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/src/.libs/libxcb.so* $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/src/.libs/libxcb-*.so* $INSTALL_SYSTEM/lib
+    rm -rf $INSTALL_SYSTEM/lib/libxcb-*.so*T
