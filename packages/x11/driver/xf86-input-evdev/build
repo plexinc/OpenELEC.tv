@@ -30,7 +30,7 @@ cd $PKG_BUILD
             --disable-static \
             --enable-shared \
             --disable-silent-rules \
-            --with-xorg-module-dir=$XORG_PATH_MODULES \
-            --with-gnu-ld \            
+            --with-xorg-module-dir=/usr/$XORG_PATH_MODULES \
+            --with-gnu-ld \
 
 make
