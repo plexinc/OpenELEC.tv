@@ -22,8 +22,8 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/share/xbmc/addons/pvr.vdr.xvdr
-  cp -PRf $PKG_BUILD/addons/pvr.vdr.xvdr/resources $INSTALL/usr/share/xbmc/addons/pvr.vdr.xvdr
-  cp -Pf $PKG_BUILD/addons/pvr.vdr.xvdr/addon.xml $INSTALL/usr/share/xbmc/addons/pvr.vdr.xvdr
-  cp -Pf $PKG_BUILD/addons/pvr.vdr.xvdr/icon.png $INSTALL/usr/share/xbmc/addons/pvr.vdr.xvdr
-  cp -Pf $PKG_BUILD/addons/pvr.vdr.xvdr/XBMC_VDR_xvdr.pvr $INSTALL/usr/share/xbmc/addons/pvr.vdr.xvdr
+mkdir -p $INSTALL_SYSTEM/share/xbmc/addons/pvr.vdr.xvdr
+  cp -PRf $PKG_BUILD/addons/pvr.vdr.xvdr/resources $INSTALL_SYSTEM/share/xbmc/addons/pvr.vdr.xvdr
+  cp -Pf $PKG_BUILD/addons/pvr.vdr.xvdr/addon.xml $INSTALL_SYSTEM/share/xbmc/addons/pvr.vdr.xvdr
+  cp -Pf $PKG_BUILD/addons/pvr.vdr.xvdr/icon.png $INSTALL_SYSTEM/share/xbmc/addons/pvr.vdr.xvdr
+  cp -Pf $PKG_BUILD/addons/pvr.vdr.xvdr/XBMC_VDR_xvdr.pvr $INSTALL_SYSTEM/share/xbmc/addons/pvr.vdr.xvdr
