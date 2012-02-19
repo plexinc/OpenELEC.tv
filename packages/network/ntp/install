@@ -22,6 +22,6 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/sbin
-  cp $PKG_BUILD/ntpd/ntpd $INSTALL/usr/sbin/
-  cp $PKG_BUILD/ntpdate/ntpdate $INSTALL/usr/sbin/
+mkdir -p $INSTALL_SYSTEM/sbin
+  cp $PKG_BUILD/ntpd/ntpd $INSTALL_SYSTEM/sbin/
+  cp $PKG_BUILD/ntpdate/ntpdate $INSTALL_SYSTEM/sbin/
