@@ -24,8 +24,8 @@
 
 ENABLED_PLUGINS="cardclient constcw sc-conax sc-cryptoworks sc-irdeto sc-nagra sc-seca sc-viaccess sc-videoguard2"
 
-mkdir -p $INSTALL/usr/lib/vdr
-  cp $PKG_BUILD/libvdr-sc.so.* $INSTALL/usr/lib/vdr
+mkdir -p $INSTALL_SYSTEM/lib/vdr
+  cp $PKG_BUILD/libvdr-sc.so.* $INSTALL_SYSTEM/lib/vdr
   for plugin in $ENABLED_PLUGINS; do
-    cp $PKG_BUILD/systems/$plugin/libsc-*.so.* $INSTALL/usr/lib/vdr
+    cp $PKG_BUILD/systems/$plugin/libsc-*.so.* $INSTALL_SYSTEM/lib/vdr
   done
