@@ -22,17 +22,17 @@
 
 . config/options $1
 
-PYTHON_LIBDIR="`ls -d $INSTALL/usr/lib/python*`"
+PYTHON_LIBDIR="`ls -d $INSTALL_SYSTEM/lib/python*`"
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_DIR/scripts/cputemp $INSTALL/usr/bin
-  cp $PKG_DIR/scripts/gputemp $INSTALL/usr/bin
-  cp $PKG_BUILD/tools/EventClients/Clients/XBMC\ Send/xbmc-send.py $INSTALL/usr/bin/xbmc-send
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_DIR/scripts/cputemp $INSTALL_SYSTEM/bin
+  cp $PKG_DIR/scripts/gputemp $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/tools/EventClients/Clients/XBMC\ Send/xbmc-send.py $INSTALL_SYSTEM/bin/xbmc-send
 
-mkdir -p $INSTALL/usr/lib/xbmc
-  cp $PKG_BUILD/xbmc.bin $INSTALL/usr/lib/xbmc
+mkdir -p $INSTALL_SYSTEM/lib/xbmc
+  cp $PKG_BUILD/xbmc.bin $INSTALL_SYSTEM/lib/xbmc
   if [ "$XORG_SUPPORT" = yes ]; then
-    cp $PKG_BUILD/xbmc-xrandr $INSTALL/usr/lib/xbmc
+    cp $PKG_BUILD/xbmc-xrandr $INSTALL_SYSTEM/lib/xbmc
   fi
 
 cd $PKG_BUILD
@@ -40,72 +40,72 @@ cd $PKG_BUILD
     -regextype posix-extended -type f \
     -not -iregex ".*svn.*|.*win32(dx)?\.vis|.*osx\.vis" \
     -iregex ".*-linux.*|.*\.vis|.*\.xbs" \
-    -exec install -D "{}" $ROOT/$INSTALL/usr/lib/xbmc/"{}" ";"
+    -exec install -D "{}" $ROOT/$INSTALL_SYSTEM/lib/xbmc/"{}" ";"
 
   find addons language media sounds userdata system \
     -regextype posix-extended -type f \
     -not -iregex ".*-linux.*|.*\.vis|.*\.xbs|.*svn.*|.*\.orig|.*\.so|.*\.dll|.*\.pyd|.*python/.*\.zlib" \
-    -exec install -D -m 0644 "{}" $ROOT/$INSTALL/usr/share/xbmc/"{}" ";"
+    -exec install -D -m 0644 "{}" $ROOT/$INSTALL_SYSTEM/share/xbmc/"{}" ";"
 cd -
 
 if [ ! "$XBMC_SCR_RSXS" = yes ]; then
-  rm -rf $ROOT/$INSTALL/usr/share/xbmc/addons/screensaver.rsxs.*
+  rm -rf $ROOT/$INSTALL_SYSTEM/share/xbmc/addons/screensaver.rsxs.*
 fi
 
 if [ ! "$XBMC_VIS_PROJECTM" = yes ]; then
-  rm -rf $ROOT/$INSTALL/usr/share/xbmc/addons/visualization.projectm
+  rm -rf $ROOT/$INSTALL_SYSTEM/share/xbmc/addons/visualization.projectm
 fi
 
-rm -rf $ROOT/$INSTALL/usr/share/xbmc/addons/visualization.dxspectrum
-rm -rf $ROOT/$INSTALL/usr/share/xbmc/addons/visualization.itunes
-rm -rf $ROOT/$INSTALL/usr/share/xbmc/addons/visualization.milkdrop
+rm -rf $ROOT/$INSTALL_SYSTEM/share/xbmc/addons/visualization.dxspectrum
+rm -rf $ROOT/$INSTALL_SYSTEM/share/xbmc/addons/visualization.itunes
+rm -rf $ROOT/$INSTALL_SYSTEM/share/xbmc/addons/visualization.milkdrop
 
 # overriding Splash image
-mkdir -p $INSTALL/usr/share/xbmc/media
-  rm -rf $INSTALL/usr/share/xbmc/media/Splash.png
+mkdir -p $INSTALL_SYSTEM/share/xbmc/media
+  rm -rf $INSTALL_SYSTEM/share/xbmc/media/Splash.png
 #   if [ -f $PROJECT_DIR/$PROJECT/splash/splash.png ]; then
-#     cp $PROJECT_DIR/$PROJECT/splash/splash.png $INSTALL/usr/share/xbmc/media/Splash.png
+#     cp $PROJECT_DIR/$PROJECT/splash/splash.png $INSTALL_SYSTEM/share/xbmc/media/Splash.png
 #   else
-#     cp $PKG_DIR/splash/splash.png $INSTALL/usr/share/xbmc/media/Splash.png
+#     cp $PKG_DIR/splash/splash.png $INSTALL_SYSTEM/share/xbmc/media/Splash.png
 #   fi
 
 # cleanup and python addon fixes
-  mkdir -p $INSTALL/usr/share/xbmc/addons/script.module.pil/lib
-  ln -s `ls -d $INSTALL/usr/lib/python*/site-packages | sed -e "s,$INSTALL,,"`/PIL \
-         $INSTALL/usr/share/xbmc/addons/script.module.pil/lib/PIL
-  rm -rf $INSTALL/usr/share/xbmc/addons/script.module.pysqlite
+  mkdir -p $INSTALL_SYSTEM/share/xbmc/addons/script.module.pil/lib
+  ln -s `ls -d $INSTALL_SYSTEM/lib/python*/site-packages | sed -e "s,$INSTALL,,"`/PIL \
+         $INSTALL_SYSTEM/share/xbmc/addons/script.module.pil/lib/PIL
+  rm -rf $INSTALL_SYSTEM/share/xbmc/addons/script.module.pysqlite
 
-mkdir -p $INSTALL/usr/share/xbmc/addons
-  cp -R $PKG_DIR/config/os.openelec.tv $INSTALL/usr/share/xbmc/addons
-  $SED "s|@ADDON_OS_VERSION@|$OS_VERSION|g" -i $INSTALL/usr/share/xbmc/addons/os.openelec.tv/addon.xml
-  cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/xbmc/addons
-  $SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/xbmc/addons/repository.openelec.tv/addon.xml
+mkdir -p $INSTALL_SYSTEM/share/xbmc/addons
+  cp -R $PKG_DIR/config/os.openelec.tv $INSTALL_SYSTEM/share/xbmc/addons
+  $SED "s|@ADDON_OS_VERSION@|$OS_VERSION|g" -i $INSTALL_SYSTEM/share/xbmc/addons/os.openelec.tv/addon.xml
+  cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL_SYSTEM/share/xbmc/addons
+  $SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL_SYSTEM/share/xbmc/addons/repository.openelec.tv/addon.xml
 
 mkdir -p $PYTHON_LIBDIR/site-packages/xbmc
   cp -R $PKG_BUILD/tools/EventClients/lib/python/* $PYTHON_LIBDIR/site-packages/xbmc
 
 # install powermanagement hooks
-  mkdir -p $INSTALL/etc/pm/sleep.d
-    cp $PKG_DIR/sleep.d/* $INSTALL/etc/pm/sleep.d
+  mkdir -p $INSTALL_SYSTEM/etc/pm/sleep.d
+    cp $PKG_DIR/sleep.d/* $INSTALL_SYSTEM/etc/pm/sleep.d
 
 # install project specific configs
-  mkdir -p $INSTALL/usr/share/xbmc/config
+  mkdir -p $INSTALL_SYSTEM/share/xbmc/config
     if [ -f $PROJECT_DIR/$PROJECT/xbmc/guisettings.xml ]; then
-      cp -R $PROJECT_DIR/$PROJECT/xbmc/guisettings.xml $INSTALL/usr/share/xbmc/config
+      cp -R $PROJECT_DIR/$PROJECT/xbmc/guisettings.xml $INSTALL_SYSTEM/share/xbmc/config
     fi
 
     if [ -f $PROJECT_DIR/$PROJECT/xbmc/sources.xml ]; then
-      cp -R $PROJECT_DIR/$PROJECT/xbmc/sources.xml $INSTALL/usr/share/xbmc/config
+      cp -R $PROJECT_DIR/$PROJECT/xbmc/sources.xml $INSTALL_SYSTEM/share/xbmc/config
     fi
 
-  mkdir -p $INSTALL/usr/share/xbmc/system/
+  mkdir -p $INSTALL_SYSTEM/share/xbmc/system/
     if [ -f $PROJECT_DIR/$PROJECT/xbmc/advancedsettings.xml ]; then
-      cp $PROJECT_DIR/$PROJECT/xbmc/advancedsettings.xml $INSTALL/usr/share/xbmc/system/
+      cp $PROJECT_DIR/$PROJECT/xbmc/advancedsettings.xml $INSTALL_SYSTEM/share/xbmc/system/
     else
-      cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/xbmc/system/
+      cp $PKG_DIR/config/advancedsettings.xml $INSTALL_SYSTEM/share/xbmc/system/
     fi
 
 if [ "$XBMC_EXTRA_FONTS" = yes ]; then
-  mkdir -p $INSTALL/usr/share/xbmc/media/Fonts
-    cp $PKG_DIR/fonts/*.ttf $INSTALL/usr/share/xbmc/media/Fonts
+  mkdir -p $INSTALL_SYSTEM/share/xbmc/media/Fonts
+    cp $PKG_DIR/fonts/*.ttf $INSTALL_SYSTEM/share/xbmc/media/Fonts
 fi
