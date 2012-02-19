@@ -25,23 +25,23 @@
 add_user sshd x 74 74 "Privilege-separated SSH" "/var/empty/sshd" "/bin/sh"
 add_group sshd 74
 
-mkdir -p $INSTALL/etc
-  cp $PKG_DIR/config/ssh_config $INSTALL/etc
-  cp $PKG_DIR/config/sshd_config $INSTALL/etc
-  cp $PKG_BUILD/moduli $INSTALL/etc
+mkdir -p $INSTALL_SYSTEM/etc
+  cp $PKG_DIR/config/ssh_config $INSTALL_SYSTEM/etc
+  cp $PKG_DIR/config/sshd_config $INSTALL_SYSTEM/etc
+  cp $PKG_BUILD/moduli $INSTALL_SYSTEM/etc
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/scp $INSTALL/usr/bin/
-  cp $PKG_BUILD/ssh $INSTALL/usr/bin/
-  cp $PKG_BUILD/ssh-add $INSTALL/usr/bin/
-  cp $PKG_BUILD/ssh-agent $INSTALL/usr/bin/
-  cp $PKG_BUILD/ssh-keygen $INSTALL/usr/bin/
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/scp $INSTALL_SYSTEM/bin/
+  cp $PKG_BUILD/ssh $INSTALL_SYSTEM/bin/
+  cp $PKG_BUILD/ssh-add $INSTALL_SYSTEM/bin/
+  cp $PKG_BUILD/ssh-agent $INSTALL_SYSTEM/bin/
+  cp $PKG_BUILD/ssh-keygen $INSTALL_SYSTEM/bin/
 
-mkdir -p $INSTALL/usr/sbin
-  cp $PKG_BUILD/sshd $INSTALL/usr/sbin/
+mkdir -p $INSTALL_SYSTEM/sbin
+  cp $PKG_BUILD/sshd $INSTALL_SYSTEM/sbin/
 
 if [ $SFTP_SERVER = "yes" ]; then
-  mkdir -p $INSTALL/usr/libexec
-    cp $PKG_BUILD/sftp-server $INSTALL/usr/libexec
+  mkdir -p $INSTALL_SYSTEM/libexec
+    cp $PKG_BUILD/sftp-server $INSTALL_SYSTEM/libexec
 fi
 
