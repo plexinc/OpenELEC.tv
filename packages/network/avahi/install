@@ -22,7 +22,7 @@
 
 . config/options $1
 
-PYTHON_LIB_DIR=`ls -d $INSTALL/usr/lib/python*`
+PYTHON_LIB_DIR=`ls -d $INSTALL_SYSTEM/lib/python*`
 
 add_user avahi x 495 495 "avahi-daemon" "/var/run/avahi-daemon" "/bin/sh"
 add_group avahi 495
@@ -30,53 +30,53 @@ add_group avahi 495
 add_user avahiautoipd x 496 496 "avahi-autoipd" "/var/lib/avahi-autoipd" "/bin/sh"
 add_group avahiautoipd 496
 
-mkdir -p $INSTALL/etc/avahi
-  cp $PKG_BUILD/avahi-autoipd/avahi-autoipd.action $INSTALL/etc/avahi
-  cp $PKG_BUILD/avahi-daemon/avahi-daemon.conf $INSTALL/etc/avahi
-  cp $PKG_BUILD/avahi-dnsconfd/avahi-dnsconfd.action $INSTALL/etc/avahi
-  cp $PKG_BUILD/avahi-daemon/hosts $INSTALL/etc/avahi
+mkdir -p $INSTALL_SYSTEM/etc/avahi
+  cp $PKG_BUILD/avahi-autoipd/avahi-autoipd.action $INSTALL_SYSTEM/etc/avahi
+  cp $PKG_BUILD/avahi-daemon/avahi-daemon.conf $INSTALL_SYSTEM/etc/avahi
+  cp $PKG_BUILD/avahi-dnsconfd/avahi-dnsconfd.action $INSTALL_SYSTEM/etc/avahi
+  cp $PKG_BUILD/avahi-daemon/hosts $INSTALL_SYSTEM/etc/avahi
 
-mkdir -p $INSTALL/etc/avahi/services
-  cp $PKG_BUILD/avahi-daemon/ssh.service $INSTALL/etc/avahi/services
-  cp $PKG_DIR/config/http.service $INSTALL/etc/avahi/services
-#  cp $PKG_DIR/config/samba.service $INSTALL/etc/avahi/services
+mkdir -p $INSTALL_SYSTEM/etc/avahi/services
+  cp $PKG_BUILD/avahi-daemon/ssh.service $INSTALL_SYSTEM/etc/avahi/services
+  cp $PKG_DIR/config/http.service $INSTALL_SYSTEM/etc/avahi/services
+#  cp $PKG_DIR/config/samba.service $INSTALL_SYSTEM/etc/avahi/services
 
   if [ $SFTP_SERVER = "yes" ]; then
-    cp $PKG_BUILD/avahi-daemon/sftp-ssh.service $INSTALL/etc/avahi/services
+    cp $PKG_BUILD/avahi-daemon/sftp-ssh.service $INSTALL_SYSTEM/etc/avahi/services
   fi
 
-mkdir -p $INSTALL/etc/dbus-1/system.d
-  cp $PKG_BUILD/avahi-daemon/avahi-dbus.conf $INSTALL/etc/dbus-1/system.d
+mkdir -p $INSTALL_SYSTEM/etc/dbus-1/system.d
+  cp $PKG_BUILD/avahi-daemon/avahi-dbus.conf $INSTALL_SYSTEM/etc/dbus-1/system.d
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/avahi-utils/.libs/avahi-browse $INSTALL/usr/bin
-    ln -sf avahi-browse $INSTALL/usr/bin/avahi-browse-domains
-  cp $PKG_BUILD/avahi-utils/.libs/avahi-publish $INSTALL/usr/bin
-    ln -sf avahi-publish $INSTALL/usr/bin/avahi-publish-address
-    ln -sf avahi-publish $INSTALL/usr/bin/avahi-publish-service
-  cp $PKG_BUILD/avahi-utils/.libs/avahi-resolve $INSTALL/usr/bin
-    ln -sf avahi-resolve $INSTALL/usr/bin/avahi-resolve-address
-    ln -sf avahi-resolve $INSTALL/usr/bin/avahi-resolve-host-name
-  cp $PKG_BUILD/avahi-utils/.libs/avahi-set-host-name $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/avahi-utils/.libs/avahi-browse $INSTALL_SYSTEM/bin
+    ln -sf avahi-browse $INSTALL_SYSTEM/bin/avahi-browse-domains
+  cp $PKG_BUILD/avahi-utils/.libs/avahi-publish $INSTALL_SYSTEM/bin
+    ln -sf avahi-publish $INSTALL_SYSTEM/bin/avahi-publish-address
+    ln -sf avahi-publish $INSTALL_SYSTEM/bin/avahi-publish-service
+  cp $PKG_BUILD/avahi-utils/.libs/avahi-resolve $INSTALL_SYSTEM/bin
+    ln -sf avahi-resolve $INSTALL_SYSTEM/bin/avahi-resolve-address
+    ln -sf avahi-resolve $INSTALL_SYSTEM/bin/avahi-resolve-host-name
+  cp $PKG_BUILD/avahi-utils/.libs/avahi-set-host-name $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/usr/sbin
-  cp $PKG_BUILD/avahi-autoipd/avahi-autoipd $INSTALL/usr/sbin
-  cp $PKG_BUILD/avahi-daemon/.libs/avahi-daemon $INSTALL/usr/sbin
-  cp $PKG_BUILD/avahi-dnsconfd/.libs/avahi-dnsconfd $INSTALL/usr/sbin
+mkdir -p $INSTALL_SYSTEM/sbin
+  cp $PKG_BUILD/avahi-autoipd/avahi-autoipd $INSTALL_SYSTEM/sbin
+  cp $PKG_BUILD/avahi-daemon/.libs/avahi-daemon $INSTALL_SYSTEM/sbin
+  cp $PKG_BUILD/avahi-dnsconfd/.libs/avahi-dnsconfd $INSTALL_SYSTEM/sbin
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/avahi-common/.libs/*.so*[.0-9] $INSTALL/usr/lib/
-  cp -P $PKG_BUILD/avahi-core/.libs/*.so*[.0-9] $INSTALL/usr/lib/
-  cp -P $PKG_BUILD/avahi-client/.libs/*.so*[.0-9] $INSTALL/usr/lib/
-  cp -P $PKG_BUILD/avahi-compat-libdns_sd/.libs/*.so*[.0-9] $INSTALL/usr/lib/
+mkdir -p $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/avahi-common/.libs/*.so*[.0-9] $INSTALL_SYSTEM/lib/
+  cp -P $PKG_BUILD/avahi-core/.libs/*.so*[.0-9] $INSTALL_SYSTEM/lib/
+  cp -P $PKG_BUILD/avahi-client/.libs/*.so*[.0-9] $INSTALL_SYSTEM/lib/
+  cp -P $PKG_BUILD/avahi-compat-libdns_sd/.libs/*.so*[.0-9] $INSTALL_SYSTEM/lib/
 
 mkdir -p $PYTHON_LIB_DIR/site-packages/avahi
   cp -P $PKG_BUILD/avahi-python/avahi/*.py $PYTHON_LIB_DIR/site-packages/avahi
 
-mkdir -p $INSTALL/usr/share/avahi
-  cp $PKG_BUILD/service-type-database/service-types $INSTALL/usr/share/avahi
-  cp $PKG_BUILD/avahi-daemon/avahi-service.dtd $INSTALL/usr/share/avahi
+mkdir -p $INSTALL_SYSTEM/share/avahi
+  cp $PKG_BUILD/service-type-database/service-types $INSTALL_SYSTEM/share/avahi
+  cp $PKG_BUILD/avahi-daemon/avahi-service.dtd $INSTALL_SYSTEM/share/avahi
 
-mkdir -p $INSTALL/usr/share/dbus-1/interfaces
-  cp $PKG_BUILD/avahi-daemon/org.freedesktop.Avahi.*.xml $INSTALL/usr/share/dbus-1/interfaces
+mkdir -p $INSTALL_SYSTEM/share/dbus-1/interfaces
+  cp $PKG_BUILD/avahi-daemon/org.freedesktop.Avahi.*.xml $INSTALL_SYSTEM/share/dbus-1/interfaces
 
