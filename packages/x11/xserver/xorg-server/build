@@ -110,8 +110,8 @@ cd $PKG_BUILD
             --with-gnu-ld \
             --with-sha1=libcrypto \
             --with-os-vendor="OpenELEC.tv" \
-            --with-module-dir=$XORG_PATH_MODULES \
-            --with-xkb-path=$XORG_PATH_XKB \
+            --with-module-dir=/usr/$XORG_PATH_MODULES \
+            --with-xkb-path=/usr/$XORG_PATH_XKB \
             --with-xkb-output=/var/cache/xkb \
             --with-log-dir=/var/log \
             --with-fontrootdir=/usr/share/fonts \

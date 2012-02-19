@@ -25,13 +25,13 @@
 get_graphicdrivers
 
 XORG_SRC="$PKG_BUILD/hw/xfree86"
-XORG_DST="$INSTALL/$XORG_PATH_MODULES"
+XORG_DST="$INSTALL_SYSTEM/$XORG_PATH_MODULES"
 
-mkdir -p $INSTALL/usr/bin
-  cp $XORG_SRC/Xorg $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $XORG_SRC/Xorg $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/lib/udev
-  cp $PKG_DIR/scripts/xorg_start $INSTALL/lib/udev
+mkdir -p $INSTALL_SYSTEM/lib/udev
+  cp $PKG_DIR/scripts/xorg_start $INSTALL_SYSTEM/lib/udev
 
 mkdir -p $XORG_DST
   cp -P $XORG_SRC/exa/.libs/libexa.so $XORG_DST
@@ -59,20 +59,20 @@ mkdir -p $XORG_DST/linux
 mkdir -p $XORG_DST/multimedia
   cp -P $XORG_SRC/i2c/.libs/*_drv.so $XORG_DST/multimedia
 
-mkdir -p $INSTALL/usr/lib/xorg
-  cp $PKG_BUILD/dix/protocol.txt $INSTALL/usr/lib/xorg
+mkdir -p $INSTALL_SYSTEM/lib/xorg
+  cp $PKG_BUILD/dix/protocol.txt $INSTALL_SYSTEM/lib/xorg
 
-mkdir -p $INSTALL/usr/share/X11/xorg.conf.d
-  cp $PKG_BUILD/config/10-evdev.conf $INSTALL/usr/share/X11/xorg.conf.d
+mkdir -p $INSTALL_SYSTEM/share/X11/xorg.conf.d
+  cp $PKG_BUILD/config/10-evdev.conf $INSTALL_SYSTEM/share/X11/xorg.conf.d
 
-mkdir -p $INSTALL/etc/X11
+mkdir -p $INSTALL_SYSTEM/etc/X11
   if [ -f $PROJECT_DIR/$PROJECT/xorg/xorg.conf ]; then
-    cp $PROJECT_DIR/$PROJECT/xorg/xorg.conf $INSTALL/etc/X11
+    cp $PROJECT_DIR/$PROJECT/xorg/xorg.conf $INSTALL_SYSTEM/etc/X11
   elif [ -f $PKG_DIR/config/xorg.conf ]; then
-    cp $PKG_DIR/config/xorg.conf $INSTALL/etc/X11
+    cp $PKG_DIR/config/xorg.conf $INSTALL_SYSTEM/etc/X11
   fi
 
 if [ "$DEVTOOLS" = yes ]; then
-  cp $XORG_SRC/utils/cvt/cvt $INSTALL/usr/bin
-  cp $XORG_SRC/utils/gtf/gtf $INSTALL/usr/bin
+  cp $XORG_SRC/utils/cvt/cvt $INSTALL_SYSTEM/bin
+  cp $XORG_SRC/utils/gtf/gtf $INSTALL_SYSTEM/bin
 fi
