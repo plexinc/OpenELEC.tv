@@ -22,46 +22,46 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/etc/ConsoleKit/run-seat.d
-mkdir -p $INSTALL/etc/ConsoleKit/run-session.d
-mkdir -p $INSTALL/etc/ConsoleKit/seats.d
-  cp -P $PKG_BUILD/data/00-primary.seat $INSTALL/etc/ConsoleKit/seats.d
+mkdir -p $INSTALL_SYSTEM/etc/ConsoleKit/run-seat.d
+mkdir -p $INSTALL_SYSTEM/etc/ConsoleKit/run-session.d
+mkdir -p $INSTALL_SYSTEM/etc/ConsoleKit/seats.d
+  cp -P $PKG_BUILD/data/00-primary.seat $INSTALL_SYSTEM/etc/ConsoleKit/seats.d
 
-mkdir -p $INSTALL/etc/dbus-1/system.d
-  cp -P $PKG_BUILD/data/ConsoleKit.conf $INSTALL/etc/dbus-1/system.d
+mkdir -p $INSTALL_SYSTEM/etc/dbus-1/system.d
+  cp -P $PKG_BUILD/data/ConsoleKit.conf $INSTALL_SYSTEM/etc/dbus-1/system.d
 
-mkdir -p $INSTALL/usr/bin
-  cp -P $PKG_BUILD/tools/ck-log-system-restart $INSTALL/usr/bin
-  cp -P $PKG_BUILD/tools/ck-log-system-start $INSTALL/usr/bin
-  cp -P $PKG_BUILD/tools/ck-log-system-stop $INSTALL/usr/bin
-  cp -P $PKG_BUILD/src/console-kit-daemon $INSTALL/usr/bin
-  cp -P $PKG_BUILD/tools/.libs/ck-launch-session $INSTALL/usr/bin
-  cp -P $PKG_BUILD/tools/ck-list-sessions $INSTALL/usr/bin
-  cp -P $PKG_BUILD/tools/ck-history $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp -P $PKG_BUILD/tools/ck-log-system-restart $INSTALL_SYSTEM/bin
+  cp -P $PKG_BUILD/tools/ck-log-system-start $INSTALL_SYSTEM/bin
+  cp -P $PKG_BUILD/tools/ck-log-system-stop $INSTALL_SYSTEM/bin
+  cp -P $PKG_BUILD/src/console-kit-daemon $INSTALL_SYSTEM/bin
+  cp -P $PKG_BUILD/tools/.libs/ck-launch-session $INSTALL_SYSTEM/bin
+  cp -P $PKG_BUILD/tools/ck-list-sessions $INSTALL_SYSTEM/bin
+  cp -P $PKG_BUILD/tools/ck-history $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/libck-connector/.libs/*.so* $INSTALL/usr/lib
+mkdir -p $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/libck-connector/.libs/*.so* $INSTALL_SYSTEM/lib
 
-mkdir -p $INSTALL/usr/lib/ConsoleKit
-  cp -P $PKG_BUILD/tools/ck-collect-session-info $INSTALL/usr/lib/ConsoleKit
-  cp -P $PKG_BUILD/tools/ck-get-x11-display-device $INSTALL/usr/lib/ConsoleKit
-  cp -P $PKG_BUILD/tools/ck-get-x11-server-pid $INSTALL/usr/lib/ConsoleKit
+mkdir -p $INSTALL_SYSTEM/lib/ConsoleKit
+  cp -P $PKG_BUILD/tools/ck-collect-session-info $INSTALL_SYSTEM/lib/ConsoleKit
+  cp -P $PKG_BUILD/tools/ck-get-x11-display-device $INSTALL_SYSTEM/lib/ConsoleKit
+  cp -P $PKG_BUILD/tools/ck-get-x11-server-pid $INSTALL_SYSTEM/lib/ConsoleKit
 
-mkdir -p $INSTALL/usr/lib/ConsoleKit/run-seat.d
-mkdir -p $INSTALL/usr/lib/ConsoleKit/run-session.d
-mkdir -p $INSTALL/usr/lib/ConsoleKit/scripts
-#  cp -P $PKG_BUILD/tools/linux/ck-system-restart $INSTALL/usr/lib/ConsoleKit/scripts
-#  cp -P $PKG_BUILD/tools/linux/ck-system-stop $INSTALL/usr/lib/ConsoleKit/scripts
-  cp -P $PKG_DIR/scripts/ck-system-restart $INSTALL/usr/lib/ConsoleKit/scripts
-  cp -P $PKG_DIR/scripts/ck-system-stop $INSTALL/usr/lib/ConsoleKit/scripts
+mkdir -p $INSTALL_SYSTEM/lib/ConsoleKit/run-seat.d
+mkdir -p $INSTALL_SYSTEM/lib/ConsoleKit/run-session.d
+mkdir -p $INSTALL_SYSTEM/lib/ConsoleKit/scripts
+#  cp -P $PKG_BUILD/tools/linux/ck-system-restart $INSTALL_SYSTEM/lib/ConsoleKit/scripts
+#  cp -P $PKG_BUILD/tools/linux/ck-system-stop $INSTALL_SYSTEM/lib/ConsoleKit/scripts
+  cp -P $PKG_DIR/scripts/ck-system-restart $INSTALL_SYSTEM/lib/ConsoleKit/scripts
+  cp -P $PKG_DIR/scripts/ck-system-stop $INSTALL_SYSTEM/lib/ConsoleKit/scripts
 
-mkdir -p $INSTALL/usr/share/dbus-1/interfaces
-  cp -P $PKG_BUILD/src/org.freedesktop.ConsoleKit.Manager.xml $INSTALL/usr/share/dbus-1/interfaces
-  cp -P $PKG_BUILD/src/org.freedesktop.ConsoleKit.Seat.xml $INSTALL/usr/share/dbus-1/interfaces
-  cp -P $PKG_BUILD/src/org.freedesktop.ConsoleKit.Session.xml $INSTALL/usr/share/dbus-1/interfaces
+mkdir -p $INSTALL_SYSTEM/share/dbus-1/interfaces
+  cp -P $PKG_BUILD/src/org.freedesktop.ConsoleKit.Manager.xml $INSTALL_SYSTEM/share/dbus-1/interfaces
+  cp -P $PKG_BUILD/src/org.freedesktop.ConsoleKit.Seat.xml $INSTALL_SYSTEM/share/dbus-1/interfaces
+  cp -P $PKG_BUILD/src/org.freedesktop.ConsoleKit.Session.xml $INSTALL_SYSTEM/share/dbus-1/interfaces
 
-mkdir -p $INSTALL/usr/share/dbus-1/system-services
-  cp -P $PKG_BUILD/data/org.freedesktop.ConsoleKit.service $INSTALL/usr/share/dbus-1/system-services
+mkdir -p $INSTALL_SYSTEM/share/dbus-1/system-services
+  cp -P $PKG_BUILD/data/org.freedesktop.ConsoleKit.service $INSTALL_SYSTEM/share/dbus-1/system-services
 
-mkdir -p $INSTALL/usr/share/polkit-1/actions
-  cp -P $PKG_BUILD/data/org.freedesktop.consolekit.policy $INSTALL/usr/share/polkit-1/actions
+mkdir -p $INSTALL_SYSTEM/share/polkit-1/actions
+  cp -P $PKG_BUILD/data/org.freedesktop.consolekit.policy $INSTALL_SYSTEM/share/polkit-1/actions
