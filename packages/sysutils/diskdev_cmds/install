@@ -22,7 +22,7 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/bin
-  cp $PKG_BUILD/fsck_hfs.tproj/fsck_hfs $INSTALL/bin
-    ln -sf fsck_hfs $INSTALL/bin/fsck.hfs
-    ln -sf fsck_hfs $INSTALL/bin/fsck.hfsplus
+mkdir -p $INSTALL_ROOT/bin
+  cp $PKG_BUILD/fsck_hfs.tproj/fsck_hfs $INSTALL_ROOT/bin
+    ln -sf fsck_hfs $INSTALL_ROOT/bin/fsck.hfs
+    ln -sf fsck_hfs $INSTALL_ROOT/bin/fsck.hfsplus
