@@ -22,11 +22,11 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/.build-target/src/.libs/file $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/.build-target/src/.libs/file $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/.build-target/src/.libs/libmagic.so* $INSTALL/usr/lib
+mkdir -p $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/.build-target/src/.libs/libmagic.so* $INSTALL_SYSTEM/lib
 
-mkdir -p $INSTALL/usr/share/misc
-  cp $PKG_BUILD/.build-target/magic/magic.mgc $INSTALL/usr/share/misc
+mkdir -p $INSTALL_SYSTEM/share/misc
+  cp $PKG_BUILD/.build-target/magic/magic.mgc $INSTALL_SYSTEM/share/misc
