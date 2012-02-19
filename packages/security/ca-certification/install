@@ -22,6 +22,6 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/etc/pki/tls
-  cp $PKG_DIR/script/ca-bundle.crt $INSTALL/etc/pki/tls
-  cp $PKG_DIR/script/ca-bundle.crt $INSTALL/etc/pki/tls/cacert.pem
+mkdir -p $INSTALL_SYSTEM/etc/pki/tls
+  cp $PKG_DIR/script/ca-bundle.crt $INSTALL_SYSTEM/etc/pki/tls
+  cp $PKG_DIR/script/ca-bundle.crt $INSTALL_SYSTEM/etc/pki/tls/cacert.pem
