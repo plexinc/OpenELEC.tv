@@ -22,7 +22,7 @@
 
 . config/options $1
 
-FONTDIR="$INSTALL/usr/share/fonts/Type1"
+FONTDIR="$INSTALL_SYSTEM/share/fonts/Type1"
 
 mkdir -p $FONTDIR
   cp $PKG_BUILD/*.afm $FONTDIR
