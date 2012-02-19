@@ -22,7 +22,7 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/src/ntfs-3g $INSTALL/usr/bin
-  ln -sf ntfs-3g $INSTALL/usr/bin/mount.ntfs
-  ln -sf ntfs-3g $INSTALL/usr/bin/mount.ntfs-3g
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/src/ntfs-3g $INSTALL_SYSTEM/bin
+  ln -sf ntfs-3g $INSTALL_SYSTEM/bin/mount.ntfs
+  ln -sf ntfs-3g $INSTALL_SYSTEM/bin/mount.ntfs-3g
