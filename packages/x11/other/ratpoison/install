@@ -22,8 +22,8 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/src/ratpoison $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/src/ratpoison $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/etc
-  cp $PKG_DIR/config/ratpoisonrc $INSTALL/etc
+mkdir -p $INSTALL_SYSTEM/etc
+  cp $PKG_DIR/config/ratpoisonrc $INSTALL_SYSTEM/etc
