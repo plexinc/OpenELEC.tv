@@ -24,5 +24,5 @@
 
 VER=`ls $BUILD/linux*/modules/lib/modules`
 
-mkdir -p $INSTALL/lib/modules/$VER/hdhomerun
-  cp $BUILD/dvbhdhomerun-*/kernel/*.ko $INSTALL/lib/modules/$VER/hdhomerun/
+mkdir -p $INSTALL_SYSTEM/lib/modules/$VER/hdhomerun
+  cp $BUILD/dvbhdhomerun-*/kernel/*.ko $INSTALL_SYSTEM/lib/modules/$VER/hdhomerun/
