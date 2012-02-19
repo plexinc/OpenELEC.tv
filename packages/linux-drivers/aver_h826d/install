@@ -24,5 +24,5 @@
 
 VER=`ls $BUILD/linux*/modules/lib/modules`
 
-mkdir -p $INSTALL/lib/modules/$VER/aver_h826d
-  cp $PKG_BUILD/installer/src/*.ko $INSTALL/lib/modules/$VER/aver_h826d
+mkdir -p $INSTALL_SYSTEM/lib/modules/$VER/aver_h826d
+  cp $PKG_BUILD/installer/src/*.ko $INSTALL_SYSTEM/lib/modules/$VER/aver_h826d
