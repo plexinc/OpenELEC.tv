@@ -22,5 +22,5 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/share/zoneinfo
-  cp -R $PKG_BUILD/.install/etc/zoneinfo/* $INSTALL/usr/share/zoneinfo
+mkdir -p $INSTALL_SYSTEM/share/zoneinfo
+  cp -R $PKG_BUILD/.install/etc/zoneinfo/* $INSTALL_SYSTEM/share/zoneinfo
