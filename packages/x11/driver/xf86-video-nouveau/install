@@ -22,8 +22,8 @@
 
 . config/options
 
-mkdir -p $INSTALL/$XORG_PATH_MODULES/drivers
-  cp $PKG_BUILD/src/.libs/*_drv.so $INSTALL/$XORG_PATH_MODULES/drivers
+mkdir -p $INSTALL_SYSTEM/$XORG_PATH_MODULES/drivers
+  cp $PKG_BUILD/src/.libs/*_drv.so $INSTALL_SYSTEM/$XORG_PATH_MODULES/drivers
 
-mkdir -p $INSTALL/etc/X11
-  cp $PKG_DIR/config/*.conf $INSTALL/etc/X11
+mkdir -p $INSTALL_SYSTEM/etc/X11
+  cp $PKG_DIR/config/*.conf $INSTALL_SYSTEM/etc/X11
