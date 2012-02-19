@@ -22,7 +22,7 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/tvdump $INSTALL/usr/bin
-  cp $PKG_BUILD/tvdump2code.py $INSTALL/usr/bin/tvdump2code
-    chmod +x $INSTALL/usr/bin/tvdump2code
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/tvdump $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/tvdump2code.py $INSTALL_SYSTEM/bin/tvdump2code
+    chmod +x $INSTALL_SYSTEM/bin/tvdump2code
