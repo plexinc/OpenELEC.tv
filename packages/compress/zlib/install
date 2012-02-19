@@ -22,5 +22,5 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/lib
-  cp -R $PKG_BUILD/*.so* $INSTALL/usr/lib
+mkdir -p $INSTALL_ROOT/lib
+  cp -R $PKG_BUILD/*.so* $INSTALL_ROOT/lib
