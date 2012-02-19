@@ -22,7 +22,7 @@
 
 . config/options $1
 
-FONTDIR="$INSTALL/usr/share/fonts"
+FONTDIR="$INSTALL_SYSTEM/share/fonts"
 
 mkdir -p $FONTDIR/encodings
   cp $PKG_BUILD/*.enc.gz $FONTDIR/encodings
