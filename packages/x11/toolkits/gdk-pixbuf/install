@@ -25,16 +25,16 @@
 GDK_BINARY_VERSION=`pkg-config gdk-pixbuf-2.0 --variable=gdk_pixbuf_binary_version`
 GDK_LIB_DIR="gdk-pixbuf-2.0/$GDK_BINARY_VERSION"
 
-mkdir -p $INSTALL/etc/gdk_pixbuf-2.0
-  cp $PKG_DIR/config/gdk-pixbuf.loaders $INSTALL/etc/gdk_pixbuf-2.0
+mkdir -p $INSTALL_SYSTEM/etc/gdk_pixbuf-2.0
+  cp $PKG_DIR/config/gdk-pixbuf.loaders $INSTALL_SYSTEM/etc/gdk_pixbuf-2.0
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/gdk-pixbuf/.libs/gdk-pixbuf-query-loaders $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/gdk-pixbuf/.libs/gdk-pixbuf-query-loaders $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/contrib/gdk-pixbuf-xlib/.libs/libgdk_pixbuf_xlib*.so* $INSTALL/usr/lib
-    rm -rf $INSTALL/usr/lib/libgdk_pixbuf_xlib*.so*T
-  cp -P $PKG_BUILD/gdk-pixbuf/.libs/libgdk_pixbuf*.so* $INSTALL/usr/lib
+mkdir -p $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/contrib/gdk-pixbuf-xlib/.libs/libgdk_pixbuf_xlib*.so* $INSTALL_SYSTEM/lib
+    rm -rf $INSTALL_SYSTEM/lib/libgdk_pixbuf_xlib*.so*T
+  cp -P $PKG_BUILD/gdk-pixbuf/.libs/libgdk_pixbuf*.so* $INSTALL_SYSTEM/lib
 
-mkdir -p $INSTALL/usr/lib/$GDK_LIB_DIR/loaders
-  cp -P $PKG_BUILD/gdk-pixbuf/.libs/libpixbufloader*.so $INSTALL/usr/lib/$GDK_LIB_DIR/loaders
+mkdir -p $INSTALL_SYSTEM/lib/$GDK_LIB_DIR/loaders
+  cp -P $PKG_BUILD/gdk-pixbuf/.libs/libpixbufloader*.so $INSTALL_SYSTEM/lib/$GDK_LIB_DIR/loaders
