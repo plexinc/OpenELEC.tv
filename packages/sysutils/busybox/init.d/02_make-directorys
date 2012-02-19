@@ -24,11 +24,18 @@
 # runlevels: openelec, installer, textmode
 
 progress "make variable directory structure"
+
+  mkdir -p /media
+  mkdir -p /run
+  mkdir -p /tmp
+
+  mkdir -p /var
+    ln -sf /run /var/run
+
   mkdir -p /var/cache \
            /var/lib \
            /var/lock \
            /var/media \
-           /var/run \
            /var/tmp \
            /var/run/sepermit \
            /var/run/lirc

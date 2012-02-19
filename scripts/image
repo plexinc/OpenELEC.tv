@@ -30,7 +30,7 @@ $SCRIPTS/build squashfs
 $SCRIPTS/build fakeroot
 $SCRIPTS/build module-init-tools
 
-export INSTALL=$BUILD/image/system
+#export INSTALL=$BUILD/image/system
 
 BUILD_DATE=`date +%Y%m%d%H%M%S`
 
@@ -47,59 +47,38 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
   rm -rf $FAKEROOT_SCRIPT   # remove $FAKEROOT_SCRIPT if it exist
   touch $FAKEROOT_SCRIPT    # create an empty $FAKEROOT_SCRIPT
   chmod +x $FAKEROOT_SCRIPT # make $FAKEROOT_SCRIPT executable
-  echo "chown -R 0:0 $INSTALL" >> $FAKEROOT_SCRIPT
+  echo "chown -R 0:0 $INSTALL_SYSTEM" >> $FAKEROOT_SCRIPT
 
 # clean old install dirs
-  rm -rf $INSTALL
+  rm -rf $INSTALL_SYSTEM
   rm -rf $STAMPS_INSTALL
-  mkdir -p $INSTALL
+  mkdir -p $INSTALL_SYSTEM
+  ln -sf /var $INSTALL_SYSTEM/var
 
-# create baselayout
-  mkdir -p $INSTALL/bin
-  mkdir -p $INSTALL/etc
-  mkdir -p $INSTALL/lib
-  mkdir -p $INSTALL/sbin
-  mkdir -p $INSTALL/dev
-  mkdir -p $INSTALL/proc
-#  mkdir -p $INSTALL/run
-  ln -sf /var/run $INSTALL/run
-  mkdir -p $INSTALL/sys
-  mkdir -p $INSTALL/usr
-  mkdir -p $INSTALL/var
-  mkdir -p $INSTALL/flash
-  mkdir -p $INSTALL/storage
-  ln -sf /var $INSTALL/usr/var
-  ln -sf /var/tmp $INSTALL/tmp
-  ln -sf /var/media $INSTALL/media
+  mkdir -p $INSTALL_SYSTEM/etc
+    echo "$DISTRONAME" > $INSTALL_SYSTEM/etc/distribution
+    echo "$PROJECT.$TARGET_ARCH" > $INSTALL_SYSTEM/etc/arch
+    echo "$OPENELEC_VERSION" > $INSTALL_SYSTEM/etc/version
+    echo "$TARGET_VERSION" > $INSTALL_SYSTEM/etc/release
+    echo "$DISTRONAME - Version: $OPENELEC_VERSION" > $INSTALL_SYSTEM/etc/openelec-release
+    if [ -n "$GIT_HASH" ]; then
+      echo "$GIT_HASH" >> $INSTALL_SYSTEM/etc/gitrev
+    fi
 
-  if [ "$TARGET_ARCH" = "x86_64" -o "$TARGET_ARCH" = "powerpc64" ]; then
-    ln -s /lib $INSTALL/lib64
-    ln -s lib $INSTALL/usr/lib64
-  fi
-
-  echo "$DISTRONAME" > $INSTALL/etc/distribution
-  echo "$PROJECT.$TARGET_ARCH" > $INSTALL/etc/arch
-  echo "$OPENELEC_VERSION" > $INSTALL/etc/version
-  echo "$TARGET_VERSION" > $INSTALL/etc/release
-  echo "$DISTRONAME - Version: $OPENELEC_VERSION" > $INSTALL/etc/openelec-release
-  if [ -n "$GIT_HASH" ]; then
-    echo "$GIT_HASH" >> $INSTALL/etc/gitrev
-  fi
-
-# create /etc/issue
-  echo $GREETING0 >  $INSTALL/etc/issue
-  echo $GREETING1 >> $INSTALL/etc/issue
-  echo $GREETING2 >> $INSTALL/etc/issue
-  echo $GREETING3 >> $INSTALL/etc/issue
-  echo $GREETING4 >> $INSTALL/etc/issue
-  echo "$DISTRONAME Version: $OPENELEC_VERSION" >> $INSTALL/etc/issue
-  if [ -n "$GIT_HASH" ]; then
-    echo "$DISTRONAME git: $GIT_HASH" >> $INSTALL/etc/issue
-  fi
+  # create /etc/issue
+    echo $GREETING0 >  $INSTALL_SYSTEM/etc/issue
+    echo $GREETING1 >> $INSTALL_SYSTEM/etc/issue
+    echo $GREETING2 >> $INSTALL_SYSTEM/etc/issue
+    echo $GREETING3 >> $INSTALL_SYSTEM/etc/issue
+    echo $GREETING4 >> $INSTALL_SYSTEM/etc/issue
+    echo "$DISTRONAME Version: $OPENELEC_VERSION" >> $INSTALL_SYSTEM/etc/issue
+    if [ -n "$GIT_HASH" ]; then
+      echo "$DISTRONAME git: $GIT_HASH" >> $INSTALL_SYSTEM/etc/issue
+    fi
 
 # copy project related files to filesystem
   if [ -d "$PROJECT_DIR/$PROJECT/filesystem" ]; then
-    cp -PR $PROJECT_DIR/$PROJECT/filesystem/* $INSTALL
+    cp -PR $PROJECT_DIR/$PROJECT/filesystem/* $INSTALL_SYSTEM
   fi
 
 # Basissystem...
@@ -152,10 +131,10 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
 
 # run depmod
   KVER=`ls $BUILD/linux-*/modules/lib/modules`
-  $ROOT/$TOOLCHAIN/bin/depmod -b $INSTALL $KVER > /dev/null
+  $ROOT/$TOOLCHAIN/bin/depmod -b $INSTALL_SYSTEM $KVER > /dev/null
 
 # strip kernel modules
-  for MOD in `find $INSTALL/lib/modules/ -name *.ko`; do
+  for MOD in `find $INSTALL_SYSTEM/lib/modules/ -name *.ko`; do
     $STRIP --strip-debug $MOD
   done
 
