@@ -25,26 +25,26 @@
 GTK_BINARY_VERSION=`pkg-config gtk+-2.0 --variable=gtk_binary_version`
 GTK_LIB_DIR="gtk-2.0/$GTK_BINARY_VERSION"
 
-mkdir -p $INSTALL/etc/gtk-2.0
-  cp $PKG_BUILD/modules/input/im-multipress.conf $INSTALL/etc/gtk-2.0
+mkdir -p $INSTALL_SYSTEM/etc/gtk-2.0
+  cp $PKG_BUILD/modules/input/im-multipress.conf $INSTALL_SYSTEM/etc/gtk-2.0
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/gtk/.libs/gtk-query-immodules-2.0 $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/gtk/.libs/gtk-query-immodules-2.0 $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/gtk/.libs/*.so* $INSTALL/usr/lib
-    rm -rf $INSTALL/usr/lib/libgtk*.so*T
-  cp -P $PKG_BUILD/gdk/.libs/*.so* $INSTALL/usr/lib
-    rm -rf $INSTALL/usr/lib/libgdk*.so*T
-  cp -P $PKG_BUILD/modules/other/gail/libgail-util/.libs/*.so* $INSTALL/usr/lib
-    rm -rf $INSTALL/usr/lib/libgailutil.so*T
+mkdir -p $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/gtk/.libs/*.so* $INSTALL_SYSTEM/lib
+    rm -rf $INSTALL_SYSTEM/lib/libgtk*.so*T
+  cp -P $PKG_BUILD/gdk/.libs/*.so* $INSTALL_SYSTEM/lib
+    rm -rf $INSTALL_SYSTEM/lib/libgdk*.so*T
+  cp -P $PKG_BUILD/modules/other/gail/libgail-util/.libs/*.so* $INSTALL_SYSTEM/lib
+    rm -rf $INSTALL_SYSTEM/lib/libgailutil.so*T
 
-mkdir -p $INSTALL/usr/lib/$GTK_LIB_DIR/engines
-  cp -P $PKG_BUILD/modules/engines/pixbuf/.libs/*.so $INSTALL/usr/lib/$GTK_LIB_DIR/engines
-mkdir -p $INSTALL/usr/lib/$GTK_LIB_DIR/immodules
-  cp -P $PKG_BUILD/modules/input/.libs/*.so $INSTALL/usr/lib/$GTK_LIB_DIR/immodules
-mkdir -p $INSTALL/usr/lib/$GTK_LIB_DIR/printbackends
-  cp -P $PKG_BUILD/modules/printbackends/*/.libs/*.so $INSTALL/usr/lib/$GTK_LIB_DIR/printbackends
-mkdir -p $INSTALL/usr/lib/gtk-2.0/modules
-  cp -P $PKG_BUILD/modules/other/gail/.libs/*.so $INSTALL/usr/lib/gtk-2.0/modules
-  cp -P $PKG_BUILD/modules/other/gail/tests/.libs/*.so $INSTALL/usr/lib/gtk-2.0/modules
+mkdir -p $INSTALL_SYSTEM/lib/$GTK_LIB_DIR/engines
+  cp -P $PKG_BUILD/modules/engines/pixbuf/.libs/*.so $INSTALL_SYSTEM/lib/$GTK_LIB_DIR/engines
+mkdir -p $INSTALL_SYSTEM/lib/$GTK_LIB_DIR/immodules
+  cp -P $PKG_BUILD/modules/input/.libs/*.so $INSTALL_SYSTEM/lib/$GTK_LIB_DIR/immodules
+mkdir -p $INSTALL_SYSTEM/lib/$GTK_LIB_DIR/printbackends
+  cp -P $PKG_BUILD/modules/printbackends/*/.libs/*.so $INSTALL_SYSTEM/lib/$GTK_LIB_DIR/printbackends
+mkdir -p $INSTALL_SYSTEM/lib/gtk-2.0/modules
+  cp -P $PKG_BUILD/modules/other/gail/.libs/*.so $INSTALL_SYSTEM/lib/gtk-2.0/modules
+  cp -P $PKG_BUILD/modules/other/gail/tests/.libs/*.so $INSTALL_SYSTEM/lib/gtk-2.0/modules
