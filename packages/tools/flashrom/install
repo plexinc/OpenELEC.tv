@@ -22,5 +22,5 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/flashrom $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/flashrom $INSTALL_SYSTEM/bin
