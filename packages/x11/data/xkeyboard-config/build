@@ -30,7 +30,7 @@ XKBCOMP="/usr/bin/xkbcomp" \
             --sysconfdir=/etc \
             --without-xsltproc \
             --enable-compat-rules \
-            --with-xkb-base=$XORG_PATH_XKB \
+            --with-xkb-base=/usr/$XORG_PATH_XKB \
             --without-xkb-rules-symlink \
 
 make

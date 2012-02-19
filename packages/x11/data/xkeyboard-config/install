@@ -22,5 +22,5 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/$XORG_PATH_XKB
-  cp -R $PKG_BUILD/.install/$XORG_PATH_XKB/* $INSTALL/$XORG_PATH_XKB
+mkdir -p $INSTALL_SYSTEM/$XORG_PATH_XKB
+  cp -R $PKG_BUILD/.install/usr/$XORG_PATH_XKB/* $INSTALL_SYSTEM/$XORG_PATH_XKB
