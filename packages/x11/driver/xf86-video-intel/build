@@ -35,7 +35,7 @@ cd $PKG_BUILD
             --enable-kms-only \
             --disable-xvmc \
             --enable-sna \
-            --with-xorg-module-dir=$XORG_PATH_MODULES
+            --with-xorg-module-dir=/usr/$XORG_PATH_MODULES
 
 make
 
