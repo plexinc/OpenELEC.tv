@@ -22,5 +22,5 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/config
-  cp $PKG_DIR/config/*.conf $INSTALL/usr/config
+mkdir -p $INSTALL_SYSTEM/config
+  cp $PKG_DIR/config/*.conf $INSTALL_SYSTEM/config
