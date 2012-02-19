@@ -22,16 +22,16 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/libkmod/.libs/*.so* $INSTALL/usr/lib
+mkdir -p $INSTALL_ROOT/lib
+  cp -P $PKG_BUILD/libkmod/.libs/*.so* $INSTALL_ROOT/lib
 
-mkdir -p $INSTALL/usr/bin
-  cp -P $PKG_BUILD/tools/.libs/kmod $INSTALL/usr/bin
+mkdir -p $INSTALL_ROOT/bin
+  cp -P $PKG_BUILD/tools/.libs/kmod $INSTALL_ROOT/bin
 
-mkdir -p $INSTALL/sbin
-  ln -sf /usr/bin/kmod $INSTALL/sbin/lsmod
-  ln -sf /usr/bin/kmod $INSTALL/sbin/insmod
-  ln -sf /usr/bin/kmod $INSTALL/sbin/rmmod
-  ln -sf /usr/bin/kmod $INSTALL/sbin/modinfo
-  ln -sf /usr/bin/kmod $INSTALL/sbin/modprobe
+mkdir -p $INSTALL_ROOT/sbin
+  ln -sf /bin/kmod $INSTALL_ROOT/sbin/lsmod
+  ln -sf /bin/kmod $INSTALL_ROOT/sbin/insmod
+  ln -sf /bin/kmod $INSTALL_ROOT/sbin/rmmod
+  ln -sf /bin/kmod $INSTALL_ROOT/sbin/modinfo
+  ln -sf /bin/kmod $INSTALL_ROOT/sbin/modprobe
 
