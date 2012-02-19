@@ -24,5 +24,5 @@
 
 VER=`ls $BUILD/linux*/modules/lib/modules`
 
-mkdir -p $INSTALL/lib/modules/$VER/cryptodev
-  cp $PKG_BUILD/cryptodev.ko $INSTALL/lib/modules/$VER/cryptodev
+mkdir -p $INSTALL_SYSTEM/lib/modules/$VER/cryptodev
+  cp $PKG_BUILD/cryptodev.ko $INSTALL_SYSTEM/lib/modules/$VER/cryptodev
