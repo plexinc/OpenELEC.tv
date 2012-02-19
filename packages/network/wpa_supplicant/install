@@ -22,13 +22,13 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/etc/dbus-1/system.d
-  cp $PKG_BUILD/wpa_supplicant/dbus/dbus-wpa_supplicant.conf $INSTALL/etc/dbus-1/system.d
+mkdir -p $INSTALL_SYSTEM/etc/dbus-1/system.d
+  cp $PKG_BUILD/wpa_supplicant/dbus/dbus-wpa_supplicant.conf $INSTALL_SYSTEM/etc/dbus-1/system.d
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/wpa_supplicant/wpa_supplicant $INSTALL/usr/bin
-  cp $PKG_BUILD/wpa_supplicant/wpa_passphrase $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/wpa_supplicant/wpa_supplicant $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/wpa_supplicant/wpa_passphrase $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/usr/share/dbus-1/system-services
-  cp $PKG_BUILD/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service $INSTALL/usr/share/dbus-1/system-services
-  cp $PKG_BUILD/wpa_supplicant/dbus/fi.epitest.hostap.WPASupplicant.service $INSTALL/usr/share/dbus-1/system-services
+mkdir -p $INSTALL_SYSTEM/share/dbus-1/system-services
+  cp $PKG_BUILD/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service $INSTALL_SYSTEM/share/dbus-1/system-services
+  cp $PKG_BUILD/wpa_supplicant/dbus/fi.epitest.hostap.WPASupplicant.service $INSTALL_SYSTEM/share/dbus-1/system-services
