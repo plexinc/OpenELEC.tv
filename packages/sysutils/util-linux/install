@@ -22,15 +22,17 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/misc-utils/.libs/blkid $INSTALL/usr/bin
-  cp $PKG_BUILD/sys-utils/fstrim $INSTALL/usr/bin
-  cp $PKG_BUILD/mount/.libs/swapon $INSTALL/usr/bin
-    ln -sf swapon $INSTALL/usr/bin/swapoff
-  cp $PKG_BUILD/fsck/.libs/fsck $INSTALL/usr/bin
+mkdir -p $INSTALL_ROOT/lib
+  cp -PR $PKG_BUILD/libblkid/src/.libs/libblkid.so* $INSTALL_ROOT/lib
+  rm -rf $INSTALL_ROOT/lib/libblkid.so*T
+  cp -PR $PKG_BUILD/libuuid/src/.libs/libuuid.so* $INSTALL_ROOT/lib
+  rm -rf $INSTALL_ROOT/lib/libuuid.so*T
 
-mkdir -p $INSTALL/usr/lib
-  cp -PR $PKG_BUILD/libblkid/src/.libs/libblkid.so* $INSTALL/usr/lib
-  rm -rf $INSTALL/usr/lib/libblkid.so*T
-  cp -PR $PKG_BUILD/libuuid/src/.libs/libuuid.so* $INSTALL/usr/lib
-  rm -rf $INSTALL/usr/lib/libuuid.so*T
+mkdir -p $INSTALL_ROOT/bin
+  cp $PKG_BUILD/misc-utils/.libs/blkid $INSTALL_ROOT/bin
+  cp $PKG_BUILD/fsck/.libs/fsck $INSTALL_ROOT/bin
+
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/sys-utils/fstrim $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/mount/.libs/swapon $INSTALL_SYSTEM/bin
+    ln -sf swapon $INSTALL_SYSTEM/bin/swapoff
