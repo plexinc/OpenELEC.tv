@@ -22,8 +22,8 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/sbin
-  cp -P $PKG_BUILD/lsusb $INSTALL/usr/sbin
+mkdir -p $INSTALL_SYSTEM/sbin
+  cp -P $PKG_BUILD/lsusb $INSTALL_SYSTEM/sbin
 
-mkdir -p $INSTALL/usr/share/misc
-  cp $PKG_DIR/config/usb.ids $INSTALL/usr/share
+mkdir -p $INSTALL_SYSTEM/share/misc
+  cp $PKG_DIR/config/usb.ids $INSTALL_SYSTEM/share
