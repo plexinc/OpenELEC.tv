@@ -22,8 +22,8 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/libnettle.so $INSTALL/usr/lib
-  ln -sf libnettle.so $INSTALL/usr/lib/`basename $PKG_BUILD/.lib/libnettle.so.[0-9]`
-  cp -P $PKG_BUILD/libhogweed.so $INSTALL/usr/lib
-  ln -sf libhogweed.so $INSTALL/usr/lib/`basename $PKG_BUILD/.lib/libhogweed.so.[0-9]`
+mkdir -p $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/libnettle.so $INSTALL_SYSTEM/lib
+  ln -sf libnettle.so $INSTALL_SYSTEM/lib/`basename $PKG_BUILD/.lib/libnettle.so.[0-9]`
+  cp -P $PKG_BUILD/libhogweed.so $INSTALL_SYSTEM/lib
+  ln -sf libhogweed.so $INSTALL_SYSTEM/lib/`basename $PKG_BUILD/.lib/libhogweed.so.[0-9]`
