@@ -44,23 +44,23 @@ if [ -n "$PKG_ARCH" -a ! "$PKG_ARCH" = "any" ]; then
 fi
 
 if [ -d $PKG_DIR/init.d ]; then
-  mkdir -p $INSTALL/etc/init.d
-  cp $PKG_DIR/init.d/* $INSTALL/etc/init.d/
+  mkdir -p $INSTALL_SYSTEM/etc/init.d
+  cp $PKG_DIR/init.d/* $INSTALL_SYSTEM/etc/init.d/
 fi
 
 if [ -d $PKG_DIR/profile.d ]; then
-  mkdir -p $INSTALL/etc/profile.d
-  cp $PKG_DIR/profile.d/*.conf $INSTALL/etc/profile.d/
+  mkdir -p $INSTALL_SYSTEM/etc/profile.d
+  cp $PKG_DIR/profile.d/*.conf $INSTALL_SYSTEM/etc/profile.d/
 fi
 
 if [ -d $PKG_DIR/udev.d ]; then
-  mkdir -p $INSTALL/lib/udev/rules.d
-  cp $PKG_DIR/udev.d/*.rules $INSTALL/lib/udev/rules.d
+  mkdir -p $INSTALL_SYSTEM/lib/udev/rules.d
+  cp $PKG_DIR/udev.d/*.rules $INSTALL_SYSTEM/lib/udev/rules.d
 fi
 
 if [ -d $PKG_DIR/init.network ]; then
-  mkdir -p $INSTALL/etc/init.d/network
-  cp $PKG_DIR/init.network/* $INSTALL/etc/init.d/network/
+  mkdir -p $INSTALL_SYSTEM/etc/init.d/network
+  cp $PKG_DIR/init.network/* $INSTALL_SYSTEM/etc/init.d/network/
 fi
 
 $SCRIPTS/build $@
