@@ -22,10 +22,10 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/etc/pastebin.d
-  cp $PKG_BUILD/pastebin.d/pastebin.com.conf $INSTALL/etc/pastebin.d
+mkdir -p $INSTALL_SYSTEM/etc/pastebin.d
+  cp $PKG_BUILD/pastebin.d/pastebin.com.conf $INSTALL_SYSTEM/etc/pastebin.d
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/pastebinit $INSTALL/usr/bin
-  ln -sf pastebinit $INSTALL/usr/bin/paste      # link for a shorter command
-  ln -sf pastebinit $INSTALL/usr/bin/wgetpaste  # link for compatibility
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/pastebinit $INSTALL_SYSTEM/bin
+  ln -sf pastebinit $INSTALL_SYSTEM/bin/paste      # link for a shorter command
+  ln -sf pastebinit $INSTALL_SYSTEM/bin/wgetpaste  # link for compatibility
