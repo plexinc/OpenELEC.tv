@@ -22,7 +22,7 @@
 
 . config/options $1
 
-FONTDIR="$INSTALL/usr/share/fonts/misc"
+FONTDIR="$INSTALL_SYSTEM/share/fonts/misc"
 
 mkdir -p $FONTDIR
   cp $PKG_BUILD/6x13-ISO8859-1.pcf.gz $FONTDIR
