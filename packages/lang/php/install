@@ -22,16 +22,16 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/sapi/cgi/php-cgi $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/sapi/cgi/php-cgi $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/etc
-  cp $PKG_BUILD/php.ini-production $INSTALL/etc/php.ini
+mkdir -p $INSTALL_SYSTEM/etc
+  cp $PKG_BUILD/php.ini-production $INSTALL_SYSTEM/etc/php.ini
   sed -e "s|^doc_root[[:space:]]*=.*$|doc_root = /usr/www|" \
       -e "s|^.cgi.force_redirect[[:space:]]*=.*$|cgi.force_redirect = 0|" \
-      -i $INSTALL/etc/php.ini
+      -i $INSTALL_SYSTEM/etc/php.ini
 
-mkdir -p $INSTALL/usr/www
-  echo "<?php" > $INSTALL/usr/www/test.php
-  echo "phpinfo();" >> $INSTALL/usr/www/test.php
-  echo "?>" >> $INSTALL/usr/www/test.php
+mkdir -p $INSTALL_SYSTEM/www
+  echo "<?php" > $INSTALL_SYSTEM/www/test.php
+  echo "phpinfo();" >> $INSTALL_SYSTEM/www/test.php
+  echo "?>" >> $INSTALL_SYSTEM/www/test.php
