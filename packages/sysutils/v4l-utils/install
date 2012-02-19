@@ -22,12 +22,12 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/utils/keytable/ir-keytable $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/utils/keytable/ir-keytable $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/lib/udev/rules.d
-  cp $PKG_BUILD/utils/keytable/*.rules $INSTALL/lib/udev/rules.d
+mkdir -p $INSTALL_SYSTEM/lib/udev/rules.d
+  cp $PKG_BUILD/utils/keytable/*.rules $INSTALL_SYSTEM/lib/udev/rules.d
 
-mkdir -p $INSTALL/etc
-  cp $PKG_BUILD/utils/keytable/rc_maps.cfg $INSTALL/etc
-  cp -R $PKG_BUILD/utils/keytable/rc_keymaps $INSTALL/etc
+mkdir -p $INSTALL_SYSTEM/etc
+  cp $PKG_BUILD/utils/keytable/rc_maps.cfg $INSTALL_SYSTEM/etc
+  cp -R $PKG_BUILD/utils/keytable/rc_keymaps $INSTALL_SYSTEM/etc
