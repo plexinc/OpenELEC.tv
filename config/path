@@ -32,8 +32,8 @@ TARGET_PREFIX=$ROOT/$TOOLCHAIN/bin/$TARGET_NAME-
 
 FAKEROOT_SCRIPT=$ROOT/.fakeroot.$PROJECT.$TARGET_ARCH
 
-INSTALL_ROOT=$ROOT/$BUILD/image/initramfs/root-image
-INSTALL_SYSTEM=$ROOT/$BUILD/image/system
+INSTALL_ROOT=$BUILD/image/initramfs
+INSTALL_SYSTEM=$BUILD/image/system
 
 . config/sources
 
@@ -69,12 +69,9 @@ SED="sed -i"
   [ -d $BUILD/${PKG_NAME}[-_.]${PKG_VERSION} ] && PKG_BUILD=`ls -d $BUILD/${PKG_NAME}[-_.]${PKG_VERSION}`
   [ -d $BUILD/${PKG_NAME}${PKG_VERSION} ] && PKG_BUILD=`ls -d $BUILD/${PKG_NAME}${PKG_VERSION}`
 
-XORG_PATH_DRI=/usr/lib/dri
-XORG_PATH_XKB=/usr/share/X11/xkb
-XORG_PATH_XKB_OUTPUT=/var/lib/xkb
-XORG_PATH_RGB=/usr/lib/X11/rgb
-XORG_PATH_MODULES=/usr/lib/xorg/modules
-XORG_PATH_DRIVERS=/usr/lib/xorg/modules/drivers
+XORG_PATH_DRI=/lib/dri
+XORG_PATH_XKB=/share/X11/xkb
+XORG_PATH_MODULES=/lib/xorg/modules
 
 TOOLCHAIN_LANGUAGES=c
 [ "$TOOLCHAIN_CXX" = yes ] && TOOLCHAIN_LANGUAGES=${TOOLCHAIN_LANGUAGES},c++
