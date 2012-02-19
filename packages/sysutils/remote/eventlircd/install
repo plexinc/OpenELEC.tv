@@ -22,14 +22,14 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/sbin
-  cp $PKG_BUILD/src/eventlircd $INSTALL/usr/sbin
+mkdir -p $INSTALL_SYSTEM/sbin
+  cp $PKG_BUILD/src/eventlircd $INSTALL_SYSTEM/sbin
 
-mkdir -p $INSTALL/lib/udev
-  cp $PKG_BUILD/udev/lircd_helper $INSTALL/lib/udev
-  chmod +x $INSTALL/lib/udev/lircd_helper
-  cp $PKG_BUILD/udev/wakeup_enable $INSTALL/lib/udev
-  chmod +x $INSTALL/lib/udev/wakeup_enable
+mkdir -p $INSTALL_SYSTEM/lib/udev
+  cp $PKG_BUILD/udev/lircd_helper $INSTALL_SYSTEM/lib/udev
+  chmod +x $INSTALL_SYSTEM/lib/udev/lircd_helper
+  cp $PKG_BUILD/udev/wakeup_enable $INSTALL_SYSTEM/lib/udev
+  chmod +x $INSTALL_SYSTEM/lib/udev/wakeup_enable
 
-mkdir -p $INSTALL/etc/eventlircd.d
-  cp $PKG_DIR/evmap/*.evmap $INSTALL/etc/eventlircd.d
+mkdir -p $INSTALL_SYSTEM/etc/eventlircd.d
+  cp $PKG_DIR/evmap/*.evmap $INSTALL_SYSTEM/etc/eventlircd.d
