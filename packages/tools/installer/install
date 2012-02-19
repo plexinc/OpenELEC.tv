@@ -22,12 +22,12 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_DIR/scripts/installer $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_DIR/scripts/installer $INSTALL_SYSTEM/bin
 
-mkdir -p $INSTALL/etc
+mkdir -p $INSTALL_SYSTEM/etc
   if [ -f $PROJECT_DIR/$PROJECT/installer/installer.conf ]; then
-    cp $PROJECT_DIR/$PROJECT/installer/installer.conf $INSTALL/etc
+    cp $PROJECT_DIR/$PROJECT/installer/installer.conf $INSTALL_SYSTEM/etc
   else
-    cp $PKG_DIR/config/installer.conf $INSTALL/etc
+    cp $PKG_DIR/config/installer.conf $INSTALL_SYSTEM/etc
   fi
