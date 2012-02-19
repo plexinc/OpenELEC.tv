@@ -22,10 +22,9 @@
 
 . config/options $1
 
-export INSTALL=$ROOT/$BUILD/image/initramfs/root-image
 $SCRIPTS/install initramfs
 
-cd $INSTALL
+cd $INSTALL_ROOT
   find . | cpio -H newc -ov -R 0:0 > $ROOT/$BUILD/image/initramfs.cpio
 cd -
 
