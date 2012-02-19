@@ -24,33 +24,33 @@
 
 VER=`ls $BUILD/linux*/modules/lib/modules`
 
-mkdir -p $INSTALL/$XORG_PATH_MODULES/drivers
-  cp -P $PKG_BUILD/nvidia_drv.so $INSTALL/$XORG_PATH_MODULES/drivers
+mkdir -p $INSTALL_SYSTEM/$XORG_PATH_MODULES/drivers
+  cp -P $PKG_BUILD/nvidia_drv.so $INSTALL_SYSTEM/$XORG_PATH_MODULES/drivers
 
-mkdir -p $INSTALL/$XORG_PATH_MODULES/extensions
+mkdir -p $INSTALL_SYSTEM/$XORG_PATH_MODULES/extensions
 # rename to not conflicting with Mesa libGL.so
-  cp -P $PKG_BUILD/libglx.so* $INSTALL/$XORG_PATH_MODULES/extensions/libglx_nvidia.so
+  cp -P $PKG_BUILD/libglx.so* $INSTALL_SYSTEM/$XORG_PATH_MODULES/extensions/libglx_nvidia.so
 
-mkdir -p $INSTALL/etc/X11
-  cp $PKG_DIR/config/*.conf $INSTALL/etc/X11
+mkdir -p $INSTALL_SYSTEM/etc/X11
+  cp $PKG_DIR/config/*.conf $INSTALL_SYSTEM/etc/X11
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/libnvidia-glcore.so* $INSTALL/usr/lib
-  cp -P $PKG_BUILD/libnvidia-ml.so* $INSTALL/usr/lib
-  cp -P $PKG_BUILD/tls/libnvidia-tls.so* $INSTALL/usr/lib
+mkdir -p $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/libnvidia-glcore.so* $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/libnvidia-ml.so* $INSTALL_SYSTEM/lib
+  cp -P $PKG_BUILD/tls/libnvidia-tls.so* $INSTALL_SYSTEM/lib
 # rename to not conflicting with Mesa libGL.so
-  cp -P $PKG_BUILD/libGL.so* $INSTALL/usr/lib/libGL_nvidia.so.1
+  cp -P $PKG_BUILD/libGL.so* $INSTALL_SYSTEM/lib/libGL_nvidia.so.1
 
-mkdir -p $INSTALL/lib/modules/$VER/nvidia
-  cp $PKG_BUILD/kernel/nvidia.ko $INSTALL/lib/modules/$VER/nvidia
+mkdir -p $INSTALL_SYSTEM/lib/modules/$VER/nvidia
+  cp $PKG_BUILD/kernel/nvidia.ko $INSTALL_SYSTEM/lib/modules/$VER/nvidia
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/nvidia-smi $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/nvidia-smi $INSTALL_SYSTEM/bin
 
 if [ "$VDPAU" = yes ]; then
   $SCRIPTS/install libvdpau
 
-  mkdir -p $INSTALL/usr/lib/vdpau
-  cp $PKG_BUILD/libvdpau_nvidia.so* $INSTALL/usr/lib/vdpau/libvdpau_nvidia.so.1
-  ln -sf libvdpau_nvidia.so.1 $INSTALL/usr/lib/vdpau/libvdpau_nvidia.so
+  mkdir -p $INSTALL_SYSTEM/lib/vdpau
+  cp $PKG_BUILD/libvdpau_nvidia.so* $INSTALL_SYSTEM/lib/vdpau/libvdpau_nvidia.so.1
+  ln -sf libvdpau_nvidia.so.1 $INSTALL_SYSTEM/lib/vdpau/libvdpau_nvidia.so
 fi
