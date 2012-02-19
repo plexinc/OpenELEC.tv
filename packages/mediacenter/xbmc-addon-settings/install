@@ -22,6 +22,6 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/share/xbmc/addons/os.openelec.settings
-  cp -R $PKG_DIR/source/* $INSTALL/usr/share/xbmc/addons/os.openelec.settings
-  cp -R $PKG_DIR/config/* $INSTALL/usr/share/xbmc/addons/os.openelec.settings
+mkdir -p $INSTALL_SYSTEM/share/xbmc/addons/os.openelec.settings
+  cp -R $PKG_DIR/source/* $INSTALL_SYSTEM/share/xbmc/addons/os.openelec.settings
+  cp -R $PKG_DIR/config/* $INSTALL_SYSTEM/share/xbmc/addons/os.openelec.settings
