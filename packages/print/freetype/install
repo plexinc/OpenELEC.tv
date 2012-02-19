@@ -22,5 +22,5 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/objs/.libs/libfreetype.so* $INSTALL/usr/lib
+mkdir -p $INSTALL_ROOT/lib
+  cp -P $PKG_BUILD/objs/.libs/libfreetype.so* $INSTALL_ROOT/lib
