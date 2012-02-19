@@ -24,5 +24,5 @@
 
 VER=`ls $BUILD/linux*/modules/lib/modules`
 
-mkdir -p $INSTALL/lib/modules/$VER/RTL2832U
-  cp $PKG_BUILD/*.ko $INSTALL/lib/modules/$VER/RTL2832U
+mkdir -p $INSTALL_SYSTEM/lib/modules/$VER/RTL2832U
+  cp $PKG_BUILD/*.ko $INSTALL_SYSTEM/lib/modules/$VER/RTL2832U
