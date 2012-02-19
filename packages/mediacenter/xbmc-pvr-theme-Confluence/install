@@ -22,5 +22,5 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/share/xbmc/addons/skin.confluence
-  cp -R $PKG_BUILD/* $INSTALL/usr/share/xbmc/addons/skin.confluence
+mkdir -p $INSTALL_SYSTEM/share/xbmc/addons/skin.confluence
+  cp -R $PKG_BUILD/* $INSTALL_SYSTEM/share/xbmc/addons/skin.confluence
