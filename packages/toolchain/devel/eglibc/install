@@ -22,37 +22,44 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/lib
-  cp $PKG_BUILD/objdir-$1/elf/ld*.so.* $INSTALL/lib
-  cp $PKG_BUILD/objdir-$1/libc.so.6 $INSTALL/lib
-  cp $PKG_BUILD/objdir-$1/math/libm.so.6 $INSTALL/lib
+mkdir -p $INSTALL_ROOT/lib
+  cp $PKG_BUILD/objdir-$1/elf/ld*.so.* $INSTALL_ROOT/lib
+  cp $PKG_BUILD/objdir-$1/libc.so.6 $INSTALL_ROOT/lib
+  cp $PKG_BUILD/objdir-$1/math/libm.so.6 $INSTALL_ROOT/lib
+  cp $PKG_BUILD/objdir-$1/nptl/libpthread.so.0 $INSTALL_ROOT/lib
+  cp $PKG_BUILD/objdir-$1/rt/librt.so.1 $INSTALL_ROOT/lib
 
-mkdir -p $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/crypt/libcrypt.so.1 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/dlfcn/libdl.so.2 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/nis/libnsl.so.1 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/nis/libnss_compat.so.2 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/nss/libnss_files.so.2 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/resolv/libnss_dns.so.2 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/resolv/libresolv.so.2 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/rt/librt.so.1 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/nptl/libpthread.so.0 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/login/libutil.so.1 $INSTALL/usr/lib # e.g. for utmp support, needed by PAM_filter
+mkdir -p $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/objdir-$1/crypt/libcrypt.so.1 $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/objdir-$1/dlfcn/libdl.so.2 $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/objdir-$1/nis/libnsl.so.1 $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/objdir-$1/nis/libnss_compat.so.2 $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/objdir-$1/nss/libnss_files.so.2 $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/objdir-$1/resolv/libnss_dns.so.2 $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/objdir-$1/resolv/libresolv.so.2 $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/objdir-$1/login/libutil.so.1 $INSTALL_SYSTEM/lib # e.g. for utmp support, needed by PAM_filter
 
 
-  [ "$DEVTOOLS" = yes ] && cp $PKG_BUILD/objdir-$1/nptl_db/libthread_db.so.1 $INSTALL/lib # for GDB
+  [ "$DEVTOOLS" = yes ] && cp $PKG_BUILD/objdir-$1/nptl_db/libthread_db.so.1 $INSTALL_ROOT/lib # for GDB
 
-mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/objdir-$1/elf/ldd $INSTALL/usr/bin
-  sed -i 's%bash%sh%g' $INSTALL/usr/bin/ldd
+if [ "$TARGET_ARCH" = "x86_64" -o "$TARGET_ARCH" = "powerpc64" ]; then
+  rm -rf $INSTALL_ROOT/lib64
+  ln -sf /lib $INSTALL_ROOT/lib64
+  rm -rf $INSTALL_SYSTEM/lib64
+  ln -sf /usr/lib $INSTALL_SYSTEM/lib64
+fi
 
-  cp $PKG_BUILD/objdir-$1/locale/locale $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp $PKG_BUILD/objdir-$1/elf/ldd $INSTALL_SYSTEM/bin
+  sed -i 's%bash%sh%g' $INSTALL_SYSTEM/bin/ldd
+
+  cp $PKG_BUILD/objdir-$1/locale/locale $INSTALL_SYSTEM/bin
 
 # libiconv replacement:
-  mkdir -p $INSTALL/usr/lib/gconv
-    cp $PKG_BUILD/iconvdata/gconv-modules $INSTALL/usr/lib/gconv
-    cp $PKG_BUILD/objdir-$1/iconvdata/*.so $INSTALL/usr/lib/gconv
+  mkdir -p $INSTALL_SYSTEM/lib/gconv
+    cp $PKG_BUILD/iconvdata/gconv-modules $INSTALL_SYSTEM/lib/gconv
+    cp $PKG_BUILD/objdir-$1/iconvdata/*.so $INSTALL_SYSTEM/lib/gconv
 
-mkdir -p $INSTALL/etc
-  cp $PKG_DIR/config/nsswitch.conf $INSTALL/etc
-  cp $PKG_BUILD/sunrpc/etc.rpc $INSTALL/etc/rpc
+mkdir -p $INSTALL_SYSTEM/etc
+  cp $PKG_DIR/config/nsswitch.conf $INSTALL_SYSTEM/etc
+  cp $PKG_BUILD/sunrpc/etc.rpc $INSTALL_SYSTEM/etc/rpc
