@@ -22,5 +22,5 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/sbin
-  cp -P $PKG_BUILD/src/sshguard $INSTALL/usr/sbin
+mkdir -p $INSTALL_SYSTEM/sbin
+  cp -P $PKG_BUILD/src/sshguard $INSTALL_SYSTEM/sbin
