@@ -22,5 +22,5 @@
 
 . config/options $1
 
-mkdir -p $INSTALL/usr/share/xbmc/addons/script.xbmc.lcd
-  cp -PRf $PKG_BUILD/script.xbmc.lcd/* $INSTALL/usr/share/xbmc/addons/script.xbmc.lcd
+mkdir -p $INSTALL_SYSTEM/share/xbmc/addons/script.xbmc.lcd
+  cp -PRf $PKG_BUILD/script.xbmc.lcd/* $INSTALL_SYSTEM/share/xbmc/addons/script.xbmc.lcd
