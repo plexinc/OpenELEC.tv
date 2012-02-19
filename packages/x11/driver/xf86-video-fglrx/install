@@ -35,55 +35,55 @@ elif [ "$TARGET_ARCH" = x86_64 ]; then
 fi
 
 # ATI kernel driver
-mkdir -p $INSTALL/lib/modules/$VER/ati
-  cp $PKG_BUILD/common/lib/modules/fglrx/build_mod/2.6.x/fglrx.ko $INSTALL/lib/modules/$VER/ati
+mkdir -p $INSTALL_SYSTEM/lib/modules/$VER/ati
+  cp $PKG_BUILD/common/lib/modules/fglrx/build_mod/2.6.x/fglrx.ko $INSTALL_SYSTEM/lib/modules/$VER/ati
 
 # X.Org modules
-mkdir -p $INSTALL/$XORG_PATH_MODULES
-  cp -P $PKG_BUILD/$BASEDIR/usr/X11R6/$LIBDIR/modules/*.so $INSTALL/$XORG_PATH_MODULES
+mkdir -p $INSTALL_SYSTEM/$XORG_PATH_MODULES
+  cp -P $PKG_BUILD/$BASEDIR/usr/X11R6/$LIBDIR/modules/*.so $INSTALL_SYSTEM/$XORG_PATH_MODULES
 
-mkdir -p $INSTALL/$XORG_PATH_MODULES/drivers
-  cp -P $PKG_BUILD/$BASEDIR/usr/X11R6/$LIBDIR/modules/drivers/*_drv.so $INSTALL/$XORG_PATH_MODULES/drivers
+mkdir -p $INSTALL_SYSTEM/$XORG_PATH_MODULES/drivers
+  cp -P $PKG_BUILD/$BASEDIR/usr/X11R6/$LIBDIR/modules/drivers/*_drv.so $INSTALL_SYSTEM/$XORG_PATH_MODULES/drivers
 
-mkdir -p $INSTALL/$XORG_PATH_MODULES/extensions/fglrx
+mkdir -p $INSTALL_SYSTEM/$XORG_PATH_MODULES/extensions/fglrx
   # rename to not conflicting with Mesa libGL.so
-  cp -P $PKG_BUILD/$BASEDIR/usr/X11R6/$LIBDIR/modules/extensions/fglrx/fglrx-libglx.so $INSTALL/$XORG_PATH_MODULES/extensions/libglx_fglrx.so
+  cp -P $PKG_BUILD/$BASEDIR/usr/X11R6/$LIBDIR/modules/extensions/fglrx/fglrx-libglx.so $INSTALL_SYSTEM/$XORG_PATH_MODULES/extensions/libglx_fglrx.so
 
-mkdir -p $INSTALL/$XORG_PATH_MODULES/linux
-  cp -P $PKG_BUILD/$BASEDIR/usr/X11R6/$LIBDIR/modules/linux/*.so $INSTALL/$XORG_PATH_MODULES/linux
+mkdir -p $INSTALL_SYSTEM/$XORG_PATH_MODULES/linux
+  cp -P $PKG_BUILD/$BASEDIR/usr/X11R6/$LIBDIR/modules/linux/*.so $INSTALL_SYSTEM/$XORG_PATH_MODULES/linux
 
-mkdir -p $INSTALL/etc/X11
-  cp $PKG_DIR/config/*.conf $INSTALL/etc/X11
+mkdir -p $INSTALL_SYSTEM/etc/X11
+  cp $PKG_DIR/config/*.conf $INSTALL_SYSTEM/etc/X11
 
-mkdir -p $INSTALL/etc/ati
-  cp $PKG_BUILD/common/etc/ati/amdpcsdb.default $INSTALL/etc/ati
-  cp $PKG_DIR/config/amdpcsdb $INSTALL/usr/config/fglrx.conf
-    ln -sf /storage/.config/fglrx.conf $INSTALL/etc/ati/amdpcsdb
-  cp $PKG_BUILD/common/etc/ati/control $INSTALL/etc/ati
-  cp $PKG_BUILD/common/etc/ati/signature $INSTALL/etc/ati
+mkdir -p $INSTALL_SYSTEM/etc/ati
+  cp $PKG_BUILD/common/etc/ati/amdpcsdb.default $INSTALL_SYSTEM/etc/ati
+  cp $PKG_DIR/config/amdpcsdb $INSTALL_SYSTEM/config/fglrx.conf
+    ln -sf /storage/.config/fglrx.conf $INSTALL_SYSTEM/etc/ati/amdpcsdb
+  cp $PKG_BUILD/common/etc/ati/control $INSTALL_SYSTEM/etc/ati
+  cp $PKG_BUILD/common/etc/ati/signature $INSTALL_SYSTEM/etc/ati
 
 # DRI driver
-mkdir -p $INSTALL/usr/lib/dri
-  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/modules/dri/fglrx_dri.so* $INSTALL/usr/lib/dri
+mkdir -p $INSTALL_SYSTEM/lib/dri
+  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/modules/dri/fglrx_dri.so* $INSTALL_SYSTEM/lib/dri
 
 # OpenGL libs
-mkdir -p $INSTALL/usr/lib
+mkdir -p $INSTALL_SYSTEM/lib
   # rename to not conflicting with Mesa libGL.so
-  cp -P $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/fglrx/fglrx-libGL.so* $INSTALL/usr/lib/libGL_fglrx.so.1
+  cp -P $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/fglrx/fglrx-libGL.so* $INSTALL_SYSTEM/lib/libGL_fglrx.so.1
 
 # System Libs
-mkdir -p $INSTALL/usr/lib
-  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/$LIBDIR/libati*.so $INSTALL/usr/lib
-  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/$LIBDIR/libatiuki.so* $INSTALL/usr/lib/libatiuki.so.1
-  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libati*.so* $INSTALL/usr/lib
-  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libfglrx*.so* $INSTALL/usr/lib
+mkdir -p $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/$LIBDIR/libati*.so $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/$LIBDIR/libatiuki.so* $INSTALL_SYSTEM/lib/libatiuki.so.1
+  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libati*.so* $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libfglrx*.so* $INSTALL_SYSTEM/lib
 
 # ATI config
-mkdir -p $INSTALL/usr/bin
-  cp -P $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/bin/aticonfig $INSTALL/usr/bin
+mkdir -p $INSTALL_SYSTEM/bin
+  cp -P $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/bin/aticonfig $INSTALL_SYSTEM/bin
 
 if [ "$XVBA" = yes ]; then
-  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libAMDXvBA.cap $INSTALL/usr/lib
-  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libAMDXvBA.so* $INSTALL/usr/lib/libAMDXvBA.so.1
-  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libXvBAW.so* $INSTALL/usr/lib/libXvBAW.so.1
+  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libAMDXvBA.cap $INSTALL_SYSTEM/lib
+  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libAMDXvBA.so* $INSTALL_SYSTEM/lib/libAMDXvBA.so.1
+  cp $PKG_BUILD/arch/$FGLRX_ARCH/usr/X11R6/$LIBDIR/libXvBAW.so* $INSTALL_SYSTEM/lib/libXvBAW.so.1
 fi
