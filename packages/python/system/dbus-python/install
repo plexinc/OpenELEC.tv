@@ -22,7 +22,7 @@
 
 . config/options $1
 
-PYTHON_LIB_DIR=`ls -d $INSTALL/usr/lib/python*`
+PYTHON_LIB_DIR=`ls -d $INSTALL_SYSTEM/lib/python*`
 
 mkdir -p $PYTHON_LIB_DIR/site-packages
   cp -P $PKG_BUILD/_dbus_bindings/.libs/*.so $PYTHON_LIB_DIR/site-packages
