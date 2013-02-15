@@ -1,0 +1,56 @@
+#/bin/sh
+
+################################################################################
+#      This file is part of OpenELEC - http://www.openelec.tv
+#      Copyright (C) 2009-2012 Stephan Raue (stephan@openelec.tv)
+#
+#  This Program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  This Program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with OpenELEC.tv; see the file COPYING.  If not, write to
+#  the Free Software Foundation, 51 Franklin Street, Suite 500, Boston, MA 02110, USA.
+#  http://www.gnu.org/copyleft/gpl.html
+################################################################################
+
+. config/options $1
+. config/functions
+. config/optimize
+
+# dont use some optimizations because of build problems
+  LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
+
+# dont build parallel
+  MAKEFLAGS=-j1
+
+  export PYTHON_VERSION="2.7"
+  export PYTHON_CPPFLAGS="-I$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
+  export PYTHON_LDFLAGS="-L$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION -lpython$PYTHON_VERSION"
+  export PYTHON_SITE_PKG="$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION/site-packages"
+  export ac_python_version="$PYTHON_VERSION"
+
+# configure the build
+export FFMPEG_DIR=$SYSROOT_PREFIX/usr/
+export FREETYPE_DIR=$SYSROOT_PREFIX/usr
+export FREETYPE_INCLUDE_DIRS=$SYSROOT_PREFIX/usr
+export SDLDIR=$SYSROOT_PREFIX/usr
+export SDLIMAGEDIR=$SDLDIR/include
+export SDLMIXERDIR=$SDLDIR/include
+export OPENGL_INCLUDE_DIR=$SYSROOT_PREFIX/usr/include
+export OPENGL_gl_LIBRARY=$SYSROOT_PREFIX/usr/lib
+
+export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
+
+cd $BUILD/plex-home-theater-public-pht-frodo/config
+cmake -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr:$SYSROOT_PREFIX/usr/include" -DVERBOSE=1 -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCMAKE_INSTALL_PREFIX=/opt/plexhometheater ../.
+
+# make it so
+make
+make install
