@@ -37,19 +37,10 @@
   export ac_python_version="$PYTHON_VERSION"
 
 # configure the build
-export FFMPEG_DIR=$SYSROOT_PREFIX/usr/
-export FREETYPE_DIR=$SYSROOT_PREFIX/usr
-export FREETYPE_INCLUDE_DIRS=$SYSROOT_PREFIX/usr
-export SDLDIR=$SYSROOT_PREFIX/usr
-export SDLIMAGEDIR=$SDLDIR/include
-export SDLMIXERDIR=$SDLDIR/include
-export OPENGL_INCLUDE_DIR=$SYSROOT_PREFIX/usr/include
-export OPENGL_gl_LIBRARY=$SYSROOT_PREFIX/usr/lib
-
 export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
 
 cd $BUILD/plex-home-theater-public-pht-frodo/config
-cmake -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr:$SYSROOT_PREFIX/usr/include" -DVERBOSE=1 -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCMAKE_INSTALL_PREFIX=/opt/plexhometheater ../.
+cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DVERBOSE=1 -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCMAKE_INSTALL_PREFIX=/opt/plexhometheater ../.
 
 # make it so
 make
