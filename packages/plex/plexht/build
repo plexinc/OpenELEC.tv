@@ -40,8 +40,14 @@
 export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
 
 cd $BUILD/plex-home-theater-public-pht-frodo/config
-cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DVERBOSE=1 -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCMAKE_INSTALL_PREFIX=/opt/plexhometheater ../.
+cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCMAKE_INSTALL_PREFIX=/opt/plexhometheater ../.
 
 # make it so
 make
 make install
+
+# Build Textures.xbt for mediastream
+cd $BUILD/plex-home-theater-public-pht-frodo
+
+tools/TexturePacker -input addons/skin.mediastream/Media -output addons/skin.mediastream/Media/Textures.xbt
+cp addons/skin.mediastream/Media/Textures.xbt $SYSROOT_PREFIX/opt/plexhometheater/share/XBMC/addons/skin.mediastream/Media/Textures.xbt
