@@ -21,14 +21,13 @@
 ################################################################################
 
 . config/options $1
-. config/functions
-. config/optimize
 
 # dont use some optimizations because of build problems
   LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
 
 # dont build parallel
   MAKEFLAGS=-j1
+  strip_lto
 
   export PYTHON_VERSION="2.7"
   export PYTHON_CPPFLAGS="-I$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
@@ -43,7 +42,7 @@ cd $BUILD/plex-home-theater-public-pht-frodo/config
 cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCMAKE_INSTALL_PREFIX=/opt/plexhometheater ../.
 
 # make it so
-make
+make 
 make install
 
 # Build Textures.xbt for mediastream
