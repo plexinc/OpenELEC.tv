@@ -295,7 +295,7 @@
 # 'all' compiles all drivers;
 # 'all,!xxx,!yyy' de-selects previously selected drivers
 # "none" for disable LCD support
-  LCD_DRIVER="irtrans,imon,imonlcd,mdm166a,MtxOrb,lis,dm140,hd44780,CFontz"
+  LCD_DRIVER="irtrans,imon,imonlcd,mdm166a,MtxOrb,lis,dm140,hd44780,CFontz,SureElec"
 
 # Modules to install in initramfs for early boot
   INITRAMFS_MODULES=""
@@ -312,7 +312,7 @@
   SWAP_SUPPORT="no"
 
 # swapfile size if SWAP_SUPPORT=yes in kB (example: 262144 = 256MB )
-  SWAPFILESIZE="262144"
+  SWAPFILESIZE="131072"
 
 # build with automatic update support (yes / no)
   UPDATE_SUPPORT="yes"

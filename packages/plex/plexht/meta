@@ -44,8 +44,8 @@ PKG_AUTORECONF="no"
   PKG_DEPENDS="$PKG_DEPENDS pycrypto"
 
 # various PVR clients
-  PKG_DEPENDS="$PKG_DEPENDS xbmc-pvr-addons"
-  PKG_DEPENDS="$PKG_DEPENDS xbmc-addon-xvdr"
+#  PKG_DEPENDS="$PKG_DEPENDS xbmc-pvr-addons"
+#  PKG_DEPENDS="$PKG_DEPENDS xbmc-addon-xvdr"
 
 if [ "$DISPLAYSERVER" = "xorg-server" ]; then
   # for libX11 support

@@ -23,22 +23,22 @@
 . /etc/profile
 
 LOCKDIR="/var/lock/"
-LOCKFILE="hdhomerun"
+LOCKFILE="$LOCKDIR/hdhomerun"
 
 case "$1" in
   hibernate|suspend)
     if [ -n "$(pidof userhdhomerun)" ]; then
       progress "Shutting down HDHomeRun driver for suspending..."
       mkdir -p "$LOCKDIR"
-      touch "$LOCKDIR/$LOCKFILE"
+      touch "$LOCKFILE"
       killall userhdhomerun
     fi
     ;;
 
   thaw|resume)
-    if [ -f "$LOCKDIR/$LOCKFILE" ]; then
+    if [ -f "$LOCKFILE" ]; then
       # driver started within Tvheadend/VDR
-      rm -rf "$LOCKDIR/$LOCKFILE"
+      rm -f "$LOCKFILE"
     fi
     ;;
 

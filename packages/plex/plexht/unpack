@@ -33,5 +33,6 @@
 
 # Unpack SRC
 cd $BUILD
-unzip -o ../sources/plexht/pht-frodo.zip
-mkdir plex-home-theater-public-pht-frodo/config
+unzip -d $PKG_NAME-$PKG_VERSION -o ../sources/plexht/pht-frodo.zip
+mv $PKG_NAME-$PKG_VERSION/plex-home-theater-public-pht-frodo/* $PKG_NAME-$PKG_VERSION
+rm -r $PKG_NAME-$PKG_VERSION/plex-home-theater-public-pht-frodo

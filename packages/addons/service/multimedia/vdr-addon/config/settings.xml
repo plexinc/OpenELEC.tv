@@ -3,7 +3,7 @@
     <setting id="NUM_ADAPTERS" value="1" />
     <setting id="REMOVE_MODULES" value="" />
     <setting id="VDR_VIDEO_DIR" value="/storage/videos" />
-    <setting id="PVR_PLUGIN" value="xvdr" />
+    <setting id="PVR_PLUGIN" value="vnsiserver" />
     <setting id="ENABLE_DYNAMITE" value="true" />
     <setting id="ENABLE_IPTV" value="false" />
     <setting id="ENABLE_SOFTCAM" value="true" />
@@ -18,7 +18,4 @@
     <setting id="ENABLE_ROTORNG" value="false" />
     <setting id="ENABLE_EPGSEARCH" value="false" />
     <setting id="SOFTCAM_PLUGIN" value="sc" />
-    <setting id="ENABLE_TEXT2SKIN" value="false" />
-    <setting id="ENABLE_XINELIBOUTPUT" value="false" />
-    <setting id="XINELIBOUTPUT_PORT" value="37890" />
 </settings>
