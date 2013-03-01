@@ -1,3 +1,6 @@
+echo "This works for the PI builds not for syslinux which we use for normal intelli builds. Exiting"
+
+exit 0
 #!/bin/bash
 #[ -z $1 ] && echo "Must give a version number" && exit 1
 
