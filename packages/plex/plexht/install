@@ -53,3 +53,6 @@ cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/XBMC/system/
 cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/XBMC/
 cp $PKG_DIR/config/Textures.xbt $INSTALL/usr/share/XBMC/addons/skin.mediastream/Media/.
 chmod +x $INSTALL/usr/bin
+
+cd $PKG_BUILD/config
+make install DESTDIR=$ROOT/$INSTALL
