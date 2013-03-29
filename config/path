@@ -66,8 +66,17 @@ SED="sed -i"
   [ -r $PKG_DIR/meta ] && . $PKG_DIR/meta
   [ "$PKG_IS_ADDON" = "yes" ] && PKG_ADDON_ID="`echo $PKG_SECTION | sed 's,/,.,g'`.$PKG_NAME"
 
-  [ -d $BUILD/${PKG_NAME}[-_.]${PKG_VERSION} ] && PKG_BUILD=`ls -d $BUILD/${PKG_NAME}[-_.]${PKG_VERSION}`
-  [ -d $BUILD/${PKG_NAME}${PKG_VERSION} ] && PKG_BUILD=`ls -d $BUILD/${PKG_NAME}${PKG_VERSION}`
+  if [ -d "$BUILD/${PKG_NAME}-${PKG_VERSION}" ]; then
+    PKG_BUILD="$BUILD/${PKG_NAME}-${PKG_VERSION}"
+  elif [ -d "$BUILD/${PKG_NAME}_${PKG_VERSION}" ]; then
+    PKG_BUILD="$BUILD/${PKG_NAME}_${PKG_VERSION}"
+  elif [ -d "$BUILD/${PKG_NAME}.${PKG_VERSION}" ]; then
+    PKG_BUILD="$BUILD/${PKG_NAME}.${PKG_VERSION}"
+  elif [ -d "$BUILD/${PKG_NAME}${PKG_VERSION}" ]; then
+    PKG_BUILD="$BUILD/${PKG_NAME}${PKG_VERSION}"
+  elif [ -d "$BUILD/${PKG_NAME}" ]; then
+    PKG_BUILD="$BUILD/${PKG_NAME}"
+  fi
 
 XORG_PATH_DRI=/usr/lib/dri
 XORG_PATH_XKB=/usr/share/X11/xkb
