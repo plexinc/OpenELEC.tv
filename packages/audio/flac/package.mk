@@ -31,6 +31,28 @@ PKG_PRIORITY="optional"
 PKG_SECTION="audio"
 PKG_SHORTDESC="flac: An Free Lossless Audio Codec"
 PKG_LONGDESC="Grossly oversimplified, FLAC is similar to MP3, but lossless, meaning that audio is compressed in FLAC without throwing away any information. This is similar to how Zip works, except with FLAC you will get much better compression because it is designed specifically for audio."
-PKG_IS_ADDON="no"
 
+PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
+
+# package specific configure options
+PKG_CONFIGURE_OPTS_TARGET="--disable-rpath \
+                           --disable-altivec \
+                           --disable-doxygen-docs \
+                           --disable-thorough-tests \
+                           --disable-cpplibs \
+                           --disable-xmms-plugin \
+                           --disable-oggtest \
+                           --with-ogg=$SYSROOT_PREFIX/usr \
+                           --with-gnu-ld"
+
+if [ "$ICONV" = "libiconv" ]; then
+  PKG_CONFIGURE_OPTS_TARGET="$PKG_CONFIGURE_OPTS_TARGET --with-libiconv-prefix=$SYSROOT_PREFIX/usr"
+fi
+
+PKG_MAKE_OPTS_TARGET="-C src"
+PKG_MAKEINSTALL_OPTS_TARGET="-C src"
+
+post_makeinstall_target() {
+  rm -rf $INSTALL/usr/bin
+}
