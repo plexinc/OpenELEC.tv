@@ -31,6 +31,9 @@ PKG_PRIORITY="optional"
 PKG_SECTION="x11/proto"
 PKG_SHORTDESC="xf86dgaproto: XF86DGA extension headers"
 PKG_LONGDESC="XF86DGA extension headers"
-PKG_IS_ADDON="no"
 
+PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
+
+# package specific configure options
+PKG_CONFIGURE_OPTS_TARGET="--without-xmlto"
