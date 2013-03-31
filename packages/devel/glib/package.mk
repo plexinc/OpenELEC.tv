@@ -35,13 +35,6 @@ PKG_LONGDESC="GLib is a library which includes support routines for C such as li
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
-# hack: we need pkg.m4 for autoreconf, but pkgconfig depends on glib so install
-# pkg.m4 first
-#  $SCRIPTS/unpack pkg-config
-#  cp $BUILD/pkg-config-*/pkg.m4 $TOOLCHAIN/share/aclocal
-
-#do_autoreconf
-
 # package specific configure options
 PKG_CONFIGURE_OPTS_HOST="--disable-silent-rules \
                          --disable-debug \
@@ -102,35 +95,6 @@ pre_configure_target() {
     strip_lto
 }
 
-post_configure_target() {
-  :
-}
-
-
-post_configure_host() {
-  :
-}
-
-pre_make_target() {
-  :
-}
-
-post_make_target() {
-  :
-}
-
-pre_make_host() {
-  :
-}
-
-post_make_host() {
-  :
-}
-
-pre_makeinstall_target() {
-  :
-}
-
 post_makeinstall_target() {
   mkdir -p $SYSROOT_PREFIX/usr/lib/pkgconfig
     cp *.pc $SYSROOT_PREFIX/usr/lib/pkgconfig
@@ -148,8 +112,4 @@ post_makeinstall_target() {
 pre_makeinstall_host() {
   cp -f gobject/.libs/glib-genmarshal $ROOT/$TOOLCHAIN/bin
   cp -f gobject/glib-mkenums $ROOT/$TOOLCHAIN/bin
-}
-
-post_makeinstall_host() {
-  :
 }
