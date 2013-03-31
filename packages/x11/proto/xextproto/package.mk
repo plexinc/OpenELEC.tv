@@ -31,6 +31,9 @@ PKG_PRIORITY="optional"
 PKG_SECTION="x11/proto"
 PKG_SHORTDESC="xextproto: KB extension headers"
 PKG_LONGDESC="Xext extension headers"
-PKG_IS_ADDON="no"
 
+PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
+
+# package specific configure options
+PKG_CONFIGURE_OPTS_TARGET="--without-xmlto"
