@@ -50,8 +50,10 @@ if [ "$ICONV" = "libiconv" ]; then
   PKG_CONFIGURE_OPTS_TARGET="$PKG_CONFIGURE_OPTS_TARGET --with-libiconv-prefix=$SYSROOT_PREFIX/usr"
 fi
 
-PKG_MAKE_OPTS_TARGET="-C src"
-PKG_MAKEINSTALL_OPTS_TARGET="-C src"
+pre_make_target() {
+  # hack
+  cp -R ../doc/* ./doc
+}
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/bin
