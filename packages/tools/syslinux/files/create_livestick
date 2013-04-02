@@ -27,7 +27,7 @@ if [ "$(id -u)" != "0" ]; then
   clear
   echo "#########################################################"
   echo "# please execute with 'sudo' or -DANGEROUS!!!- as root  #"
-  echo "# example: sudo ./create_installstick <drive>           #"
+  echo "# example: sudo ./create_livestick <drive>           #"
   echo "#########################################################"
   exit 1
 fi
@@ -36,7 +36,7 @@ if [ -z "$1" ]; then
   clear
   echo "#########################################################"
   echo "# please execute with your drive as option              #"
-  echo "# example: sudo ./create_installstick /dev/sdb          #"
+  echo "# example: sudo ./create_livestick /dev/sdb          #"
   echo "#########################################################"
   exit 1
 fi
@@ -47,7 +47,7 @@ PART="${DISK}1"
 clear
 echo "#########################################################"
 echo "#                                                       #"
-echo "#             OpenELEC.tv USB Installer                 #"
+echo "#              OpenELEC LIVE Installer                  #"
 echo "#                                                       #"
 echo "#########################################################"
 echo "#                                                       #"
@@ -64,7 +64,7 @@ echo "#########################################################"
     clear
     echo "#########################################################"
     echo "#                                                       #"
-    echo "# OpenELEC.tv missing tool - Installation will quit     #"
+    echo "# OpenELEC missing tool - Installation will quit        #"
     echo "#                                                       #"
     echo "#      We can't find the required tool \"syslinux\"       #"
     echo "#      on your system.                                  #"
@@ -80,7 +80,7 @@ echo "#########################################################"
     clear
     echo "#########################################################"
     echo "#                                                       #"
-    echo "# OpenELEC.tv missing tool - Installation will quit     #"
+    echo "# OpenELEC missing tool - Installation will quit        #"
     echo "#                                                       #"
     echo "#      We can't find the required tool \"mcopy\"          #"
     echo "#      on your system.                                  #"
@@ -98,7 +98,7 @@ echo "#########################################################"
     clear
     echo "#########################################################"
     echo "#                                                       #"
-    echo "# OpenELEC.tv missing tool - Installation will quit     #"
+    echo "# OpenELEC missing tool - Installation will quit        #"
     echo "#                                                       #"
     echo "#      We can't find the required tool \"parted\"         #"
     echo "#      on your system.                                  #"
@@ -117,7 +117,7 @@ echo "#########################################################"
     clear
     echo "#########################################################"
     echo "#                                                       #"
-    echo "# OpenELEC.tv failed md5 check - Installation will quit #"
+    echo "# OpenELEC failed md5 check - Installation will quit    #"
     echo "#                                                       #"
     echo "#      Your original download was probably corrupt.     #"
     echo "#   Please visit www.openelec.tv and get another copy   #"
@@ -177,12 +177,47 @@ echo "#########################################################"
 # create bootloader configuration
   echo "creating bootloader configuration..."
 
-  echo "DEFAULT linux" > /tmp/usb_install/syslinux.cfg
-  echo "PROMPT 0" >> /tmp/usb_install/syslinux.cfg
-  echo " " >> /tmp/usb_install/syslinux.cfg
-  echo "LABEL linux" >> /tmp/usb_install/syslinux.cfg
-  echo "  KERNEL /KERNEL" >> /tmp/usb_install/syslinux.cfg
-  echo "  APPEND boot=UUID=$UUID installer quiet" >> /tmp/usb_install/syslinux.cfg
+cat >/tmp/usb_install/syslinux.cfg << EOF
+UI vesamenu.c32
+PROMPT 0
+MENU TITLE Boot Menu
+MENU BACKGROUND splash.png
+TIMEOUT 50
+DEFAULT live
+
+MENU WIDTH 70
+MENU MARGIN 15
+MENU ROWS 2
+MENU HSHIFT 4
+MENU VSHIFT 13
+MENU TIMEOUTROW 10
+MENU TABMSGROW 8
+MENU CMDLINEROW 8
+MENU HELPMSGROW 13
+MENU HELPMSGENDROW 26
+MENU CLEAR
+
+MENU COLOR border       30;44   #40ffffff #00000000 std
+MENU COLOR title        1;36;44 #ff8bbfe3 #00000000 std
+MENU COLOR sel          7;37;40 #80f0f0f0 #ff606060 all
+MENU COLOR unsel        37;44   #50ffffff #00000000 std
+MENU COLOR help         37;40   #c0ffffff #a0000000 std
+MENU COLOR timeout_msg  37;40   #80ffffff #00000000 std
+MENU COLOR timeout      1;37;40 #c0ffffff #00000000 std
+MENU COLOR msg07        37;40   #90ffffff #a0000000 std
+MENU COLOR tabmsg       31;40   #ff868787 #00000000 std
+
+LABEL installer
+  MENU LABEL Run OpenELEC Installer
+  KERNEL /KERNEL
+  APPEND boot=UUID=$UUID installer quiet vga=current
+
+LABEL live
+  MENU LABEL Run OpenELEC Live
+  KERNEL /KERNEL
+  APPEND boot=UUID=$UUID disk=FILE=STORAGE,512 quiet vga=current
+
+EOF
 
 # copy files
   echo "copying files to $PART..."
@@ -190,12 +225,15 @@ echo "#########################################################"
   cp target/KERNEL.md5 /tmp/usb_install
   cp target/SYSTEM /tmp/usb_install
   cp target/SYSTEM.md5 /tmp/usb_install
-  cp Autorun.inf /tmp/usb_install
+#  cp Autorun.inf /tmp/usb_install
   cp openelec.ico /tmp/usb_install
   cp CHANGELOG /tmp/usb_install
   cp INSTALL /tmp/usb_install
   cp README.md /tmp/usb_install
   cp RELEASE /tmp/usb_install
+
+  cp 3rdparty/syslinux/vesamenu.c32 /tmp/usb_install
+  cp splash.png /tmp/usb_install
 
 # sync disk
   echo "syncing disk..."
