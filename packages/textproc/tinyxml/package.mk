@@ -1,5 +1,3 @@
-#!/bin/sh
-
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2012 Stephan Raue (stephan@openelec.tv)
@@ -20,18 +18,45 @@
 #  http://www.gnu.org/copyleft/gpl.html
 ################################################################################
 
-. config/options $1
+PKG_NAME="tinyxml"
+PKG_VERSION="2.6.2"
+PKG_REV="1"
+PKG_ARCH="any"
+PKG_LICENSE="OSS"
+PKG_SITE="http://www.grinninglizard.com/tinyxml/"
+PKG_URL="$SOURCEFORGE_SRC/$PKG_NAME/$PKG_VERSION/${PKG_NAME}_`echo $PKG_VERSION | sed 's,\.,_,g'`.tar.gz"
+PKG_DEPENDS=""
+PKG_BUILD_DEPENDS_TARGET="toolchain"
+PKG_PRIORITY="optional"
+PKG_SECTION="textproc"
+PKG_SHORTDESC="tinyxml: XML parser library"
+PKG_LONGDESC="TinyXML is a simple, small, C++ XML parser that can be easily integrating into other programs."
 
-cd $PKG_BUILD
+PKG_IS_ADDON="no"
+PKG_AUTORECONF="no"
 
-# Not really designed to be build as lib, DYI
+PKG_BUILD="$BUILD/$PKG_NAME-$PKG_VERSION"
+
+pre_build_target() {
+  mv $ROOT/$BUILD/$PKG_NAME $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
+}
+
+make_target() {
   for i in tinyxml.cpp tinystr.cpp tinyxmlerror.cpp tinyxmlparser.cpp; do
+    echo CXX $i
     $CXX $CXXFLAGS -fPIC -o $i.o -c $i
   done
+  echo LD lib${PKG_NAME}.so.${PKG_VERSION}
   $CXX $LDFLAGS -shared -o lib${PKG_NAME}.so.${PKG_VERSION} -Wl,-soname,lib${PKG_NAME}.so.0 *.cpp.o
 
   ln -sf lib${PKG_NAME}.so.${PKG_VERSION} lib${PKG_NAME}.so.0
   ln -sf lib${PKG_NAME}.so.0 lib${PKG_NAME}.so
+}
 
+makeinstall_target() {
   cp -P lib${PKG_NAME}.so* $SYSROOT_PREFIX/usr/lib
   cp -P ${PKG_NAME}.h $SYSROOT_PREFIX/usr/include
+
+  mkdir -p .install_pkg/usr/lib
+  cp -PR lib${PKG_NAME}.so* .install_pkg/usr/lib
+}
