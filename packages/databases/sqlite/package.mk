@@ -26,11 +26,46 @@ PKG_LICENSE="PublicDomain"
 PKG_SITE="http://www.sqlite.org/"
 PKG_URL="http://sqlite.org/2013/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS=""
-PKG_BUILD_DEPENDS="toolchain"
+PKG_BUILD_DEPENDS_TARGET="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="database"
 PKG_SHORTDESC="sqlite: An Embeddable SQL Database Engine"
 PKG_LONGDESC="SQLite is a C library that implements an embeddable SQL database engine. Programs that link with the SQLite library can have SQL database access without running a separate RDBMS process. The distribution comes with a standalone command-line access program (sqlite) that can be used to administer an SQLite database and which serves as an example of how to use the SQLite library. SQLite is not a client library used to connect to a big database server. SQLite is the server. The SQLite library reads and writes directly to and from the database files on disk."
-PKG_IS_ADDON="no"
 
+PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
+
+# package specific configure options
+PKG_CONFIGURE_OPTS_TARGET="--disable-readline \
+                           --enable-threadsafe \
+                           --enable-dynamic-extensions \
+                           --with-gnu-ld"
+
+pre_configure_target() {
+  # sqlite fails to compile with fast-math link time optimization.
+    CFLAGS=`echo $CFLAGS | sed -e "s|-Ofast|-O3|g"`
+    CFLAGS=`echo $CFLAGS | sed -e "s|-ffast-math||g"`
+
+  # This option adds additional logic to the ANALYZE command and to the query planner
+  # that can help SQLite to chose a better query plan under certain situations. The
+  # ANALYZE command is enhanced to collect histogram data from each index and store
+  # that data in the sqlite_stat3 table. The query planner will then use the histogram
+  # data to help it make better index choices.
+    CFLAGS="$CFLAGS -DSQLITE_ENABLE_STAT3"
+
+  # When this C-preprocessor macro is defined, SQLite includes some additional APIs
+  # that provide convenient access to meta-data about tables and queries. The APIs that
+  # are enabled by this option are:
+  #  - sqlite3_column_database_name()
+  #  - sqlite3_column_database_name16()
+  #  - sqlite3_column_table_name()
+  #  - sqlite3_column_table_name16()
+  #  - sqlite3_column_origin_name()
+  #  - sqlite3_column_origin_name16()
+  #  - sqlite3_table_column_metadata()
+    CFLAGS="$CFLAGS -DSQLITE_ENABLE_COLUMN_METADATA=1"
+}
+
+post_makeinstall_target() {
+  rm -rf $INSTALL/usr/bin
+}
