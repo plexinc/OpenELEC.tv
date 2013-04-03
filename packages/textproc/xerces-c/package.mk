@@ -26,11 +26,41 @@ PKG_LICENSE="APL"
 PKG_SITE="http://xml.apache.org/xerces-c/"
 PKG_URL="http://mirror.switch.ch/mirror/apache/dist/xerces/c/3/sources/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS="$ICONV curl"
-PKG_BUILD_DEPENDS="toolchain $ICONV curl"
+PKG_BUILD_DEPENDS_TARGET="toolchain $ICONV curl"
 PKG_PRIORITY="optional"
 PKG_SECTION="textproc"
 PKG_SHORTDESC="xerces-c: A C++ XML parser"
 PKG_LONGDESC="Xerces C++ is a validating XML parser written in a portable subset of C++. It makes it easy to give your application the ability to read and write XML data. A shared library is provided for parsing, generating, manipulating, and validating XML documents. It is faithful to the XML 1. 0 recommendation and associated standards ( DOM 1. 0, DOM 2. 0. SAX 1. 0, SAX 2. 0, Namespaces). It also provides an implementation of a subset of the Schema."
-PKG_IS_ADDON="no"
 
+PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
+
+# package specific configure options
+PKG_CONFIGURE_OPTS_TARGET="acx_pthread_ok=yes \
+                           --enable-netaccessor-curl \
+                           --enable-netaccessor-socket \
+                           --enable-netaccessor-cfurl \
+                           --enable-netaccessor-winsock \
+                           --enable-transcoder-gnuiconv \
+                           --enable-transcoder-iconv \
+                           --disable-transcoder-icu \
+                           --enable-transcoder-macosunicodeconverter \
+                           --enable-transcoder-windows \
+                           --enable-msgloader-inmemory \
+                           --disable-msgloader-icu \
+                           --enable-msgloader-iconv \
+                           --disable-rpath \
+                           --with-gnu-ld"
+
+pre_configure_target() {
+  if [ "$ICONV" = "libiconv" ]; then
+    export LDFLAGS="$LDFLAGS -liconv"
+  fi
+
+  # xerces-c fails to build with LTO support
+  strip_lto
+}
+
+post_makeinstall_target() {
+  rm -rf $INSTALL/usr/bin
+}
