@@ -1,27 +1,27 @@
 # Name of the Distro to build (full name, without special charcters)
-  DISTRONAME="OpenELEC"
+  DISTRONAME="PlexELEC"
 
 # Welcome Message for e.g. SSH Server (up to 5 Lines)
   GREETING0="##############################################"
-  GREETING1="# OpenELEC - The living room PC for everyone #"
+  GREETING1="# PlexELEC - The living room PC for everyone #"
   GREETING2="# ...... visit http://www.openelec.tv ...... #"
   GREETING3="##############################################"
   GREETING4=""
 
 # Hostname for target system (openelec)
-  HOSTNAME="openelec"
+  HOSTNAME="plexelec"
 
 # Root password to integrate in the target system
-  ROOT_PASSWORD="openelec"
+  ROOT_PASSWORD="plexelec"
 
 # User to integrate in the target system
-  USER_NAME="openelec"
+  USER_NAME="plexelec"
 
 # User group to integrate in the target system
-  USER_GROUP="openelec"
+  USER_GROUP="plexelec"
 
 # User password to integrate in the target system
-  USER_PASSWORD="openelec"
+  USER_PASSWORD="plexelec"
 
 # The TARGET_CPU variable controls which processor should be targeted for
 # generated code.
@@ -100,8 +100,8 @@
 # SquashFS compression method (gzip / lzo / xz)
   SQUASHFS_COMPRESSION="gzip"
 
-# Mediacenter to use (xbmc / no)
-  MEDIACENTER="xbmc"
+# Mediacenter to use (xbmc / plexht / no)
+  MEDIACENTER="plexht"
 
 # Skins to install (Confluence)
 # Space separated list is supported,
@@ -132,7 +132,7 @@
   ALSA_SUPPORT="yes"
 
 # build and install PulseAudio support (yes / no)
-  PULSEAUDIO_SUPPORT="no"
+  PULSEAUDIO_SUPPORT="yes"
 
 # build and install with non-free support
 # (RAR compression support in XBMC) (yes / no)
@@ -173,7 +173,7 @@
   UPNP_SUPPORT="yes"
 
 # build with MySQL support (yes / no)
-  MYSQL_SUPPORT="yes"
+  MYSQL_SUPPORT="no"
 
 # build xbmc with sshlib support (yes / no)
   SSHLIB_SUPPORT="yes"
@@ -206,10 +206,10 @@
   SSHGUARD_SUPPORT="yes"
 
 # build and install PPP support (yes / no)
-  PPTP_SUPPORT="yes"
+  PPTP_SUPPORT="no"
 
 # build and install OpenVPN support (yes / no)
-  OPENVPN_SUPPORT="yes"
+  OPENVPN_SUPPORT="no"
 
 # build and install diskmounter service (udisks)
 # this service provide auto mounting support for external drives
@@ -243,23 +243,23 @@
 # Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,fglrx,nvidia,nouveau,vmware,virtualbox)
 # Space separated list is supported,
 # e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeon nvidia nouveau"
-  GRAPHIC_DRIVERS="vmware virtualbox"
+  GRAPHIC_DRIVERS="vmware virtualbox i915 i965 radeon nvidia"
 
 # OpenMAX implementation to use (no / bcm2835-driver)
   OPENMAX="no"
 
 # Use VDPAU video acceleration (needs nVidia driver and a supported card)
-  VDPAU="no"
+  VDPAU="yes"
 
 # Use VAAPI video acceleration (needs intel i965 driver and a supported card)
-  VAAPI="no"
+  VAAPI="yes"
 
 # Use XVBA video acceleration (needs AMD fglrx driver and a supported card)
   XVBA="no"
 
 # Use Broadcom CrystalHD Decoder Card for video acceleration 
 # (needs Kernelsupport for Broadcom Decoder Card and a supported card)
-  CRYSTALHD="no"
+  CRYSTALHD="yes"
 
 # build and install remote support (yes / no)
   REMOTE_SUPPORT="yes"

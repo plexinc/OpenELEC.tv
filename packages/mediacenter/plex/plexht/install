@@ -24,7 +24,24 @@
 
 mkdir -p $INSTALL/usr/lib/XBMC
 
+mkdir -p $INSTALL/usr/bin
+  cp $PKG_DIR/scripts/cputemp $INSTALL/usr/bin
+  cp $PKG_DIR/scripts/gputemp $INSTALL/usr/bin
+  cp $PKG_DIR/scripts/wait_on_xbmc_exit $INSTALL/usr/bin
+  cp $PKG_DIR/scripts/setwakeup.sh $INSTALL/usr/bin
+
+mkdir -p $INSTALL/usr/lib/plexhometheater/system
+  cp $PKG_BUILD/config/plex/plexhometheater $INSTALL/usr/lib/plexhometheater
+  if [ "$DISPLAYSERVER" = "xorg-server" ]; then
+    cp $PKG_BUILD/config/xbmc-xrandr $INSTALL/usr/lib/plexhometheater/.
+  fi
+
 cd $PKG_BUILD
+find config/lib -not \( -name CMakeFiles -prune \) \
+    -regextype posix-extended -type f \
+    -not -iregex ".*svn.*|.*win32(dx)?\.vis|.*osx\.vis" \
+    -iregex ".*-linux.*|.*-arm.*|.*\.vis|.*\.xbs" \
+    -exec cp "{}" $ROOT/$INSTALL/usr/lib/plexhometheater/system/ ";"
 find system addons \
     -regextype posix-extended -type f \
     -not -iregex ".*svn.*|.*win32(dx)?\.vis|.*osx\.vis" \
@@ -44,6 +61,7 @@ mkdir -p $INSTALL/usr/share/XBMC/addons
     cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/XBMC/addons
     $SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/XBMC/addons/repository.openelec.tv/addon.xml
 
+
 mkdir -p $INSTALL/usr/share/XBMC/system/
 mkdir -p $INSTALL/usr/bin/
 
@@ -52,7 +70,14 @@ cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/XBMC/
 cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/XBMC/system/
 cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/XBMC/
 cp $PKG_DIR/config/Textures.xbt $INSTALL/usr/share/XBMC/addons/skin.mediastream/Media/.
+cp $PKG_DIR/profile.d/plex.conf /etc/profile.d/
 chmod +x $INSTALL/usr/bin
 
-cd $PKG_BUILD/config
-make install DESTDIR=$ROOT/$INSTALL
+# overriding Splash image
+mkdir -p $INSTALL/usr/share/xbmc/media
+  rm -rf $INSTALL/usr/share/xbmc/media/Splash.png
+   if [ -f $PROJECT_DIR/$PROJECT/splash/splash.png ]; then
+     cp $PROJECT_DIR/$PROJECT/splash/splash.png $INSTALL/usr/share/xbmc/media/Splash.png
+   else
+     cp $PKG_DIR/splash/splash.png $INSTALL/usr/share/XBMC/media/Splash.png
+   fi

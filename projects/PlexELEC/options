@@ -1,27 +1,27 @@
 # Name of the Distro to build (full name, without special charcters)
-  DISTRONAME="OpenELEC"
+  DISTRONAME="PlexELEC"
 
 # Welcome Message for e.g. SSH Server (up to 5 Lines)
   GREETING0="##############################################"
-  GREETING1="# OpenELEC - The living room PC for everyone #"
+  GREETING1="# PlexELEC - The living room PC for everyone #"
   GREETING2="# ...... visit http://www.openelec.tv ...... #"
   GREETING3="##############################################"
   GREETING4=""
 
 # Hostname for target system (openelec)
-  HOSTNAME="openelec"
+  HOSTNAME="plexelec"
 
 # Root password to integrate in the target system
-  ROOT_PASSWORD="openelec"
+  ROOT_PASSWORD="plexelec"
 
 # User to integrate in the target system
-  USER_NAME="openelec"
+  USER_NAME="plexelec"
 
 # User group to integrate in the target system
-  USER_GROUP="openelec"
+  USER_GROUP="plexelec"
 
 # User password to integrate in the target system
-  USER_PASSWORD="openelec"
+  USER_PASSWORD="plexelec"
 
 # The TARGET_CPU variable controls which processor should be targeted for
 # generated code.
@@ -105,7 +105,7 @@
 # SquashFS compression method (gzip / lzo / xz)
   SQUASHFS_COMPRESSION="gzip"
 
-# Mediacenter to use (xbmc / no)
+# Mediacenter to use (xbmc / plexht / no)
   MEDIACENTER="plexht"
 
 # Skins to install (Confluence)
@@ -117,7 +117,7 @@
   SKIN_DEFAULT="Confluence"
 
 # install extra subtitle Fonts for XBMC (yes / no)
-  XBMC_EXTRA_FONTS="no"
+  XBMC_EXTRA_FONTS="yes"
 
 # Plugins for XBMC to install (SABnzbd)
 # Space separated list is supported,
@@ -125,13 +125,13 @@
   XBMC_PLUGINS=""
 
 # build and install 'RSXS' Screensaver (yes / no)
-  XBMC_SCR_RSXS="no"
+  XBMC_SCR_RSXS="yes"
 
 # build and install 'ProjectM' Visualization (yes / no)
-  XBMC_VIS_PROJECTM="no"
+  XBMC_VIS_PROJECTM="yes"
 
 # build and install 'GOOM' Visualization (yes / no)
-  XBMC_VIS_GOOM="no"
+  XBMC_VIS_GOOM="yes"
 
 # build and install ALSA Audio support (yes / no)
   ALSA_SUPPORT="yes"
@@ -160,7 +160,7 @@
 # for a list of additinoal drivers see packages/linux-drivers
 # Space separated list is supported,
 # e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
-  ADDITIONAL_DRIVERS="RTL8192CU dvbhdhomerun"
+  ADDITIONAL_DRIVERS="RTL8192CU vboxguest dvbhdhomerun"
 
 # build with network support (yes / no)
   NETWORK="yes"
@@ -181,7 +181,6 @@
   MYSQL_SUPPORT="no"
 
 # build xbmc with sshlib support (yes / no)
-
   SSHLIB_SUPPORT="yes"
 
 # build xbmc with optical drive support (yes / no)
@@ -249,7 +248,7 @@
 # Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,fglrx,nvidia,nouveau,vmware)
 # Space separated list is supported,
 # e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeon nvidia nouveau"
-  GRAPHIC_DRIVERS="i915 i965"
+  GRAPHIC_DRIVERS="nvidia"
 
 # OpenMAX implementation to use (no / bcm2835-driver)
   OPENMAX="no"
@@ -299,7 +298,7 @@
   LCD_DRIVER="irtrans,imon,imonlcd,mdm166a,MtxOrb,lis,dm140,hd44780,CFontz"
 
 # Modules to install in initramfs for early boot
-  INITRAMFS_MODULES="xhci-hcd"
+  INITRAMFS_MODULES="uvesafb xhci-hcd"
 
 # additional Firmware to use (dvb-firmware, misc-firmware, wlan-firmware)
 # Space separated list is supported,

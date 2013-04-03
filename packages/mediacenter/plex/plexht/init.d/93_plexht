@@ -24,7 +24,7 @@
 
 LIRCDEV="/var/run/lirc/lircd"
 [ -e /var/run/lirc/lircd.irtrans ] && LIRCDEV="/var/run/lirc/lircd.irtrans"
-XBMC_ARGS="--standalone -fs --lircdev $LIRCDEV --debug"
+XBMC_ARGS="--standalone -fs --lircdev $LIRCDEV"
 
 progress "starting XBMC"
 
@@ -52,6 +52,12 @@ fi
 # waiting for Xorg to start
   wait_for_xorg
 
+# wait for network
+  wait_for_inet_addr
+
+# wait for udevadm settle to finish
+  wait_for_udevadm_settle
+
 # set cpu's to 'conservative'
   ( usleep 15000000
     progress "set cpu's to 'ondemand'"
@@ -71,7 +77,7 @@ fi
       usleep 250000
     done
 
-    XBMC_HOME=/usr/share/XBMC /usr/bin/plexhometheater $XBMC_ARGS > /dev/null 2>&1
+    DISPLAY=:0.0 /usr/lib/plexhometheater/plexhometheater $XBMC_ARGS > /dev/null 2>&1
     RET=$?
 
     case "$RET" in
