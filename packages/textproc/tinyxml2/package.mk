@@ -1,5 +1,3 @@
-#!/bin/sh
-
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2012 Stephan Raue (stephan@openelec.tv)
@@ -20,7 +18,28 @@
 #  http://www.gnu.org/copyleft/gpl.html
 ################################################################################
 
-. config/options $1
+PKG_NAME="tinyxml2"
+PKG_VERSION="78d450b"
+PKG_REV="1"
+PKG_ARCH="any"
+PKG_LICENSE="zlib"
+PKG_SITE="http://www.grinninglizard.com/tinyxml2/index.html"
+PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
+PKG_DEPENDS=""
+PKG_BUILD_DEPENDS_TARGET="toolchain cmake"
+PKG_PRIORITY="optional"
+PKG_SECTION="textproc"
+PKG_SHORTDESC="tinyxml2: XML parser library"
+PKG_LONGDESC="TinyXML2 is a simple, small, C++ XML parser that can be easily integrating into other programs."
 
-mkdir -p $INSTALL/usr/lib
-  cp -P $PKG_BUILD/build/src/*.so* $INSTALL/usr/lib
+PKG_IS_ADDON="no"
+PKG_AUTORECONF="no"
+
+# package specific configure options
+configure_target() {
+  cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF -DCMAKE_INSTALL_PREFIX=/usr ..
+}
+
+post_makeinstall_target() {
+ : #  rm -rf $INSTALL/usr/bin
+}
