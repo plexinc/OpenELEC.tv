@@ -38,5 +38,8 @@ make
 mkdir -p $ROOT/$TOOLCHAIN/bin
   cp pkg-config $ROOT/$TOOLCHAIN/bin
 
+mkdir -p $ROOT/$TOOLCHAIN/share/aclocal
+  cp pkg.m4 $ROOT/$TOOLCHAIN/share/aclocal
+
 mkdir -p $SYSROOT_PREFIX/usr/share/aclocal
   cp pkg.m4 $SYSROOT_PREFIX/usr/share/aclocal
