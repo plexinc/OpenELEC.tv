@@ -22,11 +22,5 @@
 
 . config/options $1
 
-cd $PKG_BUILD
-  rm -rf `find . -name "*.pyo"`
-
-  python -Wi -t -B $ROOT/$TOOLCHAIN/lib/python2.7/compileall.py ./service.openelec.settings/resources/lib/ -f
-  rm -rf `find ./service.openelec.settings/resources/lib/ -name "*.py"`
-
-  python -Wi -t -B $ROOT/$TOOLCHAIN/lib/python2.7/compileall.py ./service.openelec.settings/oe.py -f
-  rm -rf ./service.openelec.settings/oe.py
+mkdir -p $INSTALL/usr/share/xbmc/addons/service.openelec.settings
+  cp -R $PKG_BUILD/* $INSTALL/usr/share/xbmc/addons/service.openelec.settings
