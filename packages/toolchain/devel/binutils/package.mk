@@ -24,16 +24,60 @@ PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.gnu.org/software/binutils/binutils.html"
-#PKG_URL="http://www.mirrorservice.org/sites/ftp.kernel.org/pub/linux/devel/binutils/$PKG_NAME-$PKG_VERSION.tar.bz2"
-#PKG_URL="ftp://ftp.pgpi.com/linux/kernel/pub/linux/devel/binutils/$PKG_NAME-$PKG_VERSION.tar.bz2"
 PKG_URL="http://ftp.gnu.org/gnu/binutils/$PKG_NAME-$PKG_VERSION.tar.gz"
-#PKG_URL="ftp://ftp.kernel.org/pub/linux/devel/binutils/$PKG_NAME-$PKG_VERSION.tar.bz2"
 PKG_DEPENDS=""
-PKG_BUILD_DEPENDS="ccache bison flex linux-headers gmp-host mpfr cloog ppl"
+PKG_BUILD_DEPENDS_HOST="ccache bison:host flex linux-headers gmp-host mpfr cloog ppl"
 PKG_PRIORITY="optional"
 PKG_SECTION="toolchain/devel"
 PKG_SHORTDESC="binutils: A GNU collection of binary utilities"
 PKG_LONGDESC="The GNU binutils are utilities of use when dealing with object files. the packages includes ld - the GNU linker, as - the GNU assembler, addr2line - converts addresses into filenames and line numbers, ar - a utility for creating, modifying and extracting from archives, c++filt - filter to demangle encoded C++ symbols, gprof - displays profiling information, nlmconv - converts object code into an NLM, nm - lists symbols from object files, objcopy - Copys and translates object files, objdump - displays information from object files, ranlib - generates an index to the contents of an archive, readelf - displays information from any ELF format object file, size - lists the section sizes of an object or archive file, strings - lists printable strings from files, strip - discards symbols as well as windres - a compiler for Windows resource files."
-PKG_IS_ADDON="no"
 
+PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
+
+# package specific configure options
+HOST_CONFIGURE_OPTS="--host=$HOST_NAME \
+                     --build=$HOST_NAME \
+                     --target=$TARGET_NAME \
+                     --prefix=$ROOT/$TOOLCHAIN \
+                     --with-sysroot=$SYSROOT_PREFIX \
+                     --with-lib-path=$SYSROOT_PREFIX/lib:$SYSROOT_PREFIX/usr/lib \
+                     --with-gmp=$ROOT/$TOOLCHAIN \
+                     --with-mpfr=$ROOT/$TOOLCHAIN \
+                     --with-ppl=$ROOT/$TOOLCHAIN \
+                     --with-cloog=$ROOT/$TOOLCHAIN \
+                     --disable-werror \
+                     --disable-multilib \
+                     --disable-libada \
+                     --disable-libssp \
+                     --enable-cloog-backend=isl \
+                     --enable-version-specific-runtime-libs \
+                     --enable-plugins \
+                     --disable-gold \
+                     --enable-ld \
+                     --enable-lto \
+                     --disable-nls"
+
+# Disable PPL version check as the PPL major version number has been bumped so the check fails.
+  HOST_CONFIGURE_OPTS="$HOST_CONFIGURE_OPTS --disable-ppl-version-check"
+
+  if [ "$TARGET_ARCH" = "x86_64" ]; then
+    HOST_CONFIGURE_OPTS="$HOST_CONFIGURE_OPTS --enable-64-bit-bfd"
+  fi
+
+pre_configure_host() {
+  CPPFLAGS=""
+  CFLAGS=""
+  CXXFLAGS=""
+  LDFLAGS=""
+}
+
+make_host() {
+  make configure-host
+  make
+}
+
+post_makeinstall_host() {
+  mkdir -p $SYSROOT_PREFIX/usr/include
+  cp -v ../include/libiberty.h $SYSROOT_PREFIX/usr/include
+}
