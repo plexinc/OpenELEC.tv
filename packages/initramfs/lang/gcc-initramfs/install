@@ -25,4 +25,4 @@
 GCC_DIR="$BUILD/gcc-*"
 
 mkdir -p $INSTALL/lib
-  cp -P $GCC_DIR/objdir-gcc-final/$TARGET_NAME/libgcc/libgcc_s.so* $INSTALL/lib
+  cp -P $GCC_DIR/.install_pkg/lib/libgcc_s.so* $INSTALL/lib
