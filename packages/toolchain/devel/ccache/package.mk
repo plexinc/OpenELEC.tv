@@ -31,6 +31,30 @@ PKG_PRIORITY="optional"
 PKG_SECTION="toolchain/devel"
 PKG_SHORTDESC="ccache: A fast compiler cache"
 PKG_LONGDESC="Ccache is a compiler cache. It speeds up re-compilation of C/C++ code by caching previous compiles and detecting when the same compile is being done again."
-PKG_IS_ADDON="no"
 
+PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
+
+pre_configure_host() {
+  CC=$LOCAL_CC
+}
+
+makeinstall_host() {
+  mkdir -p $ROOT/$TOOLCHAIN/bin
+  cp -f ccache $ROOT/$TOOLCHAIN/bin
+
+  # setup ccache
+  $ROOT/$TOOLCHAIN/bin/ccache --max-size=$CCACHE_CACHE_SIZE
+
+cat > $HOST_CC <<EOF
+#!/bin/sh
+$ROOT/$TOOLCHAIN/bin/ccache $LOCAL_CC "\$@"
+EOF
+  chmod +x $HOST_CC
+
+cat > $HOST_CXX <<EOF
+#!/bin/sh
+$ROOT/$TOOLCHAIN/bin/ccache $LOCAL_CXX "\$@"
+EOF
+  chmod +x $HOST_CXX
+}
