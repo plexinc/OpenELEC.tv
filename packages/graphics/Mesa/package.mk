@@ -19,12 +19,13 @@
 ################################################################################
 
 PKG_NAME="Mesa"
-PKG_VERSION="9.1.5"
+PKG_VERSION="9.2-20130726"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://www.mesa3d.org/"
-PKG_URL="ftp://freedesktop.org/pub/mesa/$PKG_VERSION/MesaLib-$PKG_VERSION.tar.bz2"
+# PKG_URL="ftp://freedesktop.org/pub/mesa/$PKG_VERSION/MesaLib-$PKG_VERSION.tar.bz2"
+PKG_URL="$DISTRO_SRC/MesaLib-$PKG_VERSION.tar.bz2"
 PKG_DEPENDS="libXdamage libdrm expat libXext libXfixes libX11"
 PKG_BUILD_DEPENDS_TARGET="toolchain Python-host makedepend libxml2-host expat glproto dri2proto libdrm libXext libXdamage libXfixes libXxf86vm libxcb libX11"
 PKG_PRIORITY="optional"
@@ -35,6 +36,9 @@ PKG_LONGDESC="Mesa is a 3-D graphics library with an API which is very similar t
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
+# configure GPU drivers and dependencies:
+  get_graphicdrivers
+
 if [ "$LLVM_SUPPORT" = "yes" ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET llvm"
   PKG_DEPENDS="$PKG_DEPENDS llvm"
@@ -44,7 +48,7 @@ else
   MESA_GALLIUM_LLVM="--disable-gallium-llvm"
 fi
 
-if [ "$MESA_VDPAU_SUPPORT" = "yes" ]; then
+if [ "$VDPAU" = "yes" ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libvdpau"
   PKG_DEPENDS="$PKG_DEPENDS libvdpau"
   MESA_VDPAU="--enable-vdpau"
@@ -56,8 +60,6 @@ if [ "$MESA_VAAPI_SUPPORT" = "yes" ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libva"
   PKG_DEPENDS="$PKG_DEPENDS libva"
 fi
-
-get_graphicdrivers
 
 XA_CONFIG="--disable-xa"
 for drv in $GRAPHIC_DRIVERS; do
