@@ -230,11 +230,11 @@ else
   XBMC_CRYSTALHD="--disable-crystalhd"
 fi
 
-# xbmc fails to build with LTO optimization
-  strip_lto
+# xbmc fails to build with LTO optimization if build without GOLD support
+  [ ! "$GOLD_SUPPORT" = "yes" ] && strip_lto
 
-# dont use some optimizations because of build problems
-  LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
+# Todo: XBMC segfaults on exit when building with LTO support
+  strip_lto
 
 # dont build parallel
 # MAKEFLAGS=-j1

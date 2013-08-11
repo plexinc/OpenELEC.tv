@@ -36,6 +36,12 @@ fi
 # hack: make addon-bins executable
   chmod +x /storage/.xbmc/addons/*/bin/* > /dev/null 2>&1
 
+# hack: update RSSnews.xml in userdata
+  if [ -f /storage/.xbmc/userdata/RssFeeds.xml ]; then
+    sed -e "s,http://openelec.tv/news?format=feed&type=rss,http://feeds.openelec.tv/news,g" \
+        -i /storage/.xbmc/userdata/RssFeeds.xml
+  fi
+
 # starting autostart script (will be removed later again, dont use it!!!)
   AUTOSTART="/storage/.config/autostart.sh"
   if [ -f $AUTOSTART ]; then
@@ -49,6 +55,9 @@ fi
 # starting autoupdate
   [ -f /usr/bin/autoupdate ] && /usr/bin/autoupdate &
 
+# wait for DBUS to finish
+  wait_for_dbus
+
 # waiting for Xorg to start
   wait_for_xorg
 
@@ -57,12 +66,6 @@ fi
 
 # wait for udevadm settle to finish
   wait_for_udevadm_settle
-
-# set cpu's to 'ondemand'
-  ( usleep 15000000
-    progress "set cpu's to 'ondemand'"
-    cpupower frequency-set -g ondemand > /dev/null 2>&1
-  )&
 
 # prevent restrating XBMC at reboot or shutdown
   LOCKDIR="/var/lock/"

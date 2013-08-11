@@ -26,6 +26,8 @@
 (
   progress "automount internal disks"
 
+  wait_for_dbus
+
   drive_dump () {
     udisks --dump | tr -d ' ' | grep 'device-file:' | cut -d ':' -f2
   }

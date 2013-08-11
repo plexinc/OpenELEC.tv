@@ -6,6 +6,7 @@
 ACTION!="add|remove", GOTO="end"
 
 KERNEL=="hiddev[0-9]*", SUBSYSTEM=="usb",  SUBSYSTEMS=="usb", GOTO="begin"
+KERNEL=="ttyACM[0-9]*", SUBSYSTEM=="tty",  SUBSYSTEMS=="usb", GOTO="begin"
 KERNEL=="lirc[0-9]*",   SUBSYSTEM=="lirc", SUBSYSTEMS=="i2c", GOTO="begin"
 KERNEL=="lirc[0-9]*",   SUBSYSTEM=="lirc", SUBSYSTEMS=="usb", GOTO="begin"
 KERNEL=="lirc[0-9]*",   SUBSYSTEM=="lirc", SUBSYSTEMS=="platform", GOTO="begin"
@@ -36,11 +37,14 @@ SUBSYSTEM=="lirc", DRIVERS=="lirc_rpi", \
 # up as event devices are not included as as they are handled by eventlircd.
 #-------------------------------------------------------------------------------
 SUBSYSTEMS=="usb", GOTO="begin-usb"
-SUBSYSTEMS=="usb", GOTO="begin-usb"
 GOTO="end-usb"
 LABEL="begin-usb"
 
 ENV{ID_USB_INTERFACES}=="", IMPORT{builtin}="usb_id"
+
+ENV{ID_VENDOR_ID}=="04d8", ENV{ID_MODEL_ID}=="fd08", \
+  ENV{lircd_driver}="usb_irtoy", \
+  ENV{lircd_conf}="/storage/.config/lircd.conf"
 
 ENV{ID_VENDOR_ID}=="0fe9", ENV{ID_MODEL_ID}=="9010", \
   ENV{lircd_driver}="dvico", \

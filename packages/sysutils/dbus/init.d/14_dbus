@@ -28,5 +28,9 @@
 
   mkdir -p /var/lib/dbus /var/run/dbus
     dbus-uuidgen --ensure
-    dbus-daemon --system
+    while true; do
+      dbus-daemon --system --nofork &>/dev/null
+      rm /var/run/dbus/pid &>/dev/null
+      usleep 500000
+    done
 )&

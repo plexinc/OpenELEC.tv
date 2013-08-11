@@ -80,6 +80,9 @@
 # LTO (Link Time Optimization) support
   LTO_SUPPORT="yes"
 
+# GOLD (Google Linker) support
+  GOLD_SUPPORT="yes"
+
 # Bootloader to use (syslinux / u-boot / atv-bootloader)
   BOOTLOADER="syslinux"
 
@@ -88,6 +91,9 @@
 
 # Target Configfile for u-boot
   UBOOT_CONFIGFILE=""
+
+# install Berryboot support tools
+  BERRYBOOT_TOOLS="no"
 
 # Kernel to use. values can be:
 # default:  default mainline kernel
@@ -306,8 +312,8 @@
 # build with swap support (yes / no)
   SWAP_SUPPORT="no"
 
-# swapfile size if SWAP_SUPPORT=yes in kB (example: 262144 = 256MB )
-  SWAPFILESIZE="262144"
+# swapfile size if SWAP_SUPPORT=yes in MB
+  SWAPFILESIZE="256"
 
 # build with automatic update support (yes / no)
   UPDATE_SUPPORT="yes"
