@@ -85,6 +85,9 @@
 # LTO (Link Time Optimization) support
   LTO_SUPPORT="yes"
 
+# GOLD (Google Linker) support
+  GOLD_SUPPORT="yes"
+
 # Bootloader to use (syslinux / u-boot / atv-bootloader)
   BOOTLOADER="syslinux"
 
@@ -93,6 +96,9 @@
 
 # Target Configfile for u-boot
   UBOOT_CONFIGFILE=""
+
+# install Berryboot support tools
+  BERRYBOOT_TOOLS="no"
 
 # Kernel to use. values can be:
 # default:  default mainline kernel
@@ -106,7 +112,7 @@
   SQUASHFS_COMPRESSION="gzip"
 
 # Mediacenter to use (xbmc / no)
-  MEDIACENTER="xbmc"
+  MEDIACENTER="plexht"
 
 # Skins to install (Confluence)
 # Space separated list is supported,
@@ -137,7 +143,7 @@
   ALSA_SUPPORT="yes"
 
 # build and install PulseAudio support (yes / no)
-  PULSEAUDIO_SUPPORT="no"
+  PULSEAUDIO_SUPPORT="yes"
 
 # build and install with non-free support
 # (RAR compression support in XBMC) (yes / no)
@@ -178,7 +184,7 @@
   UPNP_SUPPORT="yes"
 
 # build with MySQL support (yes / no)
-  MYSQL_SUPPORT="yes"
+  MYSQL_SUPPORT="no"
 
 # build xbmc with sshlib support (yes / no)
   SSHLIB_SUPPORT="yes"
@@ -202,7 +208,7 @@
   SAMBA_CLIENT="yes"
 
 # build and install Samba Server (yes / no)
-  SAMBA_SERVER="yes"
+  SAMBA_SERVER="no"
 
 # build and install SFTP Server (yes / no)
   SFTP_SERVER="yes"
@@ -211,10 +217,10 @@
   SSHGUARD_SUPPORT="yes"
 
 # build and install PPP support (yes / no)
-  PPTP_SUPPORT="yes"
+  PPTP_SUPPORT="no"
 
 # build and install OpenVPN support (yes / no)
-  OPENVPN_SUPPORT="yes"
+  OPENVPN_SUPPORT="no"
 
 # build and install diskmounter service (udisks)
 # this service provide auto mounting support for external drives
@@ -248,13 +254,13 @@
 # Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,fglrx,nvidia,nouveau,vmware)
 # Space separated list is supported,
 # e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeon nvidia nouveau"
-  GRAPHIC_DRIVERS="i915 i965"
+  GRAPHIC_DRIVERS="i915 i965 nvidia"
 
 # OpenMAX implementation to use (no / bcm2835-driver)
   OPENMAX="no"
 
 # Use VDPAU video acceleration (needs nVidia driver and a supported card)
-  VDPAU="no"
+  VDPAU="yes"
 
 # Use VAAPI video acceleration (needs intel i965 driver and a supported card)
   VAAPI="yes"
@@ -311,8 +317,8 @@
 # build with swap support (yes / no)
   SWAP_SUPPORT="no"
 
-# swapfile size if SWAP_SUPPORT=yes in kB (example: 262144 = 256MB )
-  SWAPFILESIZE="262144"
+# swapfile size if SWAP_SUPPORT=yes in MB
+  SWAPFILESIZE="256"
 
 # build with automatic update support (yes / no)
   UPDATE_SUPPORT="yes"
