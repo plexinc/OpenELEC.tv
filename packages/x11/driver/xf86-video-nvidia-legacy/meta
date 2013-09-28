@@ -19,7 +19,11 @@
 ################################################################################
 
 PKG_NAME="xf86-video-nvidia-legacy"
+<<<<<<< HEAD
 PKG_VERSION="304.88"
+=======
+PKG_VERSION="304.108"
+>>>>>>> upstream/openelec-3.2
 PKG_REV="1"
 PKG_ARCH="i386 x86_64"
 PKG_LICENSE="nonfree"

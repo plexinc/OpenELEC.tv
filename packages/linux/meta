@@ -19,13 +19,31 @@
 ################################################################################
 
 PKG_NAME="linux"
-PKG_VERSION="3.7.10"
+
+case "$LINUX" in
+  AMLm1)
+    PKG_VERSION="AMLm1-2.6.34-1405682"
+    PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
+    ;;
+  AMLm3)
+    PKG_VERSION="AMLm3-2.6.34-7fe1265"
+    PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
+    ;;
+  ti-omap4)
+    PKG_VERSION="2.6.38-ti-omap4"
+    PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.bz2"
+    ;;
+  *)
+    PKG_VERSION="3.10.12"
+    PKG_URL="http://www.kernel.org/pub/linux/kernel/v3.x/$PKG_NAME-$PKG_VERSION.tar.xz"
+    ;;
+esac
+
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kernel.org"
-PKG_URL="http://www.kernel.org/pub/linux/kernel/v3.x/$PKG_NAME-$PKG_VERSION.tar.xz"
-PKG_DEPENDS="busybox linux-drivers linux-firmware pciutils $BOOTLOADER"
+PKG_DEPENDS="busybox linux-drivers linux-firmware pciutils $BOOTLOADER dvb-fe-tool"
 PKG_BUILD_DEPENDS="toolchain cpio module-init-tools pciutils xz"
 PKG_PRIORITY="optional"
 PKG_SECTION="linux"
@@ -35,6 +53,7 @@ PKG_IS_ADDON="no"
 
 PKG_AUTORECONF="no"
 
+<<<<<<< HEAD
 if [ "$LINUX" = "3.6" ]; then
   PKG_VERSION="3.6.11"
   PKG_URL="http://www.kernel.org/pub/linux/kernel/v3.x/$PKG_NAME-$PKG_VERSION.tar.xz"
@@ -48,4 +67,9 @@ fi
 if [ "$DEVTOOLS" = "yes" ]; then
   PKG_DEPENDS="$PKG_DEPENDS Python"
   PKG_BUILD_DEPENDS="$PKG_BUILD_DEPENDS newt slang elfutils Python"
+=======
+if [ "$PERF_SUPPORT" = "yes" -a "$DEVTOOLS" = "yes" ]; then
+  PKG_DEPENDS="$PKG_DEPENDS Python"
+  PKG_BUILD_DEPENDS="$PKG_BUILD_DEPENDS elfutils Python"
+>>>>>>> upstream/openelec-3.2
 fi

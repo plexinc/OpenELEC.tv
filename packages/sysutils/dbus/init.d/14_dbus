@@ -25,6 +25,7 @@
 
 (
   progress "Starting D-BUS"
+<<<<<<< HEAD
 
   mkdir -p /var/lib/dbus /var/run/dbus
     dbus-uuidgen --ensure
@@ -34,3 +35,7 @@
       usleep 500000
     done
 )&
+=======
+    dbus-daemon --system &>/dev/null
+)
+>>>>>>> upstream/openelec-3.2

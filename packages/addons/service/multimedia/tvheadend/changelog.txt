@@ -1,3 +1,31 @@
+<<<<<<< HEAD
+=======
+3.1.4
+- rebuild
+
+3.1.3
+- update to TVHeadend 3.4.27
+
+3.1.2
+- fix unloading multiple modules on suspend
+
+3.1.1
+- rebuild for OpenELEC-3.2
+
+3.0.11
+- improve suspend/resume
+
+3.0.10
+- fix preloading capmt.so with sundtek
+- added the ability to use a script's stdout as the xmltv source instead of a fixed file or URL
+
+3.0.9
+- update to TVHeadend 3.4
+
+3.0.8
+- update to TVHeadend 3.3.521
+
+>>>>>>> upstream/openelec-3.2
 3.0.7
 - update to TVHeadend 3.3.511
 

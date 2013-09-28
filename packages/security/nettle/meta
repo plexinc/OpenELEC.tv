@@ -19,7 +19,11 @@
 ################################################################################
 
 PKG_NAME="nettle"
+<<<<<<< HEAD
 PKG_VERSION="2.7"
+=======
+PKG_VERSION="2.7.1"
+>>>>>>> upstream/openelec-3.2
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

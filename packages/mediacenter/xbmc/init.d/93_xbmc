@@ -22,9 +22,49 @@
 #
 # runlevels: openelec
 
+# prevent restrating XBMC at reboot or shutdown
+  LOCKDIR="/var/lock/"
+  LOCKFILE="xbmc.disabled"
+  [ -f "$LOCKDIR/$LOCKFILE" ] && rm -f "$LOCKDIR/$LOCKFILE" &
+
+# needed functions
+  add_omit_pids() {
+    omit_pids="$omit_pids -o $1"
+  }
+
+  safe_shutdown () {
+    touch "$LOCKDIR/$LOCKFILE"
+    SHUTDOWN="/storage/.config/shutdown.sh"
+    if [ -f $SHUTDOWN ]; then
+      echo '!!! SHUTDOWN script detected !!!' | logger -t shutdown.sh $1
+      cat "$SHUTDOWN" | logger -t shutdown.sh
+      echo '!!! -End of shutdown script- !!!' | logger -t shutdown.sh $1
+      sh $SHUTDOWN $1
+    fi
+    add_omit_pids $(pidof connmand)
+    add_omit_pids $(pidof dbus-daemon)
+    killall5 -15 $omit_pids
+    for seq in `seq 1 10` ; do
+      usleep 500000
+      clear > /dev/tty1
+      killall5 -18 $omit_pids || break
+    done
+    sync
+    umount -a >/dev/null 2>&1
+    if [ $1 = "reboot" ]; then
+      reboot
+    elif [ $1 = "poweroff" ]; then
+      poweroff -f
+    fi
+  }
+
 LIRCDEV="/var/run/lirc/lircd"
 [ -e /var/run/lirc/lircd.irtrans ] && LIRCDEV="/var/run/lirc/lircd.irtrans"
 XBMC_ARGS="--standalone -fs --lircdev $LIRCDEV"
+
+if [ "$DEBUG" = yes ]; then
+  XBMC_ARGS="$XBMC_ARGS --debug"
+fi
 
 progress "starting XBMC"
 
@@ -42,6 +82,18 @@ fi
         -i /storage/.xbmc/userdata/RssFeeds.xml
   fi
 
+<<<<<<< HEAD
+=======
+# wait for dbus to start
+  wait_for_dbus
+
+# wait for network
+  wait_for_inet_addr
+
+# wait for udevadm settle to finish
+  wait_for_udevadm_settle
+
+>>>>>>> upstream/openelec-3.2
 # starting autostart script (will be removed later again, dont use it!!!)
   AUTOSTART="/storage/.config/autostart.sh"
   if [ -f $AUTOSTART ]; then
@@ -52,6 +104,7 @@ fi
     sh $AUTOSTART
   fi
 
+<<<<<<< HEAD
 # starting autoupdate
   [ -f /usr/bin/autoupdate ] && /usr/bin/autoupdate &
 
@@ -71,6 +124,11 @@ fi
   LOCKDIR="/var/lock/"
   LOCKFILE="xbmc.disabled"
   [ -f "$LOCKDIR/$LOCKFILE" ] && rm -f "$LOCKDIR/$LOCKFILE" &
+=======
+# waiting for Xorg to start
+  wait_for_xorg
+
+>>>>>>> upstream/openelec-3.2
 
 # starting XBMC
   usleep $XBMC_STARTDELAY
@@ -85,25 +143,13 @@ fi
 
     case "$RET" in
       0)
-        if [ ! $(pidof console-kit-daemon) ]; then
-          touch "$LOCKDIR/$LOCKFILE"
-          _safe_shutdown
-          poweroff -f
-        fi
+        safe_shutdown poweroff
         ;;
       64)
-        if [ ! $(pidof console-kit-daemon) ]; then
-          touch "$LOCKDIR/$LOCKFILE"
-          _safe_shutdown
-          poweroff -f
-        fi
+        safe_shutdown poweroff
         ;;
       66)
-        if [ ! $(pidof console-kit-daemon) ]; then
-          touch "$LOCKDIR/$LOCKFILE"
-          _safe_shutdown
-          reboot
-        fi
+        safe_shutdown reboot
         ;;
       255)
         echo "Abnormal Exit. Exited with code $RET"

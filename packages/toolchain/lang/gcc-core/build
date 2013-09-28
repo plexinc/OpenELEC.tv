@@ -48,6 +48,10 @@ mkdir -p objdir-$1 && cd objdir-$1
              --disable-__cxa_atexit \
              --disable-libada \
              --disable-libmudflap \
+<<<<<<< HEAD
+=======
+             --disable-libatomic \
+>>>>>>> upstream/openelec-3.2
              --enable-gold \
              --enable-ld=default \
              --enable-plugin \

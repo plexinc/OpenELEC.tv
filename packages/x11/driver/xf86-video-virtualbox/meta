@@ -19,7 +19,11 @@
 ################################################################################
 
 PKG_NAME="xf86-video-virtualbox"
+<<<<<<< HEAD
 PKG_VERSION="4.1.18"
+=======
+PKG_VERSION="4.2.12"
+>>>>>>> upstream/openelec-3.2
 PKG_REV="1"
 PKG_ARCH="i386 x86_64"
 PKG_LICENSE="OSS"

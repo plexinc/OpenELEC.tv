@@ -56,7 +56,7 @@ setup_toolchain() {
 }
 
 kernel_path() {
-  ls -d $ROOT/$BUILD/linux-[0-9]*
+  ls -d $ROOT/$BUILD/linux-*
 }
 
 tolower(){
@@ -278,7 +278,7 @@ show_config() {
   config_message="$config_message\n $dashes$dashes"
 
   config_message="$config_message\n - Broadcom CrystalHD Decoder:\t\t $CRYSTALHD"
-  config_message="$config_message\n - OpenMAX Support (provider):\t\t $OPENMAX_SUPPORT ($OPENMAX)"
+  config_message="$config_message\n - XBMC Player driver:\t\t\t $XBMCPLAYER_DRIVER"
   config_message="$config_message\n - VAAPI Support:\t\t\t $VAAPI"
   config_message="$config_message\n - VDPAU Support:\t\t\t $VDPAU"
   config_message="$config_message\n - XVBA Support:\t\t\t $XVBA"
@@ -322,14 +322,13 @@ show_config() {
   config_message="$config_message\n - Avahi (Zeroconf) support:\t\t $AVAHI_DAEMON"
   config_message="$config_message\n - SAMBA server support:\t\t $SAMBA_SERVER"
   config_message="$config_message\n - SFTP server support:\t\t\t $SFTP_SERVER"
-  config_message="$config_message\n - SSH Guard support:\t\t\t $SSHGUARD_SUPPORT"
   config_message="$config_message\n - PPTP support:\t\t\t $PPTP_SUPPORT"
   config_message="$config_message\n - OpenVPN support:\t\t\t $OPENVPN_SUPPORT"
   config_message="$config_message\n - XBMC Airplay support:\t\t $AIRPLAY_SUPPORT"
   config_message="$config_message\n - XBMC Airtunes support:\t\t $AIRTUNES_SUPPORT"
   config_message="$config_message\n - XBMC AFP support:\t\t\t $AFP_SUPPORT"
   config_message="$config_message\n - XBMC NFS support:\t\t\t $NFS_SUPPORT"
-  config_message="$config_message\n - XBMC SAMBA client support:\t\t $SAMBA_CLIENT"
+  config_message="$config_message\n - XBMC SAMBA client support:\t\t $SAMBA_SUPPORT"
   config_message="$config_message\n - XBMC Webserver support:\t\t $WEBSERVER"
 
   # OS configuration
@@ -345,9 +344,9 @@ if [ "$BOOTLOADER" = "u-boot" ]; then
   config_message="$config_message\n - U-Boot configuration:\t\t $UBOOT_CONFIG"
   config_message="$config_message\n - U-Boot config file:\t\t\t $UBOOT_CONFIGFILE"
 fi
-  config_message="$config_message\n - UDisks support:\t\t\t $UDISKS"
+  config_message="$config_message\n - UDevil support:\t\t\t $UDEVIL"
+  config_message="$config_message\n - Parted support:\t\t\t $PARTED"
   config_message="$config_message\n - UPower support:\t\t\t $UPOWER"
-  config_message="$config_message\n - Update support:\t\t\t $UPDATE_SUPPORT"
   config_message="$config_message\n - Installer support:\t\t\t $INSTALLER_SUPPORT"
 
   # Misc. Filesystems

@@ -19,7 +19,16 @@
 ################################################################################
 
 PKG_NAME="xbmc-theme-Confluence"
+<<<<<<< HEAD
 PKG_VERSION="12.2.0"
+=======
+PKG_VERSION="12.2-091cb29"
+if [ "$XBMC" = "master" ]; then
+  PKG_VERSION="13.alpha-2ef8929"
+elif [ "$XBMC" = "xbmc-aml" ]; then
+  PKG_VERSION="aml-frodo-d9119f2"
+fi
+>>>>>>> upstream/openelec-3.2
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

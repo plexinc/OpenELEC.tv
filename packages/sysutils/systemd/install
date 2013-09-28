@@ -35,6 +35,12 @@ add_group video 39
 
 mkdir -p $INSTALL/usr/bin
   cp $PKG_BUILD/udevadm $INSTALL/usr/bin
+<<<<<<< HEAD
+=======
+
+mkdir -p $INSTALL/sbin
+  ln -sf /usr/bin/udevadm $INSTALL/sbin/udevadm
+>>>>>>> upstream/openelec-3.2
 
 mkdir -p $INSTALL/lib
   cp -PR $PKG_BUILD/.libs/libsystemd-daemon.so* $INSTALL/lib
@@ -54,6 +60,7 @@ mkdir -p $INSTALL/lib/systemd
   done
   cp $PKG_BUILD/mtd_probe $INSTALL/lib/udev
 
+<<<<<<< HEAD
   cp $PKG_BUILD/keymap $INSTALL/lib/udev
   cp $PKG_BUILD/src/udev/keymap/findkeyboards $INSTALL/lib/udev
   cp $PKG_BUILD/src/udev/keymap/keyboard-force-release.sh $INSTALL/lib/udev
@@ -62,12 +69,12 @@ mkdir -p $INSTALL/lib/udev/keymaps
 mkdir -p $INSTALL/lib/udev/keymaps/force-release
   cp $PKG_BUILD/keymaps-force-release/* $INSTALL/lib/udev/keymaps/force-release
 
+=======
+>>>>>>> upstream/openelec-3.2
 mkdir -p $INSTALL/lib/udev/rules.d
   cp $PKG_BUILD/rules/*.rules $INSTALL/lib/udev/rules.d
   rm -rf $INSTALL/lib/udev/rules.d/80-net-name-slot.rules
   rm -rf $INSTALL/lib/udev/rules.d/99-systemd.rules
-  cp $PKG_BUILD/src/udev/keymap/*.rules $INSTALL/lib/udev/rules.d
-
 
 mkdir -p $INSTALL/lib/udev/hwdb.d
   cp $PKG_BUILD/hwdb/*.hwdb $INSTALL/lib/udev/hwdb.d
@@ -81,3 +88,5 @@ mkdir -p $INSTALL/usr/config
 
 # reserved for installing systemd
 
+mkdir -p $INSTALL/bin
+  cp $PKG_BUILD/systemd-tmpfiles $INSTALL/bin

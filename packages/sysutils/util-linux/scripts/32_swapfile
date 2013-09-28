@@ -38,6 +38,10 @@ fi
       echo "creating Swapfile ..."
       mkdir -p `dirname $SWAPFILE`
       dd if=/dev/zero of=$SWAPFILE bs=1M count=$SWAPFILESIZE 2>&1 > /dev/null
+<<<<<<< HEAD
+=======
+      chmod 0600 $SWAPFILE 2>&1 > /dev/null
+>>>>>>> upstream/openelec-3.2
       mkswap $SWAPFILE 2>&1 > /dev/null
     fi
 

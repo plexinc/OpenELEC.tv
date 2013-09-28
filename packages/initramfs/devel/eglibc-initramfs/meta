@@ -35,6 +35,10 @@ PKG_IS_ADDON="no"
 
 PKG_AUTORECONF="no"
 
+<<<<<<< HEAD
 if [ "$OPENMAX" = "bcm2835-driver" ]; then
+=======
+if [ "$XBMCPLAYER_DRIVER" = "bcm2835-driver" ]; then
+>>>>>>> upstream/openelec-3.2
   PKG_DEPENDS="$PKG_DEPENDS arm-mem-initramfs"
 fi

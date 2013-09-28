@@ -41,7 +41,11 @@ mkdir -p $INSTALL/etc
 mkdir -p $INSTALL/etc/modprobe.d
   cp $PKG_DIR/modprobe.d/*.conf $INSTALL/etc/modprobe.d
 
+<<<<<<< HEAD
 if [ "$DEVTOOLS" = "yes" ]; then
+=======
+if [ "$PERF_SUPPORT" = "yes" -a "$DEVTOOLS" = "yes" ]; then
+>>>>>>> upstream/openelec-3.2
   mkdir -p $INSTALL/usr/bin
     cp -P $PKG_BUILD/tools/perf/perf $INSTALL/usr/bin/
 
