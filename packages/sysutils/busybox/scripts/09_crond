@@ -24,13 +24,18 @@
 # runlevels: openelec, textmode
 
 (
-  if [ -f /var/config/settings.conf ]; then
-    . /var/config/settings.conf
+  # can be called from openelec addon.
+  # ensure that environment is sane
+  . /etc/profile
+
+  CRON_ENABLED=true
+  if [ -f $CONFIG_CACHE/services/cron.conf ]; then
+    . $CONFIG_CACHE/services/cron.conf
   fi
 
-  if [ "$CROND_START" == "true" ]; then
+  if [ "$CRON_ENABLED" == "true" ]; then
     progress "Starting cron daemon"
-    mkdir -p /storage/.cache/cron/crontabs
+    mkdir -p $CONFIG_CACHE/cron/crontabs
     crond -b
   fi
 )&

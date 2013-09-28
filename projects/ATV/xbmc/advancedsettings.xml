@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <advancedsettings>
-  <splash>false</splash>
   <showexitbutton>false</showexitbutton>
   <cputempcommand>gputemp</cputempcommand>
   <gputempcommand>gputemp</gputempcommand>
+  <fanartres>720</fanartres>
+  <imageres>540</imageres>
   <video>
     <latency>
       <delay>0</delay>
@@ -13,8 +14,19 @@
         <delay>175</delay>
       </refresh>
     </latency>
+    <busydialogdelayms>750</busydialogdelayms>
   </video>
   <samba>
     <clienttimeout>30</clienttimeout>
   </samba>
+  <network>
+    <curlclienttimeout>30</curlclienttimeout>
+    <readbufferfactor>4.0</readbufferfactor>
+  </network>
+  <!-- audio workaround for ATV -->
+  <audiooutput>
+    <dtshdpassthrough>false</dtshdpassthrough>
+    <passthroughaac>false</passthroughaac>
+    <truehdpassthrough>false</truehdpassthrough>
+  </audiooutput>
 </advancedsettings>

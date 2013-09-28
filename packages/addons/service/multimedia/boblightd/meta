@@ -19,14 +19,14 @@
 ################################################################################
 
 PKG_NAME="boblightd"
-PKG_VERSION="449"
+PKG_VERSION="467"
 PKG_REV="2"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://code.google.com/p/boblight"
 PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
-PKG_DEPENDS=""
-PKG_BUILD_DEPENDS="toolchain"
+PKG_DEPENDS="libusb"
+PKG_BUILD_DEPENDS="toolchain libusb"
 PKG_PRIORITY="optional"
 PKG_SECTION="service/multimedia"
 PKG_SHORTDESC="boblightd: an ambilight controller."

@@ -34,7 +34,10 @@ add_group video 39
 # install udev
 
 mkdir -p $INSTALL/usr/bin
-  cp $PKG_BUILD/.libs/udevadm $INSTALL/usr/bin
+  cp $PKG_BUILD/udevadm $INSTALL/usr/bin
+
+mkdir -p $INSTALL/sbin
+  ln -sf /usr/bin/udevadm $INSTALL/sbin/udevadm
 
 mkdir -p $INSTALL/lib
   cp -PR $PKG_BUILD/.libs/libsystemd-daemon.so* $INSTALL/lib
@@ -43,14 +46,14 @@ mkdir -p $INSTALL/lib
   rm -rf $INSTALL/lib/libgudev*.*T
 
 mkdir -p $INSTALL/lib/systemd
-  cp $PKG_BUILD/.libs/systemd-udevd $INSTALL/lib/systemd
+  cp $PKG_BUILD/systemd-udevd $INSTALL/lib/systemd
 
   cp $PKG_BUILD/.libs/accelerometer $INSTALL/lib/udev
   cp $PKG_BUILD/.libs/cdrom_id $INSTALL/lib/udev
   cp $PKG_BUILD/.libs/v4l_id $INSTALL/lib/udev
 
   for i in ata_id collect scsi_id; do
-    cp $PKG_BUILD/.libs/$i $INSTALL/lib/udev
+    cp $PKG_BUILD/$i $INSTALL/lib/udev
   done
   cp $PKG_BUILD/mtd_probe $INSTALL/lib/udev
 
@@ -71,3 +74,5 @@ mkdir -p $INSTALL/usr/config
 
 # reserved for installing systemd
 
+mkdir -p $INSTALL/bin
+  cp $PKG_BUILD/systemd-tmpfiles $INSTALL/bin

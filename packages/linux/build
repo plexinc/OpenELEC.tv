@@ -29,10 +29,7 @@ else
   KERNEL_IMAGE="bzImage"
 fi
 
-# dont build parallel
-  MAKEFLAGS=-j1
-
-cd $(kernel_path)
+cd $PKG_BUILD
 rm -rf modules
 mkdir -p modules
 
@@ -49,19 +46,31 @@ cd $INSTALL
   find . | cpio -H newc -ov -R 0:0 > $ROOT/$BUILD/image/initramfs.cpio
 cd -
 
-cd $(kernel_path)
+cd $PKG_BUILD
 LDFLAGS="" make $KERNEL_IMAGE
 
-( cd tools/power/cpupower
+if [ "$PERF_SUPPORT" = "yes" -a "$DEVTOOLS" = "yes" ]; then
+  ( cd tools/perf
 
-  # dont use some optimizations because of build problems
-    LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
+    # dont use some optimizations because of build problems
+      LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
 
-  export CFLAGS="$CFLAGS -I$SYSROOT_PREFIX/usr/include"
-  export LDFLAGS="$LDFLAGS -L$SYSROOT_PREFIX/lib -L$SYSROOT_PREFIX/usr/lib"
+    export FLAGSGLIBC="$CFLAGS -I$SYSROOT_PREFIX/usr/include"
+    export CFLAGS="$CFLAGS -I$SYSROOT_PREFIX/usr/include"
+    export LDFLAGS="$LDFLAGS -L$SYSROOT_PREFIX/lib -L$SYSROOT_PREFIX/usr/lib"
 
-  make CROSS="$TARGET_PREFIX" \
-       V=1 \
-       DEBUG=false \
-       NLS=false \
-)
+    make CROSS_COMPILE="$TARGET_PREFIX" \
+         ARCH="$TARGET_ARCH" \
+         V=1 \
+         DEBUG=false \
+         NLS=false \
+         NO_GTK2=true \
+         NO_LIBELF=false \
+         NO_LIBPERL=true \
+         NO_LIBPYTHON=false \
+         PYTHON=$SYSROOT_PREFIX/usr/bin/python \
+         WERROR=0 \
+         NO_SLANG=1 \
+  )
+fi
+

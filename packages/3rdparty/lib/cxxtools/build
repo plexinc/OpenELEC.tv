@@ -32,7 +32,9 @@ mkdir -p .build-host && cd .build-host
             --build=$HOST_NAME \
             --prefix=$ROOT/$TOOLCHAIN \
             --disable-static \
-            --enable-shared
+            --enable-shared \
+            --disable-demos \
+            --disable-unittest
 
 make
 make install
@@ -41,12 +43,18 @@ cd ..
 
 setup_toolchain target
 
+CFLAGS="$CFLAGS -fPIC"
+CXXFLAGS="$CXXFLAGS -fPIC"
+LDFLAGS="$LDFLAGS -fPIC"
+
 mkdir -p .build-target && cd .build-target
 ../configure --host=$TARGET_NAME \
             --build=$HOST_NAME \
             --prefix=/usr \
             --sysconfdir=/etc \
-            --disable-static \
-            --enable-shared
+            --enable-static \
+            --disable-shared \
+            --disable-demos \
+            --disable-unittest
 
 $MAKEINSTALL

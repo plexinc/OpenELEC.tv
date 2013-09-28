@@ -25,8 +25,5 @@
 
 (
   progress "Starting D-BUS"
-
-  mkdir -p /var/lib/dbus /var/run/dbus
-    dbus-uuidgen --ensure
-    dbus-daemon --system
-)&
+    dbus-daemon --system &>/dev/null
+)

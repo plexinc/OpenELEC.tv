@@ -34,8 +34,6 @@ fi
 mkdir -p $INSTALL/usr/lib
   cp $PKG_BUILD/objdir-$1/crypt/libcrypt.so.1 $INSTALL/usr/lib
   cp $PKG_BUILD/objdir-$1/dlfcn/libdl.so.2 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/nis/libnsl.so.1 $INSTALL/usr/lib
-  cp $PKG_BUILD/objdir-$1/nis/libnss_compat.so.2 $INSTALL/usr/lib
   cp $PKG_BUILD/objdir-$1/nss/libnss_files.so.2 $INSTALL/usr/lib
   cp $PKG_BUILD/objdir-$1/resolv/libnss_dns.so.2 $INSTALL/usr/lib
   cp $PKG_BUILD/objdir-$1/resolv/libresolv.so.2 $INSTALL/usr/lib
@@ -44,11 +42,13 @@ mkdir -p $INSTALL/usr/lib
   cp $PKG_BUILD/objdir-$1/login/libutil.so.1 $INSTALL/usr/lib # e.g. for utmp support, needed by PAM_filter
 
 
-  [ "$DEVTOOLS" = yes ] && cp $PKG_BUILD/objdir-$1/nptl_db/libthread_db.so.1 $INSTALL/lib # for GDB
+  [ "$DEVTOOLS" = yes ] && cp $PKG_BUILD/objdir-$1/nptl_db/libthread_db.so.1 $INSTALL/usr/lib # for GDB
 
 mkdir -p $INSTALL/usr/bin
   cp $PKG_BUILD/objdir-$1/elf/ldd $INSTALL/usr/bin
   sed -i 's%/usr/bin/bash%/bin/sh%g' $INSTALL/usr/bin/ldd
+
+  cp $PKG_BUILD/objdir-$1/nss/getent $INSTALL/usr/bin
 
   cp $PKG_BUILD/objdir-$1/locale/locale $INSTALL/usr/bin
 
@@ -59,4 +59,6 @@ mkdir -p $INSTALL/usr/bin
 
 mkdir -p $INSTALL/etc
   cp $PKG_DIR/config/nsswitch.conf $INSTALL/etc
+  cp $PKG_DIR/config/host.conf $INSTALL/etc
+  cp $PKG_DIR/config/gai.conf $INSTALL/etc
   cp $PKG_BUILD/sunrpc/etc.rpc $INSTALL/etc/rpc

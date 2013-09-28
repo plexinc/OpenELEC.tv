@@ -1,5 +1,11 @@
 # Name of the Distro to build (full name, without special charcters)
   DISTRONAME="OpenELEC"
+  if [ "$XBMC" = "master" ]; then
+    DISTRONAME="${DISTRONAME}_Gotham"
+  fi
+
+# short project description
+  DESCRIPTION="OpenELEC is a fast and userfriendly XBMC Mediacenter distribution."
 
 # Welcome Message for e.g. SSH Server (up to 5 Lines)
   GREETING0="##############################################"
@@ -85,14 +91,23 @@
 # LTO (Link Time Optimization) support
   LTO_SUPPORT="yes"
 
+# GOLD (Google Linker) support
+  GOLD_SUPPORT="yes"
+
 # Bootloader to use (syslinux / u-boot / atv-bootloader)
   BOOTLOADER="syslinux"
+
+# u-boot version to use (default / aml / cubox)
+  UBOOT_VERSION="default"
 
 # Configuration for u-boot
   UBOOT_CONFIG=""
 
 # Target Configfile for u-boot
   UBOOT_CONFIGFILE=""
+
+# install Berryboot support tools
+  BERRYBOOT_TOOLS="no"
 
 # Kernel to use. values can be:
 # default:  default mainline kernel
@@ -119,11 +134,6 @@
 # install extra subtitle Fonts for XBMC (yes / no)
   XBMC_EXTRA_FONTS="yes"
 
-# Plugins for XBMC to install (SABnzbd)
-# Space separated list is supported,
-# e.g. XBMC_PLUGINS="SABnzbd"
-  XBMC_PLUGINS=""
-
 # build and install 'RSXS' Screensaver (yes / no)
   XBMC_SCR_RSXS="yes"
 
@@ -136,12 +146,16 @@
 # build and install ALSA Audio support (yes / no)
   ALSA_SUPPORT="yes"
 
-# build and install PulseAudio support (yes / no)
-  PULSEAUDIO_SUPPORT="no"
-
 # build and install with non-free support
 # (RAR compression support in XBMC) (yes / no)
   NONFREE_SUPPORT="yes"
+
+# build and install with AACS support
+# (BD decryption support in libbluray) (yes / no)
+  AACS_SUPPORT="yes"
+
+# AACS library to use ( libaacs / makemkv-oss )
+  LIBAACS="makemkv-oss"
 
 # build and install with DVDCSS support
 # (DVD decryption support in XBMC) (yes / no)
@@ -160,7 +174,7 @@
 # for a list of additinoal drivers see packages/linux-drivers
 # Space separated list is supported,
 # e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
-  ADDITIONAL_DRIVERS="RTL8192CU dvbhdhomerun"
+  ADDITIONAL_DRIVERS="RTL8192CU RTL8188EU dvbhdhomerun"
 
 # build with network support (yes / no)
   NETWORK="yes"
@@ -199,7 +213,7 @@
   AFP_SUPPORT="yes"
 
 # build and install Samba Client support (yes / no)
-  SAMBA_CLIENT="yes"
+  SAMBA_SUPPORT="yes"
 
 # build and install Samba Server (yes / no)
   SAMBA_SERVER="yes"
@@ -207,19 +221,19 @@
 # build and install SFTP Server (yes / no)
   SFTP_SERVER="yes"
 
-# build and install SSH Guard (yes / no)
-  SSHGUARD_SUPPORT="yes"
-
 # build and install PPP support (yes / no)
   PPTP_SUPPORT="yes"
 
 # build and install OpenVPN support (yes / no)
   OPENVPN_SUPPORT="yes"
 
-# build and install diskmounter service (udisks)
-# this service provide auto mounting support for external drives
-# in the mediacenter also automount internally drives at boottime (yes / no)
-  UDISKS="yes"
+# build and install diskmounter support (udevil)
+# this service provide auto mounting support for external drives in the
+# mediacenter also automount internally drives at boottime via udev (yes / no)
+  UDEVIL="yes"
+
+# build and install parted support (yes / no)
+  PARTED="yes"
 
 # build and install powermanagement support (upower) (yes / no)
   UPOWER="yes"
@@ -250,8 +264,8 @@
 # e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 nvidia nouveau"
   GRAPHIC_DRIVERS="i915 i965 r200 r300 r600 nouveau"
 
-# OpenMAX implementation to use (no / bcm2835-driver)
-  OPENMAX="no"
+# XBMC Player implementation to use (default / bcm2835-driver / libamlplayer-m3)
+  XBMCPLAYER_DRIVER="default"
 
 # Use VDPAU video acceleration (needs nVidia driver and a supported card)
   VDPAU="no"
@@ -291,11 +305,11 @@
 # joy,lb216,lcdm001,lcterm,lirc,lis,MD8800,mdm166a,
 # ms6931,mtc_s16209x,MtxOrb,mx5000,NoritakeVFD,
 # picolcd,pyramid,sed1330,sed1520,serialPOS,
-# serialVFD,shuttleVFD,sli,stv5730,SureElec,svga,
+# serialVFD,shuttleVFD,sli,stv5730,SureElec,svga,vlsys_m428
 # 'all' compiles all drivers;
 # 'all,!xxx,!yyy' de-selects previously selected drivers
 # "none" for disable LCD support
-  LCD_DRIVER="irtrans,imon,imonlcd,mdm166a,MtxOrb,lis,dm140,hd44780,CFontz"
+  LCD_DRIVER="irtrans,imon,imonlcd,mdm166a,MtxOrb,lis,dm140,hd44780,CFontz,SureElec,vlsys_m428"
 
 # Modules to install in initramfs for early boot
   INITRAMFS_MODULES="uvesafb xhci-hcd"
@@ -311,11 +325,8 @@
 # build with swap support (yes / no)
   SWAP_SUPPORT="no"
 
-# swapfile size if SWAP_SUPPORT=yes in kB (example: 262144 = 256MB )
-  SWAPFILESIZE="262144"
-
-# build with automatic update support (yes / no)
-  UPDATE_SUPPORT="yes"
+# swapfile size if SWAP_SUPPORT=yes in MB
+  SWAPFILESIZE="256"
 
 # build with installer (yes / no)
   INSTALLER_SUPPORT="yes"
@@ -332,6 +343,9 @@
 # cron support (yes / no)
   CRON_SUPPORT="yes"
 
+# Perf support in development builds (yes / no)
+  PERF_SUPPORT="yes"
+
 # Coreboot support (yes / no)
   COREBOOT="no"
 
@@ -343,5 +357,5 @@
   ADDON_SERVER_URL="http://addons.openelec.tv"
 
 # set the addon dirs
-  ADDON_PATH="$ADDON_VERSION/$PROJECT/$TARGET_ARCH"
+  ADDON_PATH="$ADDON_VERSION/Generic/$TARGET_ARCH"
   ADDON_URL="$ADDON_SERVER_URL/$ADDON_PATH"

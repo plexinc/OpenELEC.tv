@@ -39,19 +39,29 @@ USER_PWD="`$ROOT/$TOOLCHAIN/bin/cryptpw -m sha512 $USER_PASSWORD`"
     cp $PKG_DIR/scripts/createlog $INSTALL/usr/bin/
     cp $PKG_DIR/scripts/lsb_release $INSTALL/usr/bin/
     cp $PKG_DIR/scripts/apt-get $INSTALL/usr/bin/
+    cp $PKG_DIR/scripts/passwd $INSTALL/usr/bin/
     ln -sf /bin/busybox $INSTALL/usr/bin/env          #/usr/bin/env is needed for most python scripts
+    cp $PKG_DIR/scripts/pastebinit $INSTALL/usr/bin/
+    ln -sf pastebinit $INSTALL/usr/bin/paste
 
   mkdir -p $INSTALL/sbin
     cp $PKG_DIR/scripts/init $INSTALL/sbin/
 
   mkdir -p $INSTALL/etc
     cp $PKG_DIR/config/profile $INSTALL/etc
+    cp $PKG_DIR/config/inputrc $INSTALL/etc
     cp $PKG_DIR/config/syslog.conf $INSTALL/etc
     cp $PKG_DIR/config/httpd.conf $INSTALL/etc
     echo "chmod 000 $INSTALL/etc/shadow" >> $FAKEROOT_SCRIPT
 
+  mkdir -p $INSTALL/usr/config
+    cp $PKG_DIR/config/sysctl.conf.sample $INSTALL/usr/config
+
   # /etc/fstab is needed by...
     touch $INSTALL/etc/fstab
+
+  # /etc/machine-id, needed by systemd and dbus
+    ln -sf /run/machine-id $INSTALL/etc/machine-id
 
   # /etc/hosts must be writeable
     ln -sf /var/cache/hosts $INSTALL/etc/hosts
@@ -73,7 +83,4 @@ USER_PWD="`$ROOT/$TOOLCHAIN/bin/cryptpw -m sha512 $USER_PASSWORD`"
     if [ "$CRON_SUPPORT" = "yes" ] ; then
       mkdir -p $INSTALL/etc/init.d
       cp $PKG_DIR/scripts/09_crond $INSTALL/etc/init.d/
-    else
-      rm -f $INSTALL/sbin/crond
-      rm -f $INSTALL/bin/crontab
     fi

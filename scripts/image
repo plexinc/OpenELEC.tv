@@ -30,13 +30,11 @@ $SCRIPTS/build squashfs
 $SCRIPTS/build fakeroot
 $SCRIPTS/build module-init-tools
 
-export INSTALL=$BUILD/image/system
-
 BUILD_DATE=`date +%Y%m%d%H%M%S`
 
 if [ "$OPENELEC_VERSION" = devel -o "$OPENELEC_VERSION" = debug ]; then
-  GIT_BUILD=`git rev-list HEAD | wc -l`
-  GIT_HASH=`git rev-parse HEAD`
+  GIT_BUILD=$(git rev-list --count HEAD)
+  GIT_HASH=$(git rev-parse HEAD)
   OPENELEC_VERSION=$OPENELEC_VERSION-$BUILD_DATE-r$GIT_BUILD
 fi
 
@@ -81,9 +79,15 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
   echo "$PROJECT.$TARGET_ARCH" > $INSTALL/etc/arch
   echo "$OPENELEC_VERSION" > $INSTALL/etc/version
   echo "$TARGET_VERSION" > $INSTALL/etc/release
-  echo "$DISTRONAME - Version: $OPENELEC_VERSION" > $INSTALL/etc/openelec-release
+  echo "$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) - Version: $OPENELEC_VERSION" > $INSTALL/etc/openelec-release
   if [ -n "$GIT_HASH" ]; then
     echo "$GIT_HASH" >> $INSTALL/etc/gitrev
+  fi
+
+  if [ "$OFFICIAL" = "yes" ]; then
+    echo "official" > $INSTALL/etc/build
+  else
+    echo "unofficial" > $INSTALL/etc/build
   fi
 
 # create /etc/issue
@@ -92,10 +96,12 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
   echo $GREETING2 >> $INSTALL/etc/issue
   echo $GREETING3 >> $INSTALL/etc/issue
   echo $GREETING4 >> $INSTALL/etc/issue
-  echo "$DISTRONAME Version: $OPENELEC_VERSION" >> $INSTALL/etc/issue
+  echo "$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) Version: $OPENELEC_VERSION" >> $INSTALL/etc/issue
   if [ -n "$GIT_HASH" ]; then
     echo "$DISTRONAME git: $GIT_HASH" >> $INSTALL/etc/issue
   fi
+
+  ln -sf /etc/issue $INSTALL/etc/motd
 
 # Basissystem...
   $SCRIPTS/install eglibc
@@ -114,11 +120,10 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
   [ ! "$MEDIACENTER" = "no" ] && $SCRIPTS/install mediacenter
 
 # Automounter support
-  [ "$UDISKS" = "yes" ] && $SCRIPTS/install udisks
+  [ "$UDEVIL" = "yes" ] && $SCRIPTS/install udevil
 
 # Powermanagement support
   [ "$UPOWER" = "yes" ] && $SCRIPTS/install upower
-  [ "$UPOWER" = "yes" ] && $SCRIPTS/install ConsoleKit
 
 # NTFS 3G support
   [ "$EXFAT" = "yes" ] && $SCRIPTS/install fuse-exfat
@@ -135,8 +140,8 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
 # Sensors support
   [ "$SENSOR_SUPPORT" = "yes" ] && $SCRIPTS/install lm_sensors
 
-# Update support
-  [ "$UPDATE_SUPPORT" = "yes" ] && $SCRIPTS/install autoupdate
+# Berryboot support
+  [ "$BERRYBOOT_TOOLS" = "yes" ] && $SCRIPTS/install berryboot-tools
 
 # Installer support
   [ "$INSTALLER_SUPPORT" = "yes" ] && $SCRIPTS/install installer
@@ -219,10 +224,14 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
           if [ -d "$BOOTLOADER_DIR"/files ]; then
             cp -R $BOOTLOADER_DIR/files/* $RELEASE_DIR
           fi
-          if [ -f "$BOOTLOADER_DIR"/release ]; then
+
+          if [ -f $PROJECT_DIR/$PROJECT/bootloader/release ]; then
+            . $PROJECT_DIR/$PROJECT/bootloader/release
+          elif [ -f "$BOOTLOADER_DIR"/release ]; then
             . $BOOTLOADER_DIR/release
           fi
         fi
+
         cp $ROOT/README* $RELEASE_DIR
         cp $ROOT/CHANGELOG* $RELEASE_DIR
         cp -R $CONFIG/release/openelec.ico $RELEASE_DIR
@@ -256,10 +265,86 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
       mkdir -p $TARGET_IMG
 
     # remove an previous created release tarball
-      rm -rf $TARGET_IMG/$IMAGE_NAME.tar.bz2
+      rm -rf $TARGET_IMG/$IMAGE_NAME.tar
 
     # create release tarball
-      tar cjf $TARGET_IMG/$IMAGE_NAME.tar.bz2 -C target $IMAGE_NAME
+      tar cf $TARGET_IMG/$IMAGE_NAME.tar -C target $IMAGE_NAME
+
+    # cleanup release dir
+      rm -rf $RELEASE_DIR
+
+  elif [ "$1" = "noobs" ]; then
+
+    RELEASE_DIR="$TARGET_IMG/${IMAGE_NAME}-$1"
+
+    # cleanup
+      rm -rf $RELEASE_DIR
+
+    # create release dir
+      mkdir -p $RELEASE_DIR
+
+      cp -PR $ROOT/config/$1/* $RELEASE_DIR
+
+      cp $ROOT/README* $RELEASE_DIR
+      cp $ROOT/CHANGELOG $RELEASE_DIR/release_notes.txt
+
+
+      sed -e "s%@DISTRONAME@%$DISTRONAME%g" \
+          -e "s%@OPENELEC_VERSION@%$OPENELEC_VERSION%g" \
+          -e "s%@RELEASE_DATE@%$(date +%F)%g" \
+          -e "s%@KERNEL_VERSION@%$(echo $(basename $BUILD/linux-*) | awk -F - '{print $2}')%g" \
+          -e "s%@DESCRIPTION@%$DESCRIPTION%g" \
+          -i $RELEASE_DIR/os.json
+
+    # create System dir
+      mkdir -p $RELEASE_DIR/System
+
+        BOOTLOADER_DIR=`find $PACKAGES -type d -name $BOOTLOADER 2>/dev/null`
+        if [ -d "$BOOTLOADER_DIR"/files/3rdparty/bootloader/ ]; then
+          cp -PR $BOOTLOADER_DIR/files/3rdparty/bootloader/* $RELEASE_DIR/System
+        fi
+
+      # copy Bootloader
+        cp -PR $BUILD/bcm2835-bootloader-*/LICENCE* $RELEASE_DIR/System/
+        cp -PR $BUILD/bcm2835-bootloader-*/bootcode.bin $RELEASE_DIR/System/
+        cp -PR $BUILD/bcm2835-bootloader-*/fixup_x.dat $RELEASE_DIR/System/fixup.dat
+        cp -PR $BUILD/bcm2835-bootloader-*/start_x.elf $RELEASE_DIR/System/start.elf
+
+      # copy system files
+        cp $TARGET_IMG/$IMAGE_NAME.system $RELEASE_DIR/System/SYSTEM
+        cp $TARGET_IMG/$IMAGE_NAME.kernel $RELEASE_DIR/System/kernel.img
+
+      # create md5sum's
+        ( cd $RELEASE_DIR/System;
+          md5sum -t SYSTEM > SYSTEM.md5;
+          md5sum -t kernel.img > kernel.img.md5;
+        )
+
+      # copy additional files
+        cp -R $CONFIG/release/openelec.ico $RELEASE_DIR/System
+        mkdir -p $RELEASE_DIR/System/licenses
+          cp $ROOT/licenses/* $RELEASE_DIR/System/licenses
+
+    # create Storage dir
+      mkdir -p $RELEASE_DIR/Storage
+
+    # remove an previous created release tarball
+      rm -rf $RELEASE_DIR/System.tar.xz
+      rm -rf $RELEASE_DIR/Storage.tar.xz
+
+    # create filesystem tarballs
+      tar cJf $RELEASE_DIR/System.tar.xz -C $RELEASE_DIR/System/ .
+      tar cJf $RELEASE_DIR/Storage.tar.xz -C $RELEASE_DIR/Storage/ .
+
+    # remove an filesystem dirs
+      rm -rf $RELEASE_DIR/System
+      rm -rf $RELEASE_DIR/Storage
+
+    # remove an previous created release tarball
+      rm -rf $TARGET_IMG/${IMAGE_NAME}-$1.tar
+
+    # create release tarball
+      tar cf $TARGET_IMG/${IMAGE_NAME}-$1.tar -C $TARGET ${IMAGE_NAME}-$1
 
     # cleanup release dir
       rm -rf $RELEASE_DIR

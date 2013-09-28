@@ -1,0 +1,308 @@
+#!/bin/sh
+
+################################################################################
+#      Copyright (C) 2009-2010 OpenELEC.tv
+#      http://www.openelec.tv
+#
+#  This Program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  This Program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with OpenELEC.tv; see the file COPYING.  If not, write to
+#  the Free Software Foundation, 51 Franklin Street, Suite 500, Boston, MA 02110, USA.
+#  http://www.gnu.org/copyleft/gpl.html
+################################################################################
+
+# usage:   sudo ./create_installstick <drive>
+# example: sudo ./create_installstick /dev/sdb
+
+if [ "$(id -u)" != "0" ]; then
+  clear
+  echo "#########################################################"
+  echo "# please execute with 'sudo' or -DANGEROUS!!!- as root  #"
+  echo "# example: sudo ./create_livestick <drive>           #"
+  echo "#########################################################"
+  exit 1
+fi
+
+if [ -z "$1" ]; then
+  clear
+  echo "#########################################################"
+  echo "# please execute with your drive as option              #"
+  echo "# example: sudo ./create_livestick /dev/sdb          #"
+  echo "#########################################################"
+  exit 1
+fi
+
+DISK="$1"
+
+### If DISK ends with a number, add "p1" instead of "1" for the first partition
+case ${DISK#${DISK%?}} in
+    ([0-9]) PART="${DISK}p1";;
+    (*)     PART="${DISK}1";;
+esac
+
+clear
+echo "#########################################################"
+echo "#                                                       #"
+echo "#              OpenELEC LIVE Installer                  #"
+echo "#                                                       #"
+echo "#########################################################"
+echo "#                                                       #"
+echo "#     This will wipe any data off your chosen drive     #"
+echo "# Please read the instructions and use very carefully.. #"
+echo "#                                                       #"
+echo "#########################################################"
+
+# check for some required tools
+
+  # this is needed to create a bootloader
+  which syslinux > /dev/null
+  if [ "$?" = "1" ]; then
+    clear
+    echo "#########################################################"
+    echo "#                                                       #"
+    echo "# OpenELEC missing tool - Installation will quit        #"
+    echo "#                                                       #"
+    echo "#      We can't find the required tool \"syslinux\"       #"
+    echo "#      on your system.                                  #"
+    echo "#      Please install it via your package manager.      #"
+    echo "#                                                       #"
+    echo "#########################################################"
+    exit 1
+  fi
+
+  # this is needed by syslinux
+  which mcopy > /dev/null
+    if [ "$?" = "1" ]; then
+    clear
+    echo "#########################################################"
+    echo "#                                                       #"
+    echo "# OpenELEC missing tool - Installation will quit        #"
+    echo "#                                                       #"
+    echo "#      We can't find the required tool \"mcopy\"          #"
+    echo "#      on your system.                                  #"
+    echo "#      Please install it via your package manager.      #"
+    echo "#      NOTE: Some distributions call this package       #"
+    echo "#      \"mtools\".                                        #"
+    echo "#                                                       #"
+    echo "#########################################################"
+    exit 1
+  fi
+
+  # this is needed to partion the drive
+  which parted > /dev/null
+  if [ "$?" = "1" ]; then
+    clear
+    echo "#########################################################"
+    echo "#                                                       #"
+    echo "# OpenELEC missing tool - Installation will quit        #"
+    echo "#                                                       #"
+    echo "#      We can't find the required tool \"parted\"         #"
+    echo "#      on your system.                                  #"
+    echo "#      Please install it via your package manager.      #"
+    echo "#                                                       #"
+    echo "#########################################################"
+    exit 1
+  fi
+
+  # this is needed to format the drive
+  which mkfs.vfat > /dev/null
+  if [ "$?" = "1" ]; then
+    clear
+    echo "#########################################################"
+    echo "#                                                       #"
+    echo "# OpenELEC.tv missing tool - Installation will quit     #"
+    echo "#                                                       #"
+    echo "#      We can't find the required tool \"mkfs.vfat\"       #"
+    echo "#      on your system.                                  #"
+    echo "#      Please install it via your package manager.      #"
+    echo "#                                                       #"
+    echo "#########################################################"
+    exit 1
+  fi
+
+# check MD5 sums
+  echo "checking MD5 sum..."
+
+  md5sumFailed()
+  {
+    clear
+    echo "#########################################################"
+    echo "#                                                       #"
+    echo "# OpenELEC failed md5 check - Installation will quit    #"
+    echo "#                                                       #"
+    echo "#      Your original download was probably corrupt.     #"
+    echo "#   Please visit www.openelec.tv and get another copy   #"
+    echo "#                                                       #"
+    echo "#########################################################"
+    exit 1
+  }
+
+  md5sum -c target/KERNEL.md5
+  if [ "$?" = "1" ]; then
+    md5sumFailed
+  fi
+
+  md5sum -c target/SYSTEM.md5
+  if [ "$?" = "1" ]; then
+    md5sumFailed
+  fi
+
+# (TODO) umount everything (if more than one partition)
+  umount "$PART"
+
+# remove all partitions from the drive
+  echo "writing new disklabel on $DISK (removing all partitions)..."
+  dd if=/dev/zero of="$DISK" bs=4096 count=1024
+  parted -s "$DISK" mklabel msdos
+
+# create a single partition
+  echo "creating a partition on $DISK..."
+  parted -s "$DISK" unit cyl mkpart primary fat32 -- 0 -0
+
+# make partition active (bootable)
+  echo "marking partition active..."
+  parted -s "$DISK" set 1 boot on
+
+# tell kernel we have a new partition table
+  echo "telling kernel we have a new partition table..."
+  partprobe "$DISK"
+
+# create filesystem
+  echo "creating filesystem on $PART..."
+  mkfs.vfat "$PART" -n OpenELEC
+
+# install syslinux
+  echo "installing syslinux to $PART..."
+  syslinux -f "$PART"
+
+# mount partition
+  echo "mounting partition $PART on /tmp/usb_install..."
+  mkdir -p /tmp/usb_install
+  mount "$PART" /tmp/usb_install
+
+# find UUID
+  echo -n "finding partition UUID for $PART ..."
+  UUID=`blkid $PART -s UUID -o value`
+  echo "$UUID"
+
+# create bootloader configuration
+  echo "creating bootloader configuration..."
+
+cat >/tmp/usb_install/syslinux.cfg << EOF
+UI vesamenu.c32
+PROMPT 0
+MENU TITLE Boot Menu
+MENU BACKGROUND splash.png
+TIMEOUT 50
+DEFAULT live
+
+MENU WIDTH 70
+MENU MARGIN 15
+MENU ROWS 2
+MENU HSHIFT 4
+MENU VSHIFT 13
+MENU TIMEOUTROW 10
+MENU TABMSGROW 8
+MENU CMDLINEROW 8
+MENU HELPMSGROW 13
+MENU HELPMSGENDROW 26
+MENU CLEAR
+
+MENU COLOR border       30;44   #40ffffff #00000000 std
+MENU COLOR title        1;36;44 #ff8bbfe3 #00000000 std
+MENU COLOR sel          7;37;40 #80f0f0f0 #ff606060 all
+MENU COLOR unsel        37;44   #50ffffff #00000000 std
+MENU COLOR help         37;40   #c0ffffff #a0000000 std
+MENU COLOR timeout_msg  37;40   #80ffffff #00000000 std
+MENU COLOR timeout      1;37;40 #c0ffffff #00000000 std
+MENU COLOR msg07        37;40   #90ffffff #a0000000 std
+MENU COLOR tabmsg       31;40   #ff868787 #00000000 std
+
+LABEL installer
+  MENU LABEL Run OpenELEC Installer
+  KERNEL /KERNEL
+  APPEND boot=UUID=$UUID installer quiet vga=current
+
+LABEL live
+  MENU LABEL Run OpenELEC Live
+  KERNEL /KERNEL
+  APPEND boot=UUID=$UUID disk=FILE=STORAGE,512 quiet vga=current
+
+EOF
+
+# copy files
+  echo "copying files to $PART..."
+  cp target/KERNEL /tmp/usb_install
+  cp target/KERNEL.md5 /tmp/usb_install
+  cp target/SYSTEM /tmp/usb_install
+  cp target/SYSTEM.md5 /tmp/usb_install
+#  cp Autorun.inf /tmp/usb_install
+  cp openelec.ico /tmp/usb_install
+  cp CHANGELOG /tmp/usb_install
+  cp INSTALL /tmp/usb_install
+  cp README.md /tmp/usb_install
+  cp RELEASE /tmp/usb_install
+
+  cp splash.png /tmp/usb_install
+
+  if [ -f /usr/lib/syslinux/vesamenu.c32 ]; then
+    cp /usr/lib/syslinux/vesamenu.c32 /tmp/usb_install
+  elif [ -f /usr/share/syslinux/vesamenu.c32 ]; then
+    cp /usr/share/syslinux/vesamenu.c32 /tmp/usb_install
+  else
+    echo "ERROR: Can't find syslinux's vesamenu.c32 on Host OS" >&2
+    sed 's|^UI vesamenu.c32|#UI vesamenu.c32|g' /tmp/usb_install/syslinux.cfg
+  fi
+
+  if [ -f /usr/lib/syslinux/libcom32.c32 ]; then
+    cp /usr/lib/syslinux/libcom32.c32 /tmp/usb_install
+  elif [ -f /usr/share/syslinux/libcom32.c32 ]; then
+    cp /usr/share/syslinux/libcom32.c32 /tmp/usb_install
+  fi
+
+  if [ -f /usr/lib/syslinux/libutil.c32 ]; then
+    cp /usr/lib/syslinux/libutil.c32 /tmp/usb_install
+  elif [ -f /usr/share/syslinux/libutil.c32 ]; then
+    cp /usr/share/syslinux/libutil.c32 /tmp/usb_install
+  fi
+
+# sync disk
+  echo "syncing disk..."
+  sync
+
+# unmount partition
+  echo "unmounting partition $PART..."
+  umount "$PART"
+
+# write mbr
+  echo "writing mbr..."
+  if [ -f /usr/lib/syslinux/mbr.bin ]; then
+    MBR="/usr/lib/syslinux/mbr.bin"       # example: debian, ubuntu
+  elif [ -f /usr/share/syslinux/mbr.bin ]; then
+    MBR="/usr/share/syslinux/mbr.bin"     # example: fedora
+  else
+    echo "ERROR: Can't find syslinux's mbr.bin on Host OS" >&2
+  fi
+
+  if [ -n "$MBR" ]; then
+    cat "$MBR" > "$DISK"
+  fi
+
+# syncing disk
+  echo "syncing disk..."
+  sync
+
+# cleaning
+  echo "cleaning tempdir..."
+  rmdir /tmp/usb_install
+
+echo "...installation finished"

@@ -22,31 +22,35 @@
 #
 # runlevels: openelec, textmode
 
-  if [ -f /var/config/settings.conf ]; then
-    . /var/config/settings.conf
+  # can be called from openelec addon.
+  # ensure that environment is sane
+  . /etc/profile
+
+  SSHD_START=false
+  if [ -f $CONFIG_CACHE/services/ssh.conf ]; then
+    . $CONFIG_CACHE/services/ssh.conf
   fi
 
-  RSA1_KEY="/storage/.cache/ssh/ssh_host_key"
-  RSA2_KEY="/storage/.cache/ssh/ssh_host_rsa_key"
-  DSA2_KEY="/storage/.cache/ssh/ssh_host_dsa_key"
+# Check if password authentication is disabled
+  OPTIONS=""
+
+  if [ "$SSHD_DISABLE_PW_AUTH" == "true" ] ; then
+    OPTIONS="-o 'PasswordAuthentication no'"
+  fi
+
+  RSA1_KEY="$CONFIG_CACHE/ssh/ssh_host_key"
+  RSA2_KEY="$CONFIG_CACHE/ssh/ssh_host_rsa_key"
+  DSA2_KEY="$CONFIG_CACHE/ssh/ssh_host_dsa_key"
 
   KEYGEN="/usr/bin/ssh-keygen"
   SSHD="/usr/sbin/sshd"
 
-  HOME="/storage"
-
   (
-    if [ -f /etc/ssh.conf ]; then
-      . /etc/ssh.conf
-    fi
-
-    if [ "$SSH" = yes -o -f /storage/.config/ssh_enable -o "$SSHD_START" == "true" ]; then
+    if [ "$SSH" = "yes" -o "$SSHD_START" = "true" ]; then
 
     # Check for the SSH1 RSA key
       if [ ! -s $RSA1_KEY ] ; then
         progress "SSH: generating SSH1 RSA key"
-
-        mkdir -p /storage/.cache/ssh
           $KEYGEN -q -t rsa1 -f $RSA1_KEY -C '' -N '' >&/dev/null
           chmod 600 $RSA1_KEY
       fi
@@ -54,8 +58,6 @@
     # Check for the SSH2 RSA key
       if [ ! -s $RSA2_KEY ] ; then
         progress "SSH: generating SSH2 RSA key"
-
-        mkdir -p /storage/.cache/ssh
           $KEYGEN -q -t rsa -f $RSA2_KEY -C '' -N '' >&/dev/null
           chmod 600 $RSA2_KEY
       fi
@@ -63,34 +65,12 @@
     # Check for the SSH2 DSA key
       if [ ! -s $DSA2_KEY ] ; then
         progress "SSH: generating SSH2 DSA key"
-
-        mkdir -p /storage/.cache/ssh
           $KEYGEN -q -t dsa -f $DSA2_KEY -C '' -N '' >&/dev/null
           chmod 600 $DSA2_KEY
       fi
 
-    # ensure that $HOME/.ssh exists, is root-owned and not world-readable
-      mkdir -p $HOME/.ssh
-      chown root:root $HOME/.ssh
-      chmod 0700 $HOME/.ssh
-
-    # Check for predefined known hosts file
-      if [ -f /etc/ssh/known_hosts -a ! -f $HOME/.ssh/known_hosts ] ; then
-        progress "SSH: setup predefined known hosts"
-
-        cp /etc/ssh/known_hosts $HOME/.ssh
-      fi
-
-    # Check if password authentication is disabled
-      OPTIONS=""
-
-      if [ "$SSHD_DISABLE_PW_AUTH" == "true" ] ; then
-        OPTIONS="-o 'PasswordAuthentication no'"
-      fi
       progress "Starting SSH Server"
-
-      mkdir -p /var/empty
-      chmod -R 600 /var/empty
-      eval $SSHD $OPTIONS
+        rm /var/run/sshd.pid &>/dev/null
+        eval $SSHD $OPTIONS
     fi
   )&

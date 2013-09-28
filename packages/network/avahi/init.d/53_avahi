@@ -23,11 +23,24 @@
 # runlevels: openelec, textmode
 
 (
-  # sleep 10 sec to be ensure network is started
-    usleep 10000000
+  # can be called from openelec addon.
+  # ensure that environment is sane
+  . /etc/profile
 
   progress "Starting Avahi Daemon"
 
-    mkdir -p /var/run/avahi-daemon
-    avahi-daemon -D
+  if [ "$DEBUG" = "yes" ]; then
+    AVAHI_DEBUG="--debug"
+  fi
+
+  mkdir -p /var/run/avahi-daemon
+  AVAHI_ENABLED=true
+  if [ -f $CONFIG_CACHE/services/avahi.conf ]; then
+    . $CONFIG_CACHE/services/avahi.conf
+  fi
+  if [ "$AVAHI_ENABLED" == "true" ]; then
+    wait_for_dbus
+    rm /var/run/avahi-daemon/pid &>/dev/null
+    avahi-daemon $AVAHI_DEBUG -D --syslog > /dev/null 2>&1
+  fi
 )&
