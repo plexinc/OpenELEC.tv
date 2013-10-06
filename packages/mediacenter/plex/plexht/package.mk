@@ -349,106 +349,61 @@ export PYTHON_LDFLAGS="-L$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION -lpython$
 export PYTHON_SITE_PKG="$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION/site-packages"
 export ac_python_version="$PYTHON_VERSION"
 
-PKG_CONFIGURE_OPTS_TARGET="gl_cv_func_gettimeofday_clobber=no \
-                           --with-arch=$TARGET_ARCH \
-                           --with-cpu=$TARGET_CPU \
-                           --disable-debug \
-                           --disable-optimizations \
-                           $XBMC_OPENGL \
-                           $XBMC_OPENGLES \
-                           $XBMC_SDL \
-                           $XBMC_OPENMAX \
-                           $XBMC_VDPAU \
-                           $XBMC_VAAPI \
-                           $XBMC_CRYSTALHD \
-                           $XBMC_XVBA \
-                           --disable-vdadecoder \
-                           --disable-vtbdecoder \
-                           --disable-tegra \
-                           --disable-profiling \
-                           $XBMC_JOYSTICK \
-                           $XBMC_CEC \
-                           --enable-udev \
-                           --disable-libusb \
-                           $XBMC_GOOM \
-                           $XBMC_RSXS \
-                           $XBMC_PROJECTM \
-                           $XBMC_XORG \
-                           --disable-ccache \
-                           $XBMC_ALSA \
-                           --disable-pulse \
-                           --enable-rtmp \
-                           $XBMC_SAMBA \
-                           $XBMC_NFS \
-                           $XBMC_AFP \
-                           $XBMC_VORBISENC \
-                           --disable-libcap \
-                           --enable-ffmpeg-libvorbis \
-                           $XBMC_LAMEENC \
-                           $XBMC_DVDCSS \
-                           --disable-mid \
-                           --disable-hal \
-                           $XBMC_AVAHI \
-                           $XBMC_UPNP \
-                           $XBMC_MYSQL \
-                           $XBMC_SSH \
-                           $XBMC_AIRPLAY \
-                           $XBMC_AIRTUNES \
-                           $XBMC_NONFREE \
-                           --disable-asap-codec \
-                           $XBMC_WEBSERVER \
-                           $XBMC_OPTICAL \
-                           $XBMC_BLURAY \
-                           --enable-texturepacker --with-texturepacker-root="$ROOT/$TOOLCHAIN" \
-                           --disable-external-libraries \
-                           --enable-external-ffmpeg \
-                           $XBMC_CODEC \
-                           $XBMC_PLAYER"
-
-pre_build_target() {
-# adding fake Makefile for stripped skin
-  mkdir -p $PKG_BUILD/addons/skin.confluence/media
-  touch $PKG_BUILD/addons/skin.confluence/media/Makefile.in
-
-# autoreconf
-  BOOTSTRAP_STANDALONE=1 make -C $PKG_BUILD -f bootstrap.mk
-}
 
 pre_configure_target() {
-# xbmc fails to build in subdirs
-  cd $ROOT/$PKG_BUILD
-    rm -rf .$TARGET_NAME
+# Configure Plex
+# dont use some optimizations because of build problems
+  LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
+# dont build parallel
+  MAKEFLAGS=-j1
 
-# xbmc fails to build with LTO optimization if build without GOLD support
-  [ ! "$GOLD_SUPPORT" = "yes" ] && strip_lto
-
-# Todo: XBMC segfaults on exit when building with LTO support
+# strip compiler optimization
   strip_lto
 
-# dont build parallel
-# MAKEFLAGS=-j1
+# set python variables
+  export PYTHON_VERSION="2.7"
+  export PYTHON_CPPFLAGS="-I$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
+  export PYTHON_LDFLAGS="-L$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION -lpython$PYTHON_VERSION"
+  export PYTHON_SITE_PKG="$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION/site-packages"
+  export ac_python_version="$PYTHON_VERSION"
 
-  export CFLAGS="$CFLAGS $XBMC_CFLAGS"
-  export CXXFLAGS="$CXXFLAGS $XBMC_CXXFLAGS"
-  export LIBS="$LIBS $XBMC_LIBS"
+# configure the build
+export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
+
+cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
+[ ! -d config ] && mkdir config
+cd config
+
+cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCOMPRESS_TEXTURES=off -DCMAKE_INSTALL_PREFIX=$INSTALL/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
+}
+
+pre_build_target() {
+# Do nothing
+MAKEFLAGS=-j1
+
 }
 
 make_target() {
-# setup skin dir from default skin
-  SKIN_DIR="skin.`tolower $SKIN_DEFAULT`"
+# Build Plex
+# dont use some optimizations because of build problems
+  LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
+# dont build parallel
+  MAKEFLAGS=-j1
 
-# setup default skin inside the sources
-  sed -i -e "s|skin.confluence|$SKIN_DIR|g" $ROOT/$PKG_BUILD/xbmc/settings/Settings.h
+# strip compiler optimization
+  strip_lto
 
-  make externals
-  make plexhometheater 
+# set python variables
+  export PYTHON_VERSION="2.7"
+  export PYTHON_CPPFLAGS="-I$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
+  export PYTHON_LDFLAGS="-L$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION -lpython$PYTHON_VERSION"
+  export PYTHON_SITE_PKG="$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION/site-packages"
+  export ac_python_version="$PYTHON_VERSION"
 
-  if [ "$DISPLAYSERVER" = "xorg-server" ]; then
-    make xbmc-xrandr
-  fi
-
-  make -C tools/TexturePacker
-  cp -PR tools/TexturePacker/TexturePacker $ROOT/$TOOLCHAIN/bin
+# configure the build
+export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
+cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config
+make -j1
 }
 
 post_makeinstall_target() {
@@ -456,7 +411,6 @@ post_makeinstall_target() {
     cp $PKG_DIR/scripts/cputemp $INSTALL/usr/bin
     cp $PKG_DIR/scripts/gputemp $INSTALL/usr/bin
     cp $PKG_DIR/scripts/setwakeup.sh $INSTALL/usr/bin
-    cp tools/EventClients/Clients/XBMC\ Send/xbmc-send.py $INSTALL/usr/bin/xbmc-send
 
     rm -rf $INSTALL/usr/bin/xbmc
     rm -rf $INSTALL/usr/bin/xbmc-standalone
@@ -488,9 +442,6 @@ post_makeinstall_target() {
     $SED "s|@OS_VERSION@|$OS_VERSION|g" -i $INSTALL/usr/share/xbmc/addons/os.openelec.tv/addon.xml
     cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/xbmc/addons
     $SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/xbmc/addons/repository.openelec.tv/addon.xml
-
-  mkdir -p $INSTALL/usr/lib/python"$PYTHON_VERSION"/site-packages/xbmc
-    cp -R tools/EventClients/lib/python/* $INSTALL/usr/lib/python"$PYTHON_VERSION"/site-packages/xbmc
 
 # install powermanagement hooks
   mkdir -p $INSTALL/etc/pm/sleep.d
@@ -528,4 +479,3 @@ post_makeinstall_target() {
   fi
 }
 
-# Catch all dependencies until meta rewrite
