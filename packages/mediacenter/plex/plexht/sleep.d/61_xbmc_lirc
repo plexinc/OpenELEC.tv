@@ -1,3 +1,5 @@
+#!/bin/sh
+
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2012 Stephan Raue (stephan@openelec.tv)
@@ -17,28 +19,16 @@
 #  the Free Software Foundation, 51 Franklin Street, Suite 500, Boston, MA 02110, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 ################################################################################
-# Mediacenter environment variables.
-#
-# This file contains non-OpenELEC evironment variables as well as OpenELEC
-# evironment variables that are not user defined.
-################################################################################
 
-if [ -z "$XBMC_STARTDELAY" ]; then
-  XBMC_STARTDELAY="1000000"
-fi
+. /etc/profile
 
-XBMC_HOME="/usr/share/XBMC"
-
-export XBMC_HOME
-
-GPUTYPE="OTHER"
-
-if [ -x /usr/bin/lspci ]; then
-  GPUDEVICE=$(lspci -n | grep 0300)
-
-  [ "$(echo $GPUDEVICE | grep 8086)" ] && GPUTYPE="INTEL"   # 8086 == INTEL
-  [ "$(echo $GPUDEVICE | grep 10de)" ] && GPUTYPE="NVIDIA"  # 10de == NVIDIA
-  [ "$(echo $GPUDEVICE | grep 1002)" ] && GPUTYPE="AMD"     # 1002 == AMD
-fi
-
-export GPUTYPE
+case "$1" in
+  hibernate|suspend)
+    xbmc-send --host=127.0.0.1 -a "LIRC.Stop"
+    ;;
+  thaw|resume)
+    xbmc-send --host=127.0.0.1 -a "LIRC.Start"
+    ;;
+  *) exit $NA
+    ;;
+esac

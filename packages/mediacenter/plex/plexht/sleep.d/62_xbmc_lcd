@@ -20,10 +20,15 @@
 #  http://www.gnu.org/copyleft/gpl.html
 ################################################################################
 
-count=0
+. /etc/profile
 
-while [ $(pidof plexhometheater) -a $count -le 20 ]; do
-  usleep 250000
-  logger -t wait_on_xbmc_exit "### Waiting for XBMC to Exit - $count ###"
-  count=$((count+1))
-done
+case "$1" in
+  hibernate|suspend)
+    xbmc-send --host=127.0.0.1 -a "LCD.Suspend"
+    ;;
+  thaw|resume)
+    xbmc-send --host=127.0.0.1 -a "LCD.Resume"
+    ;;
+  *) exit $NA
+    ;;
+esac

@@ -1,30 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <advancedsettings>
-<showfirstrun>77</showfirstrun>
- <cputempcommand>/opt/vc/bin/vcgencmd measure_temp | sed -e 's/temp=\([0-9]*\).*/\1 C/'</cputempcommand>
- <gputempcommand>/opt/vc/bin/vcgencmd measure_temp | sed -e 's/temp=\([0-9]*\).*/\1 C/'</gputempcommand>
- <network>
-<cachemembuffersize>30242880</cachemembuffersize>
-</network>
-<fanartheight>560</fanartheight>
-<thumbsize>256</thumbsize>
-<loglevel hide="false">2</loglevel>
-
-
- <video>
- <defaultplayer>omxplayer</defaultplayer>
- <defaultdvdplayer>omxplayer</defaultdvdplayer>
- </video>
- <audio>
- <defaultplayer>paplayer</defaultplayer>
- <streamsilence>false</streamsilence>
- </audio>
- <gui>
- <algorithmdirtyregions>3</algorithmdirtyregions>
-  <nofliptimeout>0</nofliptimeout>
- </gui>
-  <bginfoloadermaxthreads>2</bginfoloadermaxthreads>
-  <destroywindowcontrols>false</destroywindowcontrols>A
-  <useddsfanart>false</useddsfanart>
+  <showexitbutton>false</showexitbutton>
+  <cputempcommand>cputemp</cputempcommand>
+  <gputempcommand>gputemp</gputempcommand>
+  <video>
+    <latency>
+      <delay>0</delay>
+      <refresh>
+        <min>23</min>
+        <max>24</max>
+        <delay>175</delay>
+      </refresh>
+    </latency>
+    <busydialogdelayms>750</busydialogdelayms>
+  </video>
+  <samba>
+    <clienttimeout>30</clienttimeout>
+  </samba>
+  <network>
+    <curlclienttimeout>30</curlclienttimeout>
+    <readbufferfactor>4.0</readbufferfactor>
+  </network>
 </advancedsettings>
-
-<!--https://github.com/OpenELEC/OpenELEC.tv/blob/master/projects/RPi/xbmc/advancedsettings.xml-->

@@ -1,0 +1,11 @@
+--- cmake-2.8.11/Modules/FindSDL.cmake	2013-02-18 11:57:47.482249799 +0100
++++ cmake-2.8.11/Modules/FindSDL.cmake.new	2013-02-18 11:57:32.786258578 +0100
+@@ -70,7 +70,7 @@
+ find_path(SDL_INCLUDE_DIR SDL.h
+   HINTS
+     ENV SDLDIR
+-  PATH_SUFFIXES include/SDL include/SDL12 include/SDL11 include
++  PATH_SUFFIXES include/SDL include/SDL12 include/SDL11 include SDL SDL12 SDL11
+ )
+ 
+ # SDL-1.1 is the name used by FreeBSD ports...

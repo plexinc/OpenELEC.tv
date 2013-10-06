@@ -20,10 +20,9 @@
 #  http://www.gnu.org/copyleft/gpl.html
 ################################################################################
 
-count=0
+. /etc/profile
 
-while [ $(pidof plexhometheater) -a $count -le 20 ]; do
-  usleep 250000
-  logger -t wait_on_xbmc_exit "### Waiting for XBMC to Exit - $count ###"
-  count=$((count+1))
+for script in $HOME/.plexht/addons/*/sleep.d/*.power; do
+  progress "running addon sleep script $script ($1)..."
+  sh $script $1
 done

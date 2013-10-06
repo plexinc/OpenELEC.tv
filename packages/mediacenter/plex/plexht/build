@@ -24,7 +24,6 @@
 
 # dont use some optimizations because of build problems
   LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
-
 # dont build parallel
   MAKEFLAGS=-j1
 
@@ -50,7 +49,12 @@ cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSRO
 # make it so
 make -j1
 
+
 ## Build Textures.xbt for mediastream
-#cd ../
-#chroot . /bin/sh -c "config/tools/TexturePacker/TexturePacker -input addons/skin.mediastream/Media/ -output Textures.xbt"
-#cp Textures.xbt $SYSROOT_PREFIX/opt/plexhometheater/share/XBMC/addons/skin.mediastream/Media/Textures.xbt
+#pwd
+#export LD_LIBRARY_PATH=$SYSROOT_PREFIX/usr/lib
+#make -C tools/TexturePacker
+#cp -PR tools/TexturePacker/TexturePacker $ROOT/$TOOLCHAIN/bin
+#$SYSROOT_PREFIX/bin/TexturePacker -input ../addons/skin.mediastream/Media/ -output ../addons/skin.mediastream/Media/Textures.xbt
+TexturePacker -input ../addons/skin.mediastream/Media/ -output ../addons/skin.mediastream/Media/Textures.xbt -dupecheck -use_none
+
