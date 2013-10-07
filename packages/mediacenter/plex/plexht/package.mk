@@ -47,10 +47,6 @@ PKG_AUTORECONF="no"
   PKG_DEPENDS="$PKG_DEPENDS simplejson"
   PKG_DEPENDS="$PKG_DEPENDS pycrypto"
 
-# various PVR clients
-#  PKG_DEPENDS="$PKG_DEPENDS xbmc-pvr-addons"
-#  PKG_DEPENDS="$PKG_DEPENDS xbmc-addon-xvdr"
-
 if [ "$DISPLAYSERVER" = "xorg-server" ]; then
 # for libX11 support
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libX11 libXext"
@@ -67,95 +63,37 @@ if [ "$OPENGL" = "Mesa" ]; then
 # for OpenGL (GLX) support
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET Mesa glu glew"
   PKG_DEPENDS="$PKG_DEPENDS Mesa glu"
-  XBMC_OPENGL="--enable-gl"
-else
-  XBMC_OPENGL="--disable-gl"
 fi
 
 if [ "$OPENGLES_SUPPORT" = yes ]; then
 # for OpenGL-ES support
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET $OPENGLES"
   PKG_DEPENDS="$PKG_DEPENDS $OPENGLES"
-  XBMC_OPENGLES="--enable-gles"
-else
-  XBMC_OPENGLES="--disable-gles"
 fi
 
 if [ "$SDL_SUPPORT" = yes ]; then
 # for SDL support
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET SDL SDL_image"
   PKG_DEPENDS="$PKG_DEPENDS SDL SDL_image"
-  XBMC_SDL="--enable-sdl"
-else
-  XBMC_SDL="--disable-sdl"
 fi
 
 if [ "$ALSA_SUPPORT" = yes ]; then
 # for ALSA support
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET alsa-lib"
   PKG_DEPENDS="$PKG_DEPENDS alsa-lib"
-  XBMC_ALSA="--enable-alsa"
-else
-  XBMC_ALSA="--disable-alsa"
 fi
 
 if [ "$CEC_SUPPORT" = yes ]; then
 # for CEC support
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libcec"
   PKG_DEPENDS="$PKG_DEPENDS libcec"
-  XBMC_CEC="--enable-libcec"
-else
-  XBMC_CEC="--disable-libcec"
 fi
 
 if [ "$XBMC_SCR_RSXS" = yes ]; then
 # for RSXS Screensaver support
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libXt libXmu"
-  XBMC_RSXS="--enable-rsxs"
 # fix build of RSXS Screensaver support if not using libiconv
   export jm_cv_func_gettimeofday_clobber=no
-else
-  XBMC_RSXS="--disable-rsxs"
-fi
-
-if [ "$XBMC_VIS_PROJECTM" = yes ]; then
-# for ProjectM Visualisation support
-  XBMC_PROJECTM="--enable-projectm"
-else
-  XBMC_PROJECTM="--disable-projectm"
-fi
-
-if [ "$XBMC_VIS_GOOM" = yes ]; then
-# for GOOM Visualisation support
-  XBMC_GOOM="--enable-goom"
-else
-  XBMC_GOOM="--disable-goom"
-fi
-
-if [ "$JOYSTICK_SUPPORT" = yes ]; then
-# for Joystick support
-  XBMC_JOYSTICK="--enable-joystick"
-else
-  XBMC_JOYSTICK="--disable-joystick"
-fi
-
-if [ "$OPTICAL_DRIVE_SUPPORT" = yes ]; then
-  XBMC_OPTICAL="--enable-optical-drive"
-else
-  XBMC_OPTICAL="--disable-optical-drive"
-fi
-
-if [ "$NONFREE_SUPPORT" = yes ]; then
-# for non-free support
-  XBMC_NONFREE="--enable-non-free"
-else
-  XBMC_NONFREE="--disable-non-free"
-fi
-
-if [ "$DVDCSS_SUPPORT" = yes ]; then
-  XBMC_DVDCSS="--enable-dvdcss"
-else
-  XBMC_DVDCSS="--disable-dvdcss"
 fi
 
 if [ "$FAAC_SUPPORT" = yes ]; then
@@ -166,49 +104,30 @@ fi
 if [ "$ENCODER_LAME" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET lame"
   PKG_DEPENDS="$PKG_DEPENDS lame"
-  XBMC_LAMEENC="--enable-libmp3lame"
-else
-  XBMC_LAMEENC="--disable-libmp3lame"
-fi
 
 if [ "$ENCODER_VORBIS" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libvorbis"
   PKG_DEPENDS="$PKG_DEPENDS libvorbis"
-  XBMC_VORBISENC="--enable-libvorbisenc"
-else
-  XBMC_VORBISENC="--disable-libvorbisenc"
 fi
 
 if [ "$BLURAY_SUPPORT" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libbluray"
   PKG_DEPENDS="$PKG_DEPENDS libbluray"
-  XBMC_BLURAY="--enable-libbluray"
-else
-  XBMC_BLURAY="--disable-libbluray"
 fi
 
 if [ "$AVAHI_DAEMON" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET avahi"
   PKG_DEPENDS="$PKG_DEPENDS avahi"
-  XBMC_AVAHI="--enable-avahi"
-else
-  XBMC_AVAHI="--disable-avahi"
 fi
 
 if [ "$MYSQL_SUPPORT" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET mysql"
   PKG_DEPENDS="$PKG_DEPENDS mysql"
-  XBMC_MYSQL="--enable-mysql"
-else
-  XBMC_MYSQL="--disable-mysql"
 fi
 
 if [ "$AIRPLAY_SUPPORT" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libplist"
   PKG_DEPENDS="$PKG_DEPENDS libplist"
-  XBMC_AIRPLAY="--enable-airplay"
-else
-  XBMC_AIRPLAY="--disable-airplay"
 fi
 
 if [ "$AIRTUNES_SUPPORT" = yes ]; then
@@ -219,53 +138,25 @@ if [ "$AIRTUNES_SUPPORT" = yes ]; then
     PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libshairport"
     PKG_DEPENDS="$PKG_DEPENDS libshairport"
   fi
-  XBMC_AIRTUNES="--enable-airtunes"
-else
-  XBMC_AIRTUNES="--disable-airtunes"
 fi
 
 if [ "$NFS_SUPPORT" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libnfs"
   PKG_DEPENDS="$PKG_DEPENDS libnfs"
-  XBMC_NFS="--enable-nfs"
-else
-  XBMC_NFS="--disable-nfs"
 fi
 
 if [ "$AFP_SUPPORT" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET afpfs-ng"
   PKG_DEPENDS="$PKG_DEPENDS afpfs-ng"
-  XBMC_AFP="--enable-afpclient"
-else
-  XBMC_AFP="--disable-afpclient"
 fi
 
 if [ "$SAMBA_SUPPORT" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET samba"
   PKG_DEPENDS="$PKG_DEPENDS samba"
-  XBMC_SAMBA="--enable-samba"
-  XBMC_LIBS="$XBMC_LIBS -ltalloc -ltdb -ltevent -lwbclient"
-else
-  XBMC_SAMBA="--disable-samba"
 fi
 
 if [ "$WEBSERVER" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libmicrohttpd"
-  XBMC_WEBSERVER="--enable-webserver"
-else
-  XBMC_WEBSERVER="--disable-webserver"
-fi
-
-if [ "$UPNP_SUPPORT" = yes ]; then
-  XBMC_UPNP="--enable-upnp"
-else
-  XBMC_UPNP="--disable-upnp"
-fi
-
-if [ "$SSHLIB_SUPPORT" = yes ]; then
-  XBMC_SSH="--enable-ssh"
-else
-  XBMC_SSH="--disable-ssh"
 fi
 
 if [ ! "$XBMCPLAYER_DRIVER" = default ]; then
@@ -302,17 +193,11 @@ fi
 if [ "$VDPAU" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libvdpau"
   PKG_DEPENDS="$PKG_DEPENDS libvdpau"
-  XBMC_VDPAU="--enable-vdpau"
-else
-  XBMC_VDPAU="--disable-vdpau"
 fi
 
 if [ "$VAAPI" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libva"
   PKG_DEPENDS="$PKG_DEPENDS libva"
-  XBMC_VAAPI="--enable-vaapi"
-else
-  XBMC_VAAPI="--disable-vaapi"
 fi
 
 if [ "$XVBA" = yes ]; then
@@ -324,31 +209,12 @@ if [ "$XVBA" = yes ]; then
       PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET xf86-video-fglrx-legacy"
     fi
   done
-  XBMC_XVBA="--enable-xvba"
-else
-  XBMC_XVBA="--disable-xvba"
 fi
 
 if [ "$CRYSTALHD" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET crystalhd"
   PKG_DEPENDS="$PKG_DEPENDS crystalhd"
-  XBMC_CRYSTALHD="--enable-crystalhd"
-else
-  XBMC_CRYSTALHD="--disable-crystalhd"
 fi
-
-export CXX_FOR_BUILD="$HOST_CXX"
-export CC_FOR_BUILD="$HOST_CC"
-export CXXFLAGS_FOR_BUILD="$HOST_CXXFLAGS"
-export CFLAGS_FOR_BUILD="$HOST_CFLAGS"
-export LDFLAGS_FOR_BUILD="$HOST_LDFLAGS"
-
-export PYTHON_VERSION="2.7"
-export PYTHON_CPPFLAGS="-I$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
-export PYTHON_LDFLAGS="-L$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION -lpython$PYTHON_VERSION"
-export PYTHON_SITE_PKG="$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION/site-packages"
-export ac_python_version="$PYTHON_VERSION"
-
 
 pre_configure_target() {
 # Configure Plex
@@ -374,7 +240,7 @@ cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
 [ ! -d config ] && mkdir config
 cd config
 
-cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCOMPRESS_TEXTURES=off -DCMAKE_INSTALL_PREFIX=$INSTALL/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
+cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCOMPRESS_TEXTURES=off -DCMAKE_INSTALL_PREFIX=/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
 }
 
 pre_build_target() {
@@ -400,13 +266,18 @@ make_target() {
   export PYTHON_SITE_PKG="$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION/site-packages"
   export ac_python_version="$PYTHON_VERSION"
 
-# configure the build
+# Make the build
 export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
 cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config
 make -j1
 }
 
 post_makeinstall_target() {
+
+echo "Posting install variable"
+echo $INSTALL
+env
+echo "Back to installing"
   mkdir -p $INSTALL/usr/bin
     cp $PKG_DIR/scripts/cputemp $INSTALL/usr/bin
     cp $PKG_DIR/scripts/gputemp $INSTALL/usr/bin
@@ -416,66 +287,58 @@ post_makeinstall_target() {
     rm -rf $INSTALL/usr/bin/xbmc-standalone
 
   if [ ! "$DISPLAYSERVER" = "xorg-server" ]; then
-    rm -rf $INSTALL/usr/lib/xbmc/xbmc-xrandr
-  fi
-
-  if [ ! "$XBMC_SCR_RSXS" = yes ]; then
-    rm -rf $INSTALL/usr/share/xbmc/addons/screensaver.rsxs.*
-  fi
-
-  if [ ! "$XBMC_VIS_PROJECTM" = yes ]; then
-    rm -rf $INSTALL/usr/share/xbmc/addons/visualization.projectm
+    rm -rf $INSTALL/usr/bin/xbmc-xrandr
   fi
 
   rm -rf $INSTALL/usr/share/applications
   rm -rf $INSTALL/usr/share/icons
-  rm -rf $INSTALL/usr/share/xbmc/addons/repository.pvr-*
-  rm -rf $INSTALL/usr/share/xbmc/addons/script.module.pysqlite
-  rm -rf $INSTALL/usr/share/xbmc/addons/script.module.simplejson
-  rm -rf $INSTALL/usr/share/xbmc/addons/visualization.dxspectrum
-  rm -rf $INSTALL/usr/share/xbmc/addons/visualization.itunes
-  rm -rf $INSTALL/usr/share/xbmc/addons/visualization.milkdrop
+  rm -rf $INSTALL/usr/share/XBMC/addons/repository.pvr-*
+  rm -rf $INSTALL/usr/share/XBMC/addons/script.module.pysqlite
+  rm -rf $INSTALL/usr/share/XBMC/addons/script.module.simplejson
+  rm -rf $INSTALL/usr/share/XBMC/addons/visualization.dxspectrum
+  rm -rf $INSTALL/usr/share/XBMC/addons/visualization.itunes
+  rm -rf $INSTALL/usr/share/XBMC/addons/visualization.milkdrop
+  rm -rf $INSTALL/usr/share/XBMC/addons/xbmc.pvr
   rm -rf $INSTALL/usr/share/xsessions
 
-  mkdir -p $INSTALL/usr/share/xbmc/addons
-    cp -R $PKG_DIR/config/os.openelec.tv $INSTALL/usr/share/xbmc/addons
-    $SED "s|@OS_VERSION@|$OS_VERSION|g" -i $INSTALL/usr/share/xbmc/addons/os.openelec.tv/addon.xml
-    cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/xbmc/addons
-    $SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/xbmc/addons/repository.openelec.tv/addon.xml
+  mkdir -p $INSTALL/usr/share/XBMC/addons
+    cp -R $PKG_DIR/config/os.openelec.tv $INSTALL/usr/share/XBMC/addons
+    $SED "s|@OS_VERSION@|$OS_VERSION|g" -i $INSTALL/usr/share/XBMC/addons/os.openelec.tv/addon.xml
+    cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/XBMC/addons
+    $SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/XBMC/addons/repository.openelec.tv/addon.xml
 
 # install powermanagement hooks
   mkdir -p $INSTALL/etc/pm/sleep.d
     cp $PKG_DIR/sleep.d/* $INSTALL/etc/pm/sleep.d
 
 # install project specific configs
-  mkdir -p $INSTALL/usr/share/xbmc/config
-    if [ -f $PROJECT_DIR/$PROJECT/xbmc/guisettings.xml ]; then
-      cp -R $PROJECT_DIR/$PROJECT/xbmc/guisettings.xml $INSTALL/usr/share/xbmc/config
+  mkdir -p $INSTALL/usr/share/XBMC/config
+    if [ -f $PROJECT_DIR/$PROJECT/XBMC/guisettings.xml ]; then
+      cp -R $PROJECT_DIR/$PROJECT/XBMC/guisettings.xml $INSTALL/usr/share/XBMC/config
     fi
 
-    if [ -f $PROJECT_DIR/$PROJECT/xbmc/sources.xml ]; then
-      cp -R $PROJECT_DIR/$PROJECT/xbmc/sources.xml $INSTALL/usr/share/xbmc/config
+    if [ -f $PROJECT_DIR/$PROJECT/XBMC/sources.xml ]; then
+      cp -R $PROJECT_DIR/$PROJECT/XBMC/sources.xml $INSTALL/usr/share/XBMC/config
     fi
 
-  mkdir -p $INSTALL/usr/share/xbmc/system/
-    if [ -f $PROJECT_DIR/$PROJECT/xbmc/advancedsettings.xml ]; then
-      cp $PROJECT_DIR/$PROJECT/xbmc/advancedsettings.xml $INSTALL/usr/share/xbmc/system/
+  mkdir -p $INSTALL/usr/share/XBMC/system/
+    if [ -f $PROJECT_DIR/$PROJECT/XBMC/advancedsettings.xml ]; then
+      cp $PROJECT_DIR/$PROJECT/XBMC/advancedsettings.xml $INSTALL/usr/share/XBMC/system/
     else
-      cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/xbmc/system/
+      cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/XBMC/system/
     fi
 
   if [ "$XBMC" = master ]; then
     mkdir -p $INSTALL/usr/share/xbmc/system/settings
       if [ -f $PROJECT_DIR/$PROJECT/xbmc/appliance.xml ]; then
-        cp $PROJECT_DIR/$PROJECT/xbmc/appliance.xml $INSTALL/usr/share/xbmc/system/settings
+        cp $PROJECT_DIR/$PROJECT/xbmc/appliance.xml $INSTALL/usr/share/XBMC/system/settings
       else
-        cp $PKG_DIR/config/appliance.xml $INSTALL/usr/share/xbmc/system/settings
+        cp $PKG_DIR/config/appliance.xml $INSTALL/usr/share/XBMC/system/settings
       fi
   fi
 
   if [ "$XBMC_EXTRA_FONTS" = yes ]; then
-    mkdir -p $INSTALL/usr/share/xbmc/media/Fonts
-      cp $PKG_DIR/fonts/*.ttf $INSTALL/usr/share/xbmc/media/Fonts
+    mkdir -p $INSTALL/usr/share/XBMC/media/Fonts
+      cp $PKG_DIR/fonts/*.ttf $INSTALL/usr/share/XBMC/media/Fonts
   fi
 }
-
