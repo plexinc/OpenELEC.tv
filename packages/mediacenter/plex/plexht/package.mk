@@ -104,6 +104,7 @@ fi
 if [ "$ENCODER_LAME" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET lame"
   PKG_DEPENDS="$PKG_DEPENDS lame"
+fi
 
 if [ "$ENCODER_VORBIS" = yes ]; then
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libvorbis"
@@ -342,3 +343,4 @@ echo "Back to installing"
       cp $PKG_DIR/fonts/*.ttf $INSTALL/usr/share/XBMC/media/Fonts
   fi
 }
+
