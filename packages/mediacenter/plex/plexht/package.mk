@@ -271,6 +271,9 @@ make_target() {
 export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
 cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config
 make -j1
+
+make -C tools/TexturePacker
+cp -PR tools/TexturePacker/TexturePacker $ROOT/$TOOLCHAIN/bin
 }
 
 post_makeinstall_target() {

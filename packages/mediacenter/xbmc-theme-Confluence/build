@@ -22,7 +22,7 @@
 
 . config/options $1
 
-cd $PKG_BUILD
+cd plexht-theme-Mediastream 
 TexturePacker -input media/ \
               -output Textures.xbt \
               -dupecheck \
