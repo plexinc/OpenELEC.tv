@@ -28,10 +28,16 @@ progress "setup XBMC"
 # setup XBMC sources
 #
 
+# Check for .plexht/userdata dir. If doesn't exist create it. 
+
+if [ ! -d $HOME/.plexht/userdata ]; then
+   mkdir -p $HOME/.plexht/userdata
+fi
+
   if [ ! -f $HOME/.plexht/userdata/sources.xml ]; then
-    if [ -f /usr/share/xbmc/config/sources.xml ]; then
+    if [ -f /usr/share/XBMC/config/sources.xml ]; then
       # include project specific sources
-      cp /usr/share/xbmc/config/sources.xml $HOME/.xbmc/userdata
+      cp /usr/share/XBMC/config/sources.xml $HOME/.plexht/userdata
     else
       cat > $HOME/.plexht/userdata/sources.xml << EOF
   <sources>
@@ -69,7 +75,7 @@ EOF
 # common setup guisettings
 #
 
-  if [ ! -f $HOME/.xbmc/userdata/guisettings.xml ] ; then
+  if [ ! -f $HOME/.plexht/userdata/guisettings.xml ] ; then
     echo "<settings>" > $HOME/.plexht/userdata/guisettings.xml
 
     cat >> $HOME/.plexht/userdata/guisettings.xml << EOF
@@ -82,8 +88,8 @@ EOF
   # include project specific options
   #
 
-    if [ -f /usr/share/xbmc/config/guisettings.xml ]; then
-      cat /usr/share/xbmc/config/guisettings.xml >> $HOME/.plexht/userdata/guisettings.xml
+    if [ -f /usr/share/XBMC/config/guisettings.xml ]; then
+      cat /usr/share/XBMC/config/guisettings.xml >> $HOME/.plexht/userdata/guisettings.xml
     fi
 
   #
