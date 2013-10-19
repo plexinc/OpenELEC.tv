@@ -113,7 +113,7 @@ fi
       usleep 250000
     done
 
-    DISPLAY=:0.0 /usr/bin/plexhometheater/plexhometheater $XBMC_ARGS > /dev/null 2>&1
+    DISPLAY=:0.0 /usr/bin/plexhometheater $XBMC_ARGS > /dev/null 2>&1
     RET=$?
 
     case "$RET" in
