@@ -311,6 +311,8 @@ echo "Back to installing"
     cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/XBMC/addons
     $SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/XBMC/addons/repository.openelec.tv/addon.xml
 
+  cp $PKG_DIR/config/Textures.xbt $INSTALL/usr/share/XBMC/addons/skin.mediastream/Media/
+
 # install powermanagement hooks
   mkdir -p $INSTALL/etc/pm/sleep.d
     cp $PKG_DIR/sleep.d/* $INSTALL/etc/pm/sleep.d
