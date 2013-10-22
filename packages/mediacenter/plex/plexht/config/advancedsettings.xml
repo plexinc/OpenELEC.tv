@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <advancedsettings>
+  <gui>
+    <algorithmdirtyregions>1</algorithmdirtyregions>
+    <nofliptimeout>1000</nofliptimeout>
+  </gui>
   <showexitbutton>false</showexitbutton>
   <cputempcommand>cputemp</cputempcommand>
   <gputempcommand>gputemp</gputempcommand>

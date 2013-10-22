@@ -235,7 +235,7 @@ LABEL installer
 LABEL live
   MENU LABEL Run OpenELEC Live
   KERNEL /KERNEL
-  APPEND boot=UUID=$UUID disk=FILE=STORAGE,512 quiet vga=current
+  APPEND boot=UUID=$UUID disk=FILE=STORAGE,512 quiet vga=current debugging
 
 EOF
 

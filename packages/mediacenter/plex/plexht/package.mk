@@ -19,7 +19,7 @@
 ################################################################################
 
 PKG_NAME="plexht"
-PKG_VERSION="0.9.10.1"
+PKG_VERSION="`wget -q -O - https://github.com/plexinc/plex-home-theater-public/blob/pht-frodo/plex/ReleaseNotes --no-check-certificate|grep txt| sed 's/.*.txt">//g'|cut -d"<" -f1|sort -Vr|sed 's/\.txt//g'|head -1`"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -240,8 +240,7 @@ export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
 cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
 [ ! -d config ] && mkdir config
 cd config
-
-cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCOMPRESS_TEXTURES=off -DCMAKE_INSTALL_PREFIX=/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
+cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCMAKE_BUILD_TYPE=Debug -DENABLE_DVD_DRIVE=on -DCOMPRESS_TEXTURES=on -DTEXTUREPACKERPATH=$PKG_DIR/config/TexturePacker -DCMAKE_INSTALL_PREFIX=/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
 }
 
 pre_build_target() {
@@ -272,16 +271,9 @@ export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
 cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config
 make -j1
 
-make -C tools/TexturePacker
-cp -PR tools/TexturePacker/TexturePacker $ROOT/$TOOLCHAIN/bin
 }
 
 post_makeinstall_target() {
-
-echo "Posting install variable"
-echo $INSTALL
-env
-echo "Back to installing"
   mkdir -p $INSTALL/usr/bin
     cp $PKG_DIR/scripts/cputemp $INSTALL/usr/bin
     cp $PKG_DIR/scripts/gputemp $INSTALL/usr/bin
@@ -311,34 +303,28 @@ echo "Back to installing"
     cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/XBMC/addons
     $SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/XBMC/addons/repository.openelec.tv/addon.xml
 
-  cp $PKG_DIR/config/Textures.xbt $INSTALL/usr/share/XBMC/addons/skin.mediastream/Media/
-
 # install powermanagement hooks
   mkdir -p $INSTALL/etc/pm/sleep.d
     cp $PKG_DIR/sleep.d/* $INSTALL/etc/pm/sleep.d
 
 # install project specific configs
   mkdir -p $INSTALL/usr/share/XBMC/config
-    if [ -f $PROJECT_DIR/$PROJECT/XBMC/guisettings.xml ]; then
-      cp -R $PROJECT_DIR/$PROJECT/XBMC/guisettings.xml $INSTALL/usr/share/XBMC/config
+    if [ -f $PKG_DIR/config/guisettings.xml ]; then
+      cp -R $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/XBMC/config
     fi
 
-    if [ -f $PROJECT_DIR/$PROJECT/XBMC/sources.xml ]; then
-      cp -R $PROJECT_DIR/$PROJECT/XBMC/sources.xml $INSTALL/usr/share/XBMC/config
+    if [ -f $PKG_DIR/config/sources.xml ]; then
+      cp -R $PKG_DIR/config/sources.xml $INSTALL/usr/share/XBMC/config
     fi
 
   mkdir -p $INSTALL/usr/share/XBMC/system/
-    if [ -f $PROJECT_DIR/$PROJECT/XBMC/advancedsettings.xml ]; then
-      cp $PROJECT_DIR/$PROJECT/XBMC/advancedsettings.xml $INSTALL/usr/share/XBMC/system/
-    else
+    if [ -f $PKG_DIR/config/advancedsettings.xml ]; then
       cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/XBMC/system/
     fi
 
   if [ "$XBMC" = master ]; then
     mkdir -p $INSTALL/usr/share/xbmc/system/settings
-      if [ -f $PROJECT_DIR/$PROJECT/xbmc/appliance.xml ]; then
-        cp $PROJECT_DIR/$PROJECT/xbmc/appliance.xml $INSTALL/usr/share/XBMC/system/settings
-      else
+      if [ -f $PKG_DIR/config/xbmc/appliance.xml ]; then
         cp $PKG_DIR/config/appliance.xml $INSTALL/usr/share/XBMC/system/settings
       fi
   fi
