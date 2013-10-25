@@ -290,7 +290,7 @@
   IRSERVER_SUPPORT="yes"
 
 # build and install Joystick support (yes / no)
-  JOYSTICK_SUPPORT="yes"
+  JOYSTICK_SUPPORT="no"
 
 # build and install CEC adapter support (yes / no)
   CEC_SUPPORT="yes"

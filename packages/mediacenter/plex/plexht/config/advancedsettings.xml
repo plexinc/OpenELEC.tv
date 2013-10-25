@@ -2,7 +2,6 @@
 <advancedsettings>
   <gui>
     <algorithmdirtyregions>1</algorithmdirtyregions>
-    <nofliptimeout>1000</nofliptimeout>
   </gui>
   <showexitbutton>false</showexitbutton>
   <cputempcommand>cputemp</cputempcommand>
