@@ -150,13 +150,6 @@
 # (RAR compression support in XBMC) (yes / no)
   NONFREE_SUPPORT="yes"
 
-# build and install with AACS support
-# (BD decryption support in libbluray) (yes / no)
-  AACS_SUPPORT="yes"
-
-# AACS library to use ( libaacs / makemkv-oss )
-  LIBAACS="makemkv-oss"
-
 # build and install with DVDCSS support
 # (DVD decryption support in XBMC) (yes / no)
   DVDCSS_SUPPORT="yes"
@@ -256,6 +249,9 @@
 # Windowmanager to use (ratpoison / none)
   WINDOWMANAGER="ratpoison"
 
+# include uvesafb support (yes / no)
+  UVESAFB_SUPPORT="no"
+
 # Displayserver to use (xorg-server / no)
   DISPLAYSERVER="xorg-server"
 
@@ -312,7 +308,7 @@
   LCD_DRIVER="irtrans,imon,imonlcd,mdm166a,MtxOrb,lis,dm140,hd44780,CFontz,SureElec,vlsys_m428"
 
 # Modules to install in initramfs for early boot
-  INITRAMFS_MODULES="uvesafb xhci-hcd"
+  INITRAMFS_MODULES="xhci-hcd"
 
 # additional Firmware to use (dvb-firmware, misc-firmware, wlan-firmware)
 # Space separated list is supported,

@@ -270,10 +270,6 @@
       LABEL=*|UUID=*|/*)
         MOUNT_CMD="mount_common"
         MOUNT_TARGET="$1"
-        # check filesystem
-          if [ -x /sbin/fsck ]; then
-            /sbin/fsck -a $1 &>/dev/null
-          fi
         ;;
       CIFS=*|SMB=*)
         MOUNT_CMD="mount_cifs"
@@ -325,6 +321,23 @@
     umount /sysroot
   }
 
+  hfsdiskprep() {
+    for DEVICE in /dev/sd*; do
+      for device in $(/bin/busybox blkid $DEVICE); do
+        case $device in
+          TYPE=*)
+            FS_TYPE=${device#TYPE=}
+            ;;
+        esac
+      done
+
+      if [ "$FS_TYPE" = "\"hfs\"" -o "$FS_TYPE" = "\"hfsplus\"" ]; then
+        progress "check filesystem $DEVICE [$FS_TYPE]..."
+        /bin/fsck_hfs -r -y $DEVICE >&$SILENT_OUT 2>&1
+      fi
+    done
+  }
+
   load_modules() {
     progress "Loading kernel modules"
 
@@ -339,23 +352,41 @@
   load_splash() {
     progress "Loading bootsplash"
 
-    if [ -e /dev/fb0 -a ! "$SPLASH" = "no" ]; then
+    if [ ! "$SPLASH" = "no" ]; then
+      SPLASHIMAGE="/splash/splash-full.png"
 
-      # set framebuffer to a default resolution (1024x768-32)
+      # load uvesafb module if needed
+      if [ -f "$MODULE_DIR/uvesafb.ko" -a ! -e /dev/fb0 ]; then
+        progress "Loading kernel module uvesafb.ko"
+          insmod "$MODULE_DIR/uvesafb.ko" || \
+            progress "... Failed to load kernel module uvesafb, skipping"
+
+        # set framebuffer to a default resolution (1024x768-32)
         if [ ! "$SWITCH_FRAMEBUFFER" = "no" ]; then
           fbset -g 1024 768 1024 768 32
+          SPLASHIMAGE="/splash/splash-1024.png"
         fi
+      fi
 
-      # load splash
+      if [ -e /dev/fb0 ]; then
+        # load splash
         if [ -f /flash/oemsplash.png ]; then
           SPLASHIMAGE="/flash/oemsplash.png"
         elif [ -f /splash/splash.conf ]; then
           . /splash/splash.conf
-        else
-          SPLASHIMAGE="/splash/splash.png"
         fi
 
         ply-image $SPLASHIMAGE > /dev/null 2>&1
+      fi
+    fi
+  }
+
+  check_disks() {
+    progress "Checking disks"
+
+    if [ -x /bin/fsck_hfs ]; then
+    # deal with hfs partitions
+      hfsdiskprep
     fi
   }
 
@@ -544,6 +575,7 @@
 # main boot sequence
   for BOOT_STEP in \
       load_modules \
+      check_disks \
       mount_flash \
       load_splash \
       mount_storage \

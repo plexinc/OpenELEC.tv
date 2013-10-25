@@ -19,7 +19,7 @@
 ################################################################################
 
 PKG_NAME="bluez"
-PKG_VERSION="5.8"
+PKG_VERSION="5.10"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -49,8 +49,6 @@ fi
 
 PKG_CONFIGURE_OPTS_TARGET="--disable-dependency-tracking \
                            --disable-silent-rules \
-                           --enable-shared \
-                           --disable-static \
                            --enable-library \
                            --enable-usb \
                            --enable-udev \
@@ -61,6 +59,7 @@ PKG_CONFIGURE_OPTS_TARGET="--disable-dependency-tracking \
                            --enable-tools \
                            --enable-datafiles \
                            --disable-experimental \
+                           --enable-playstation-peripheral \
                            --with-gnu-ld \
                            $BLUEZ_CONFIG \
                            storagedir=/storage/.cache/bluetooth"
