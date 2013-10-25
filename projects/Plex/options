@@ -135,13 +135,13 @@
   XBMC_EXTRA_FONTS="yes"
 
 # build and install 'RSXS' Screensaver (yes / no)
-  XBMC_SCR_RSXS="no"
+  XBMC_SCR_RSXS="yes"
 
 # build and install 'ProjectM' Visualization (yes / no)
-  XBMC_VIS_PROJECTM="no"
+  XBMC_VIS_PROJECTM="yes"
 
 # build and install 'GOOM' Visualization (yes / no)
-  XBMC_VIS_GOOM="no"
+  XBMC_VIS_GOOM="yes"
 
 # build and install ALSA Audio support (yes / no)
   ALSA_SUPPORT="yes"
@@ -149,13 +149,6 @@
 # build and install with non-free support
 # (RAR compression support in XBMC) (yes / no)
   NONFREE_SUPPORT="yes"
-
-# build and install with AACS support
-# (BD decryption support in libbluray) (yes / no)
-  AACS_SUPPORT="yes"
-
-# AACS library to use ( libaacs / makemkv-oss )
-  LIBAACS="makemkv-oss"
 
 # build and install with DVDCSS support
 # (DVD decryption support in XBMC) (yes / no)
@@ -198,7 +191,7 @@
   SSHLIB_SUPPORT="yes"
 
 # build xbmc with optical drive support (yes / no)
-  OPTICAL_DRIVE_SUPPORT="yes"
+  OPTICAL_DRIVE_SUPPORT="no"
 
 # build with AirPlay support (stream videos from iDevices to XBMC) (yes / no)
   AIRPLAY_SUPPORT="yes"
@@ -216,16 +209,16 @@
   SAMBA_SUPPORT="yes"
 
 # build and install Samba Server (yes / no)
-  SAMBA_SERVER="no"
+  SAMBA_SERVER="yes"
 
 # build and install SFTP Server (yes / no)
   SFTP_SERVER="yes"
 
 # build and install PPP support (yes / no)
-  PPTP_SUPPORT="no"
+  PPTP_SUPPORT="yes"
 
 # build and install OpenVPN support (yes / no)
-  OPENVPN_SUPPORT="no"
+  OPENVPN_SUPPORT="yes"
 
 # build and install diskmounter support (udevil)
 # this service provide auto mounting support for external drives in the
@@ -255,6 +248,9 @@
 
 # Windowmanager to use (ratpoison / none)
   WINDOWMANAGER="ratpoison"
+
+# include uvesafb support (yes / no)
+  UVESAFB_SUPPORT="no"
 
 # Displayserver to use (xorg-server / no)
   DISPLAYSERVER="xorg-server"
@@ -290,7 +286,7 @@
   IRSERVER_SUPPORT="yes"
 
 # build and install Joystick support (yes / no)
-  JOYSTICK_SUPPORT="no"
+  JOYSTICK_SUPPORT="yes"
 
 # build and install CEC adapter support (yes / no)
   CEC_SUPPORT="yes"

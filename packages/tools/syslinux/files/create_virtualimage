@@ -270,7 +270,7 @@ PROMPT 0
 
 LABEL linux
   KERNEL /KERNEL
-  APPEND boot=LABEL=System disk=LABEL=Storage quiet ssh
+  APPEND boot=LABEL=System disk=LABEL=Storage ssh debugging
 
 EOF
 
