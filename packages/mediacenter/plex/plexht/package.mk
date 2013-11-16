@@ -25,8 +25,8 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.plexapp.com"
 PKG_URL="https://github.com/plexinc/plex-home-theater-public/archive/pht-frodo.zip"
-PKG_DEPENDS="ffmpeg Python zlib bzip2 systemd libass curl rtmpdump fontconfig freetype libmad libogg libmodplug faad2 flac libmpeg2 taglib service.openelec.settings SDL_mixer SDL_image"
-PKG_BUILD_DEPENDS_TARGET="ffmpeg toolchain boost Python zlib bzip2 systemd lzo pcre swig libass enca curl libmicrohttpd libssh rtmpdump fontconfig fribidi tinyxml libjpeg-turbo libpng tiff freetype jasper libmad libsamplerate libogg libcdio libmodplug faad2 fribidi flac flac++ libmpeg2 taglib yajl sqlite libshairport SDL_image SDL_mixer avahi glew libplist libcec lame"
+PKG_DEPENDS="Python zlib bzip2 systemd libass curl rtmpdump fontconfig freetype libmad libogg libmodplug faad2 flac libmpeg2 taglib service.openelec.settings SDL_mixer SDL_image"
+PKG_BUILD_DEPENDS_TARGET="toolchain boost Python zlib bzip2 systemd lzo pcre swig libass enca curl libmicrohttpd libssh rtmpdump fontconfig fribidi tinyxml libjpeg-turbo libpng tiff freetype jasper libmad libsamplerate libogg libcdio libmodplug faad2 fribidi flac flac++ libmpeg2 taglib yajl sqlite libshairport SDL_image SDL_mixer avahi glew libplist libcec lame"
 PKG_PRIORITY="optional"
 PKG_SECTION="plex"
 PKG_SHORTDESC="plexht: Plex Home Theater"
@@ -280,8 +280,8 @@ post_makeinstall_target() {
     cp $PKG_DIR/scripts/gputemp $INSTALL/usr/bin
     cp $PKG_DIR/scripts/setwakeup.sh $INSTALL/usr/bin
 
-    rm -rf $INSTALL/usr/bin/xbmc
-    rm -rf $INSTALL/usr/bin/xbmc-standalone
+    rm -rf $INSTALL/usr/bin/XBMC
+    rm -rf $INSTALL/usr/bin/XBMC-standalone
 
   if [ ! "$DISPLAYSERVER" = "xorg-server" ]; then
     rm -rf $INSTALL/usr/bin/xbmc-xrandr
@@ -324,8 +324,8 @@ post_makeinstall_target() {
     fi
 
   if [ "$XBMC" = master ]; then
-    mkdir -p $INSTALL/usr/share/xbmc/system/settings
-      if [ -f $PKG_DIR/config/xbmc/appliance.xml ]; then
+    mkdir -p $INSTALL/usr/share/XBMC/system/settings
+      if [ -f $PKG_DIR/config/XBMC/appliance.xml ]; then
         cp $PKG_DIR/config/appliance.xml $INSTALL/usr/share/XBMC/system/settings
       fi
   fi
