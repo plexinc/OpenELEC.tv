@@ -26,7 +26,12 @@ ZIP_PKG="`echo $PKG_URL | sed 's%.*/\(.*\)$%\1%'`"
 [ -d $PKG_BUILD ] && rm -rf $PKG_BUILD
 
 mkdir -p $BUILD/${PKG_NAME}-${PKG_VERSION}
-  unzip $SOURCES/$1/$ZIP_PKG -d $BUILD/${PKG_NAME}-${PKG_VERSION} >/dev/null 2>&1
+
+# Unpacking own settings version
+#  unzip $SOURCES/$1/$ZIP_PKG -d $BUILD/${PKG_NAME}-${PKG_VERSION} >/dev/null 2>&1
+unzip $SOURCES/$1/$ZIP_PKG -d $BUILD/${PKG_NAME}-${PKG_VERSION} >/dev/null 2>&1
+mv $BUILD/${PKG_NAME}-${PKG_VERSION}/${PKG_NAME}-settings-openelec-3.2/* $BUILD/${PKG_NAME}-${PKG_VERSION}
+rmdir $BUILD/${PKG_NAME}-${PKG_VERSION}/${PKG_NAME}-settings-openelec-3.2
 
 echo "### Applying upstream patches ###"
 

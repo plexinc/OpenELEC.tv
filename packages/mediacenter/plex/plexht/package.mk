@@ -303,6 +303,8 @@ post_makeinstall_target() {
     $SED "s|@OS_VERSION@|$OS_VERSION|g" -i $INSTALL/usr/share/XBMC/addons/os.openelec.tv/addon.xml
     cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/XBMC/addons
     $SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/XBMC/addons/repository.openelec.tv/addon.xml
+# Install Dale's Mediastream skin
+    cp -R $PKG_DIR/files/skin.mediastream-dale $INSTALL/usr/share/XBMC/addons
 
 # install powermanagement hooks
   mkdir -p $INSTALL/etc/pm/sleep.d
