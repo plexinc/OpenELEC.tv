@@ -1,4 +1,4 @@
-################################################################################
+#yes###############################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2012 Stephan Raue (stephan@openelec.tv)
 #
@@ -241,7 +241,6 @@ cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
 [ ! -d config ] && mkdir config
 cd config
 cmake -DENABLE_PYTHON=on -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCMAKE_BUILD_TYPE=Debug -DCOMPRESS_TEXTURES=on -DENABLE_AUTOUPDATE=off -DTEXTUREPACKERPATH=$PKG_DIR/config/TexturePacker -DCMAKE_INSTALL_PREFIX=/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
-#cmake -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCMAKE_BUILD_TYPE=Debug -DCOMPRESS_TEXTURES=on -DCMAKE_INSTALL_PREFIX=/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
 }
 
 pre_build_target() {
@@ -270,6 +269,7 @@ make_target() {
 # Make the build
 export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
 cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config
+export CPLUS_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
 make -j1
 
 }
