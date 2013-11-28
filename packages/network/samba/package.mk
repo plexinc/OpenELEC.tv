@@ -19,7 +19,7 @@
 ################################################################################
 
 PKG_NAME="samba"
-PKG_VERSION="3.6.19"
+PKG_VERSION="3.6.20"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -155,6 +155,8 @@ post_make_target() {
     cp ../source3/include/libsmbclient.h $SYSROOT_PREFIX/usr/include
 
   mkdir -p $SYSROOT_PREFIX/usr/lib/pkgconfig
+    # talloc/tdb/tevent/wbclient static
+    sed -e "s,^Libs: -lsmbclient$,Libs: -lsmbclient -ltalloc -ltdb -ltevent -lwbclient,g" -i pkgconfig/smbclient.pc
     cp pkgconfig/smbclient.pc $SYSROOT_PREFIX/usr/lib/pkgconfig
 }
 
