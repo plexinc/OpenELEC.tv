@@ -36,6 +36,5 @@ rmdir $BUILD/${PKG_NAME}-${PKG_VERSION}/${PKG_NAME}-settings-openelec-3.2
 echo "### Applying upstream patches ###"
 
 for patch in `ls $PKG_DIR/patches.upstream/*.patch 2>/dev/null`; do
-  cat $patch | patch -d \
-    `echo $BUILD/$PKG_NAME-$PKG_VERSION | cut -f1 -d\ ` -p1
+  patch $BUILD/$PKG_NAME-$PKG_VERSION/`cat $patch|head -1| awk '{print $2}'` < $patch
 done

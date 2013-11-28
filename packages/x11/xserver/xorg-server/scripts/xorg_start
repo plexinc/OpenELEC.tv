@@ -100,7 +100,7 @@ if [ "$RUNLEVEL" = openelec ]; then
 
   logger -t Xorg "### starting Xorg with '$DISPLAY vt01 $XORG_ARGS' ###"
 
-  Xorg $DISPLAY vt01 $XORG_ARGS > /dev/null 2>&1 &
+  Xorg $DISPLAY vt01 -nocursor $XORG_ARGS > /dev/null 2>&1 &
 
 fi
 

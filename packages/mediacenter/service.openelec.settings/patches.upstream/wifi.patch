@@ -1,0 +1,18 @@
+--- resources/skins/Default/720p/mainWindow.xml	2013-11-16 21:30:14.000000000 +0100
++++ resources/skins/Default/720p/mainWindow.xml.new	2013-11-28 22:23:35.800208000 +0100
+@@ -682,14 +682,7 @@
+                             <posy>0</posy>
+                             <width>796</width>
+                             <height>98</height>
+-                            <texture border="5">button-nofocus.png</texture>
+-                        </control>
+-                        <control type="image">
+-                            <posx>0</posx>
+-                            <posy>0</posy>
+-                            <width>796</width>
+-                            <height>98</height>
+-                            <visible>Control.HasFocus(1200)</visible>
++                            <visible>true</visible>
+                             <texture border="5">button-focus2.png</texture>
+                             <animation type="Visible" reversible="false">
+                                 <effect type="fade" start="0" end="100" time="300" />

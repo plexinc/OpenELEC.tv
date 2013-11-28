@@ -1,0 +1,15 @@
+--- LeftSideMenu.xml	2013-11-23 21:22:42.000000000 +0100
++++ LeftSideMenu.xml.new	2013-11-28 10:25:55.136208000 +0100
+@@ -358,6 +358,12 @@
+ 						<onclick>Dialog.Close(4998)</onclick>
+ 						<onclick>XBMC.ActivateWindow(appearancesettings)</onclick>
+ 					</item>
++                                        <item id="101">
++                                                <description>OpenELEC Settings Button</description>
++                                                <label> OE Settings </label>
++						 <onclick>Dialog.Close(4998)</onclick>
++                                                <onclick>RunAddon(service.openelec.settings)</onclick>
++                                        </item>
+ 					<item id="111">
+ 						<description>Quit</description>
+ 						<label>$LOCALIZE[31007]</label>
