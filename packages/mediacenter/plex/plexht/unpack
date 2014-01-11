@@ -39,7 +39,7 @@ rm -r $PKG_NAME-$PKG_VERSION/plex-home-theater-public-pht-frodo
 patch $PKG_NAME-$PKG_VERSION/addons/skin.mediastream/720p/Home.xml < $PKG_DIR/patches/mediastream.patch
 #patch $PKG_NAME-$PKG_VERSION/plex/FileSystem/PlexDirectoryTypeParserPicture.cpp < $PKG_DIR/patches/plexht.patch
 patch $PKG_NAME-$PKG_VERSION/CMakeLists.txt < $PKG_DIR/patches/cmakelists.patch
-patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigLINUX.cmake < $PKG_DIR/patches/platformconfig.patch
+#patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigLINUX.cmake < $PKG_DIR/patches/platformconfig.patch
 patch $PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/LeftSideMenu.xml < $PKG_DIR/patches/skinplex.patch
 patch $PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/Font.xml < $PKG_DIR/patches/fontfix.patch
-patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigPOSIX.cmake < $PKG_DIR/patches/externalffmpeg.patch
+#patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigPOSIX.cmake < $PKG_DIR/patches/externalffmpeg.patch
