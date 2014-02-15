@@ -271,7 +271,7 @@ export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
 cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config
 export CPLUS_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
 export PYTHON_LIBDIR=`ls -d $SYSROOT_PREFIX/usr/lib/python*`
-make -j1
+make -j4
 
 }
 
