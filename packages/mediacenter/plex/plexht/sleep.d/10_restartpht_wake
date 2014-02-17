@@ -1,0 +1,8 @@
+#!/bin/bash
+case $1 in
+    thaw|resume)
+      /bin/killall -HUP plexhometheater
+    ;;
+    *)  echo "This script is for restarting PHT on resume"
+    ;;
+esac
