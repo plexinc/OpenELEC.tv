@@ -24,7 +24,7 @@
  						<label>$LOCALIZE[31960]</label>
  						<onclick>Dialog.Close(4998)</onclick>
 -						<onclick>Plex.Suspend</onclick>
-+						<onclick>Suspend</onclick>
++						<onclick>System.Exec(pm-suspend)</onclick>
  					</item>
  					<item id="113">
  						<description>Shut Down</description>
