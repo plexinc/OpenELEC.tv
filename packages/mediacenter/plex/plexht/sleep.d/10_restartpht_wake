@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 case $1 in
     thaw|resume)
       /bin/killall -HUP plexhometheater
