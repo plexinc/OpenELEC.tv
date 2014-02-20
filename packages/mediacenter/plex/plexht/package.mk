@@ -1,4 +1,4 @@
-#yes###############################################################################
+################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2012 Stephan Raue (stephan@openelec.tv)
 #
@@ -19,7 +19,11 @@
 ################################################################################
 
 PKG_NAME="plexht"
-PKG_VERSION="`wget -q -O - https://github.com/plexinc/plex-home-theater-public/blob/pht-frodo/plex/ReleaseNotes --no-check-certificate|grep txt| sed 's/.*.txt">//g'|cut -d"<" -f1|sort -Vr|sed 's/\.txt//g'|head -1`"
+if [ "$PHT_HEAD" = "HEAD" ]; then
+  PKG_VERSION=HEAD
+else
+  PKG_VERSION="`wget -q -O - https://github.com/plexinc/plex-home-theater-public/blob/pht-frodo/plex/ReleaseNotes --no-check-certificate|grep txt| sed 's/.*.txt">//g'|cut -d"<" -f1|sort -Vr|sed 's/\.txt//g'|head -1`"
+fi
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
