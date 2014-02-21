@@ -51,12 +51,5 @@ else
   patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigLINUX.cmake < $PKG_DIR/patches/platformconfig.patch
 fi
 
-patch $PKG_NAME-$PKG_VERSION/addons/skin.mediastream/720p/Home.xml < $PKG_DIR/patches/mediastream.patch
-unzip -d $PKG_NAME-$PKG_VERSION -o $ROOT/sources/plexht/pht-frodo.zip
-mv $PKG_NAME-$PKG_VERSION/plex-home-theater-public-pht-frodo/* $PKG_NAME-$PKG_VERSION
-rm -r $PKG_NAME-$PKG_VERSION/plex-home-theater-public-pht-frodo
-#patch $PKG_NAME-$PKG_VERSION/addons/skin.mediastream/720p/Home.xml < $PKG_DIR/patches/mediastream.patch
-#patch $PKG_NAME-$PKG_VERSION/plex/FileSystem/PlexDirectoryTypeParserPicture.cpp < $PKG_DIR/patches/plexht.patch
 patch $PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/LeftSideMenu.xml < $PKG_DIR/patches/skinplex.patch
 patch $PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/Font.xml < $PKG_DIR/patches/fontfix.patch
-#patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigPOSIX.cmake < $PKG_DIR/patches/externalffmpeg.patch
