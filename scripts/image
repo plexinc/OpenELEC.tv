@@ -38,8 +38,14 @@ if [ "$OPENELEC_VERSION" = devel -o "$OPENELEC_VERSION" = debug ]; then
   OPENELEC_VERSION=$OPENELEC_VERSION-$BUILD_DATE-r$GIT_BUILD
 fi
 
-TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
+# New Plex Target/Image names
+#TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
+#IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
+PHT-GITHASH=`git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git rev-parse --short HEAD`
+PHT_VERSION=`cat /data/jenkins/pht-openelec/plexht-HEAD/CMakeLists.txt | awk '/MAJOR |MINOR |PATCH / {gsub("\\)",""); printf $2"."}  END {print ""}'| sed 's/.$//g'`
+TARGET_VERSION="$PROJECT-$OPENELEC_VERSION-$BUILD_NUMBER-Plex-Home-Theater-$PHT_VERSION-$PHT-GITHASH.$TARGET_ARCH"
 IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
+
 
 # setup fakeroot
   rm -rf $FAKEROOT_SCRIPT   # remove $FAKEROOT_SCRIPT if it exist
