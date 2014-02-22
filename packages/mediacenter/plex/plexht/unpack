@@ -43,7 +43,7 @@ if [ "$PHT_HEAD" = "HEAD" ]; then
     git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git pull 
     cp -R /data/jenkins/pht-openelec/plexht-HEAD .
   fi
-  patch $PKG_NAME-$PKG_VERSION/plexCMakeLists.txt < $PKG_DIR/patches/fixpython.patch
+  patch $PKG_NAME-$PKG_VERSION/plex/CMakeLists.txt < $PKG_DIR/patches/fixpython.patch
 else
   unzip -d $PKG_NAME-$PKG_VERSION -o $ROOT/sources/plexht/pht-frodo.zip
   mv $PKG_NAME-$PKG_VERSION/plex-home-theater-public-pht-frodo/* $PKG_NAME-$PKG_VERSION
