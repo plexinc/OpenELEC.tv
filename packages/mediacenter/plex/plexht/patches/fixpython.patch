@@ -19,7 +19,7 @@
 +      REGEX .*\\.pyo$ EXCLUDE
 +    )
 +    install(FILES ${PYTHON_INCLUDE_DIRS}/pyconfig.h DESTINATION "${LIBPATH}/include/python${PYTHON_VERSION}" COMPONENT RUNTIME)
-+  elseif()
++  else()
 +    install(DIRECTORY ${EXTERNAL_PYTHON_HOME}/lib/python${PYTHON_VERSION} DESTINATION ${LIBPATH}/lib/ COMPONENT RUNTIME
 +      PATTERN python${PYTHON_VERSION}/test EXCLUDE
 +      REGEX .*\\.pyc$ EXCLUDE
