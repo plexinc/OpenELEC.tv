@@ -43,7 +43,7 @@ fi
 #IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
 if [ "$PHT_HEAD" = "HEAD" ]; then
   PHT_GITHASH="`git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git rev-parse --short HEAD`"
-  PHT_VERSION="`cat /data/jenkins/pht-openelec/plexht-HEAD/plex/CMakeLists.txt | awk '/MAJOR |MINOR |PATCH / {gsub(")",""); printf $2"."}  END {print ""}'| sed 's/.$//g'`"
+  PHT_VERSION="`cat /data/jenkins/pht-openelec/plexht-HEAD/CMakeLists.txt | awk '/MAJOR |MINOR |PATCH / {gsub(")",""); printf $2"."}  END {print ""}'| sed 's/.$//g'`"
   TARGET_VERSION="$PROJECT-$OPENELEC_VERSION-$BUILD_NUMBER-Plex-Home-Theater-$PHT_VERSION-$PHT_GITHASH.$TARGET_ARCH"
 else
   PHT_VERSION="`wget -q -O - https://raw2.github.com/plexinc/plex-home-theater-public/pht-frodo/CMakeLists.txt --no-check-certificate | awk '/MAJOR |MINOR |PATCH / {gsub(")",""); printf $2"."}  END {print ""}'| sed 's/.$//g'`"
