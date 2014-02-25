@@ -281,10 +281,6 @@ post_makeinstall_target() {
     cp $PKG_DIR/scripts/gputemp $INSTALL/usr/bin
     cp $PKG_DIR/scripts/setwakeup.sh $INSTALL/usr/bin
 
-# Install autostart.sh script
-
-    cp $PKG_DIR/scripts/autostart.sh $INSTALL/usr/share/XBMC/config/autostart.sh ; chmod -x $INSTALL/usr/share/XBMC/config/autostart.sh
-
     rm -rf $INSTALL/usr/bin/XBMC
     rm -rf $INSTALL/usr/bin/XBMC-standalone
 
@@ -321,6 +317,11 @@ post_makeinstall_target() {
 
     if [ -f $PKG_DIR/config/sources.xml ]; then
       cp -R $PKG_DIR/config/sources.xml $INSTALL/usr/share/XBMC/config
+    fi
+# Install autostart.sh script
+
+    if [ -f $PKG_DIR/scripts/autostart.sh ]; then
+      cp -R $PKG_DIR/scripts/autostart.sh $INSTALL/usr/share/XBMC/config ; chmod -x $INSTALL/usr/share/XBMC/config/autostart.sh
     fi
 
   mkdir -p $INSTALL/usr/share/XBMC/system/
