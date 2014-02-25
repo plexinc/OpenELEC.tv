@@ -287,7 +287,7 @@ post_makeinstall_target() {
 
 # Install autostart.sh script
 
-    cp $PKG_DIR/scripts/autostart.sh /usr/share/XBMC/config/autostart.sh ; chmod -x $INSTALL/usr/share/XBMC/config/autostart.sh
+    cp $PKG_DIR/scripts/autostart.sh $INSTALL/usr/share/XBMC/config/autostart.sh ; chmod -x $INSTALL/usr/share/XBMC/config/autostart.sh
 
     rm -rf $INSTALL/usr/bin/XBMC
     rm -rf $INSTALL/usr/bin/XBMC-standalone
