@@ -100,9 +100,17 @@ EOF
     if [ "$GPUTYPE" = "NVIDIA" -o "$GPUTYPE" = "AMD" ] ; then
       cat >> $HOME/.plexht/userdata/guisettings.xml << EOF
     <videoscreen>
-        <vsync>2</vsync>
+        <vsync>1</vsync>
     </videoscreen>
 EOF
     fi
     echo "</settings>" >> $HOME/.plexht/userdata/guisettings.xml
   fi
+
+#
+# Add default autostart.sh
+#
+
+if [ -f /usr/share/XBMC/config/autostart.sh ];then
+   cp /usr/share/XBMC/config/autostart.sh $HOME/.config/autostart.sh ; chmod +x $HOME/.config/autostart.sh
+fi
