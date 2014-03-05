@@ -4,7 +4,11 @@ set -e
   CONFIG=config
   SCRIPTS=scripts
   PACKAGES=packages
+if [ -z $SOURCES ]; then
   SOURCES=sources
+else
+  SOURCES=$SOURCES
+fi
   BUILD_BASE=build
   TARGET=target
   ADDONS=addons
