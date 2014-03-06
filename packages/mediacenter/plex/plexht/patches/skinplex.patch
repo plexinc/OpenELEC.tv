@@ -31,7 +31,7 @@
  						<label>$LOCALIZE[31961]</label>
  						<onclick>Dialog.Close(4998)</onclick>
 -						<onclick>Plex.Powerdown</onclick>
-+						<onclick>Powerdown</onclick>
++						<onclick>System.Exec(poweroff)</onclick>
  					</item>
  				</content>
  			</control>
