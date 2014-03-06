@@ -23,4 +23,4 @@
 . config/options $1
 
 mkdir -p $INSTALL/bin
-  cp $PKG_BUILD/src $INSTALL/bin
+  cp $PKG_BUILD/src/tar $INSTALL/bin
