@@ -40,7 +40,7 @@ if [ "$PHT_HEAD" = "HEAD" ]; then
     git clone git@github.com:plexinc/plex.git /data/jenkins/pht-openelec/plexht-HEAD
     cp -R /data/jenkins/pht-openelec/plexht-HEAD .
   else
-    git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git reset && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git clean -xfd
+    git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git reset --hard && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git pull 
     cp -R /data/jenkins/pht-openelec/plexht-HEAD .
   fi
 else
