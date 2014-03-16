@@ -44,9 +44,13 @@ if [ "$PHT_HEAD" = "HEAD" ]; then
     cp -R /data/jenkins/pht-openelec/plexht-HEAD .
   fi
 else
-  unzip -d $PKG_NAME-$PKG_VERSION -o $ROOT/sources/plexht/pht-frodo.zip
-  mv $PKG_NAME-$PKG_VERSION/plex-home-theater-public-pht-frodo/* $PKG_NAME-$PKG_VERSION
-  rm -r $PKG_NAME-$PKG_VERSION/plex-home-theater-public-pht-frodo
+  if [ ! -d /data/jenkins/pht-openelec/plexht-PUBLIC ]; then
+    git clone https://github.com/plexinc/plex-home-theater-public.git /data/jenkins/pht-openelec/plexht-PUBLIC
+    cp -R /data/jenkins/pht-openelec/plexht-PUBLIC .
+  else
+    git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git reset --hard && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git pull
+    cp -R /data/jenkins/pht-openelec/plexht-PUBLIC .
+  fi
   patch $PKG_NAME-$PKG_VERSION/CMakeLists.txt < $PKG_DIR/patches/cmakelists.patch
   patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigLINUX.cmake < $PKG_DIR/patches/platformconfig.patch
 fi
