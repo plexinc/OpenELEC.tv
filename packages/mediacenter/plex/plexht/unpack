@@ -38,18 +38,18 @@ cd $BUILD
 if [ "$PHT_HEAD" = "HEAD" ]; then
   if [ ! -d /data/jenkins/pht-openelec/plexht-HEAD ]; then
     git clone git@github.com:plexinc/plex.git /data/jenkins/pht-openelec/plexht-HEAD
-    cp -R /data/jenkins/pht-openelec/plexht-HEAD .
+    cp -R /data/jenkins/pht-openelec/plexht-HEAD $PKG_NAME-$PKG_VERSION/.
   else
     git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git reset --hard && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git pull 
-    cp -R /data/jenkins/pht-openelec/plexht-HEAD .
+    cp -R /data/jenkins/pht-openelec/plexht-HEAD $PKG_NAME-$PKG_VERSION/.
   fi
 else
   if [ ! -d /data/jenkins/pht-openelec/plexht-PUBLIC ]; then
     git clone https://github.com/plexinc/plex-home-theater-public.git /data/jenkins/pht-openelec/plexht-PUBLIC
-    cp -R /data/jenkins/pht-openelec/plexht-PUBLIC .
+    cp -R /data/jenkins/pht-openelec/plexht-PUBLIC $PKG_NAME-$PKG_VERSION/.
   else
     git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git reset --hard && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git pull
-    cp -R /data/jenkins/pht-openelec/plexht-PUBLIC .
+    cp -R /data/jenkins/pht-openelec/plexht-PUBLIC $PKG_NAME-$PKG_VERSION/.
   fi
   patch $PKG_NAME-$PKG_VERSION/CMakeLists.txt < $PKG_DIR/patches/cmakelists.patch
   patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigLINUX.cmake < $PKG_DIR/patches/platformconfig.patch
