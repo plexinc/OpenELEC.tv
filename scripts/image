@@ -50,7 +50,7 @@ else
   git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git reset --hard && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git pull
   PHT_GITHASH="`git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git rev-parse --short HEAD`"
   PHT_VERSION="`cat /data/jenkins/pht-openelec/plexht-PUBLIC/CMakeLists.txt | awk '/MAJOR |MINOR |PATCH / {gsub(")",""); printf $2"."}  END {print ""}'| sed 's/.$//g'`"
-  TARGET_VERSION="$PROJECT-$OPENELEC_VERSION-$BUILD_NUMBER-Plex-Home-Theater-$PHT_VERSION.$TARGET_ARCH"
+  TARGET_VERSION="$PROJECT-$OPENELEC_VERSION-$BUILD_NUMBER-Plex-Home-Theater-$PHT_VERSION-$PHT_GITHASH.$TARGET_ARCH"
 fi
 IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
 
