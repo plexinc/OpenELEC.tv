@@ -24,9 +24,9 @@
 # runlevels: openelec, textmode
 
 progress "setting timezone"
-  GUISETTINGS="/storage/.xbmc/userdata/guisettings.xml"
+  GUISETTINGS="/storage/.plexht/userdata/guisettings.xml"
   if [ -f "$GUISETTINGS" ] ; then
-    TIMEZONE=`sed -n -e 's/.*<timezone>\(.*\)<\/timezone>.*/\1/p' /storage/.xbmc/userdata/guisettings.xml`
+    TIMEZONE=`sed -n -e 's/.*<timezone>\(.*\)<\/timezone>.*/\1/p' /storage/.plexht/userdata/guisettings.xml`
   fi
 
   if [ ! "$TIMEZONE" == "" -a -f "/usr/share/zoneinfo/$TIMEZONE" ] ; then
