@@ -52,3 +52,16 @@ pre_configure_target() {
 # TODO: xf86-video-intel-2.21.5 dont link with LTO enabled
   strip_lto
 }
+
+post_makeinstall_target() {
+
+# Install TearFree option for Intel driver if PROJECT Plex-Intel
+
+if [ "$PROJECT" = "Plex-Intel" ]; then
+   if [ ! -d $INSTALL/usr/share/X11/xorg.conf.d ]; then
+     mkdir -p $INSTALL/usr/share/X11/xorg.conf.d
+   fi
+   cp $PKG_DIR/config/20-intel-tearfree.conf $INSTALL/usr/share/X11/xorg.conf.d
+fi
+
+}
