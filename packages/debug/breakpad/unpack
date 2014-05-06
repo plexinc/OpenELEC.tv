@@ -1,0 +1,8 @@
+. config/options $1
+
+# Unpack SRC
+cd $ROOT/$BUILD
+pwd
+#tar -xpf $ROOT/sources/$PKG_NAME/$PKG_NAME-$PKG_VERSION.tar.gz -C $ROOT/$BUILD/ 
+#mv $ROOT/$BUILD/$PKG_NAME-$PKG_NAME-$PKG_VERSION/ $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
+tar -xpf $ROOT/sources/$PKG_NAME/$PKG_VERSION.tar.gz -C $ROOT/$BUILD/ 

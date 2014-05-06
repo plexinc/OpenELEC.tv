@@ -2,20 +2,22 @@
 
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
-#      Copyright (C) 2009-2014 Stephan Raue (stephan@openelec.tv)
+#      Copyright (C) 2009-2012 Stephan Raue (stephan@openelec.tv)
 #
-#  OpenELEC is free software: you can redistribute it and/or modify
+#  This Program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 2 of the License, or
-#  (at your option) any later version.
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
 #
-#  OpenELEC is distributed in the hope that it will be useful,
+#  This Program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
+#  along with OpenELEC.tv; see the file COPYING.  If not, write to
+#  the Free Software Foundation, 51 Franklin Street, Suite 500, Boston, MA 02110, USA.
+#  http://www.gnu.org/copyleft/gpl.html
 ################################################################################
 
 # usage:   sudo ./create_sdcard <drive>
@@ -195,10 +197,13 @@ echo "#########################################################"
 
 # create a single partition
   echo "creating partitions on $DISK..."
-  parted -s "$DISK" unit cyl mkpart primary fat32 -- 0 16
-# align the partition on 4mb boundary, starting at 132mb (132 % 4 == 0), which
-# is right after the first partition
-  parted -s "$DISK" mkpart primary ext2 -- 132MiB -2cyl
+  parted -s "$DISK" unit cyl mkpart primary fat32 -- 0 32
+  parted -s "$DISK" unit cyl mkpart primary ext2 -- 32 -1
+
+  p1start=$(parted -s "$DISK" -m unit b p | grep "^1" | cut -f 2 -d: | sed s:B::)
+  p1end=$(parted -s "$DISK" -m unit b p | grep "^2" | cut -f 2 -d: | sed s:B::)
+  
+  echo "P1 is from $p1start to $p1end"
 
 # make partition active (bootable)
   echo "marking partition active..."
@@ -212,16 +217,14 @@ echo "#########################################################"
   echo "creating filesystem on $PART1..."
   mkfs.vfat "$PART1" -I -n System
 
-# create ext4 partition with optimized settings for running on flash/sd
-# See http://blogofterje.wordpress.com/2012/01/14/optimizing-fs-on-sd-card/ for reference.
   echo "creating filesystem on $PART2..."
-  mkfs.ext4 -O ^has_journal -E stride=2,stripe-width=1024 -b 4096 "$PART2" -L Storage
+  mkfs.ext4 "$PART2" -L Storage
 
 # remount loopback device
   if [ "$DISK" = "/dev/loop0" ]; then
     sync
     losetup -d $DISK
-    losetup $DISK $IMGFILE -o 1048576 --sizelimit 131071488
+    losetup $DISK $IMGFILE -o $p1start --sizelimit $p1end
     PART1=$DISK
   fi
 
@@ -235,7 +238,7 @@ echo "#########################################################"
 # create bootloader configuration
   echo "creating bootloader configuration..."
 
-  echo "boot=/dev/mmcblk0p1 disk=/dev/mmcblk0p2 quiet" > $MOUNTPOINT/cmdline.txt
+  echo "boot=/dev/mmcblk0p1 disk=/dev/mmcblk0p2 quiet ssh growstorage" > $MOUNTPOINT/cmdline.txt
 
 # copy files
   echo "copying files to $MOUNTPOINT..."

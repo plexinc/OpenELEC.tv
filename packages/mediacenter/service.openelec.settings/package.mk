@@ -17,12 +17,13 @@
 ################################################################################
 
 PKG_NAME="service.openelec.settings"
-PKG_VERSION="0.3.15"
+PKG_VERSION="9.9.20"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="prop."
 PKG_SITE="http://www.openelec.tv"
-PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.zip"
+#PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.zip"
+PKG_URL="https://github.com/RasPlex/service.openelec.settings/archive/rasplex.zip"
 PKG_SOURCE_DIR="$PKG_NAME"
 PKG_DEPENDS_TARGET="toolchain Python connman pygobject dbus-python"
 PKG_PRIORITY="optional"
@@ -39,11 +40,24 @@ else
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bkeymaps"
 fi
 
+unpack () {
+	cd $ROOT/$BUILD
+	[ -d $PKG_BUILD ] && rm -rf $PKG_BUILD
+
+	ZIP_PKG="`echo $PKG_URL | sed 's%.*/\(.*\)$%\1%'`"
+
+	unzip -d $ROOT/$BUILD/$PKG_NAME -o $ROOT/sources/$PKG_NAME/$ZIP_PKG
+	cd $ROOT
+}
+
+
 make_target() {
  : # nothing todo
 }
 
 makeinstall_target() {
+	set -x
+	cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
   mkdir -p $INSTALL/usr/share/xbmc/addons/service.openelec.settings
     cp -R * $INSTALL/usr/share/xbmc/addons/service.openelec.settings
 

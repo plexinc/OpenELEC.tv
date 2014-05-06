@@ -17,12 +17,14 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="fm-11086c5"
+PKG_VERSION="0.10.7"
+#PKG_VERSION="1.2.6"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
 PKG_SITE="http://ffmpeg.org"
-PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
+PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.bz2"
+#PKG_URL="http://www.ffmpeg.org/releases/ffmpeg-1.2.6.tar.bz2"
 PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis gnutls"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
@@ -160,7 +162,7 @@ configure_target() {
               --disable-w32threads \
               --disable-x11grab \
               --enable-network \
-              --enable-gnutls \
+              --disable-gnutls \
               --disable-gray \
               --enable-swscale-alpha \
               $FFMPEG_OPTIM \
@@ -212,7 +214,6 @@ configure_target() {
               --disable-libtheora \
               --disable-libvo-aacenc \
               --disable-libvo-amrwbenc \
-              --enable-libvorbis --enable-muxer=ogg --enable-encoder=libvorbis \
               --disable-libvpx \
               --disable-libx264 \
               --disable-libxavs \

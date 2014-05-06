@@ -1,5 +1,5 @@
 # Name of the Distro to build (full name, without special characters)
-  DISTRONAME="OpenELEC"
+  DISTRONAME="rasplex"
 
 # short project description
   DESCRIPTION="OpenELEC is a fast and userfriendly XBMC Mediacenter distribution."
@@ -12,7 +12,7 @@
   GREETING4=""
 
 # Root password to integrate in the target system
-  ROOT_PASSWORD="openelec"
+  ROOT_PASSWORD="rasplex"
 
 # The TARGET_CPU variable controls which processor should be targeted for
 # generated code.
@@ -115,15 +115,15 @@
   SQUASHFS_COMPRESSION="lzo"
 
 # Mediacenter to use (xbmc / no)
-  MEDIACENTER="xbmc"
+  MEDIACENTER="plexht"
 
 # Skins to install (Confluence)
 # Space separated list is supported,
 # e.g. SKINS="Confluence"
-  SKINS="Confluence"
+  SKINS=""
 
 # Default Skin (Confluence)
-  SKIN_DEFAULT="Confluence"
+  SKIN_DEFAULT=""
 
 # install extra subtitle Fonts for XBMC (yes / no)
   XBMC_EXTRA_FONTS="yes"
@@ -189,7 +189,7 @@
   UPNP_SUPPORT="yes"
 
 # build with MySQL support (yes / no)
-  MYSQL_SUPPORT="yes"
+  MYSQL_SUPPORT="no"
 
 # build xbmc with sshlib support (yes / no)
   SSHLIB_SUPPORT="yes"
@@ -207,7 +207,7 @@
   NFS_SUPPORT="yes"
 
 # build with afpfs-ng support (mounting AFP shares with XBMC) (yes / no)
-  AFP_SUPPORT="yes"
+  AFP_SUPPORT="no"
 
 # build and install Samba Client support (yes / no)
   SAMBA_SUPPORT="yes"
@@ -344,8 +344,8 @@
   COREBOOT="no"
 
 # Distribution Specific source location
-  DISTRO_MIRROR="http://sources.openelec.tv/mirror"
-  DISTRO_SRC="http://sources.openelec.tv/$OPENELEC_VERSION"
+  DISTRO_MIRROR="http://sources.rasplex.com/mirror"
+  DISTRO_SRC="http://sources.rasplex.com/$OPENELEC_VERSION"
 
 # Addon Server Url
   ADDON_SERVER_URL="http://addons.openelec.tv"

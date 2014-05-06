@@ -1,0 +1,14 @@
+#!/bin/bash
+
+. config/options $1
+
+IMAGE_TARGET=$ROOT/$BUILD/image/system
+
+cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
+
+mkdir -p $IMAGE_TARGET/usr/include/client/linux/handler/
+cp src/client/linux/libbreakpad_client.a $IMAGE_TARGET/usr/lib
+
+#find src -type f | grep -v ".h$" | xargs -I{} rm {}
+cp -r src/* $IMAGE_TARGET/usr/include/
+cp -r third_party $IMAGE_TARGET/usr/include/

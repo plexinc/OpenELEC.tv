@@ -1,0 +1,6 @@
+distro:    rasplex
+project:   RPi
+arch:      arm
+type:      release # debug or release
+oeversion: devel # oe version
+assembler: ninja

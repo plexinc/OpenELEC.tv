@@ -7,3 +7,5 @@
 # ADDON_VERSION: Addon version
   ADDON_VERSION="4.1"
 
+# Load rasplex configuration and overrides
+. config/rasplex

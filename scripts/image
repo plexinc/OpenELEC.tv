@@ -92,17 +92,13 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
   echo -e "VERSION_ID=$OS_VERSION" >> $INSTALL/etc/os-release
   echo -e "PRETTY_NAME=$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) - Version: $OPENELEC_VERSION" >> $INSTALL/etc/os-release
   echo -e "HOME_URL=http://www.openelec.tv" >> $INSTALL/etc/os-release
-  echo -e "BUG_REPORT_URL=https://github.com/OpenELEC/OpenELEC.tv" >> $INSTALL/etc/os-release
+  echo -e "BUG_REPORT_URL=http://tiny.cc/rasplex-bugs" >> $INSTALL/etc/os-release
   if [ -n "$GIT_HASH" ]; then
 	echo -e "BUILD_ID=$GIT_HASH" >> $INSTALL/etc/os-release
   fi
   
 
-  if [ "$OFFICIAL" = "yes" ]; then
-    echo "official" > $INSTALL/etc/build
-  else
-    echo "unofficial" > $INSTALL/etc/build
-  fi
+  echo "official" > $INSTALL/etc/build
 
 # create /etc/issue
   echo $GREETING0 >  $INSTALL/etc/issue
