@@ -28,8 +28,32 @@ eos
 
 
   desc "Generate an image file from current or latest build output"
-  task :image do
-    sh "echo image"
+  task :image, [:version] do | t, args |
+    if args[:version].nil?
+      version = "wip"
+    else
+      version = args[:version]
+    end
+
+    unless File.directory? 'tmp'
+      Dir.mkdir('tmp')
+    end
+
+    freedev = `sudo losetup -f`.strip
+
+    tarballs = Dir.glob('target/*.tar')
+    latest = tarballs.sort_by {|filename| File.mtime(filename) }[-1]
+    basename = File.basename(latest).gsub('.tar','')
+    imgfile = "rasplex-#{version}.img"
+
+    sh "tar -xpf #{latest} -C tmp"
+    sh "dd if=/dev/zero of=tmp/#{imgfile} bs=1M count=910"
+    Dir.chdir("tmp/#{basename}") do 
+      cmd = "sudo ./create_sdcard #{freedev} ../#{imgfile}"
+      sh cmd
+    end
+
+    
   end
 
   desc "Force a rebuild of the kernel, initramfs, and firmware"
