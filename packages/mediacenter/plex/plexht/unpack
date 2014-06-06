@@ -55,4 +55,6 @@ else
   patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigLINUX.cmake < $PKG_DIR/patches/platformconfig.patch
 fi
 
+patch $PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/Font.xml < $PKG_DIR/patches/fontfix.patch
+
 cp -f $PKG_NAME-$PKG_VERSION/plex/Resources/Splash-OpenELEC.png $PKG_NAME-$PKG_VERSION/plex/Resources/Splash.png
