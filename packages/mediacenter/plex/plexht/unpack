@@ -55,7 +55,6 @@ else
   patch $PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigLINUX.cmake < $PKG_DIR/patches/platformconfig.patch
 fi
 
-patch $PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/LeftSideMenu.xml < $PKG_DIR/patches/skinplex.patch
 patch $PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/Font.xml < $PKG_DIR/patches/fontfix.patch
 
 if [ $PROJECT = Plex-Intel-Pioneer ]; then

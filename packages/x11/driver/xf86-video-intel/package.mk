@@ -53,15 +53,17 @@ pre_configure_target() {
   strip_lto
 }
 
-post_makeinstall_target() {
+# Temporary removing this for adding a full conf in /storage/.config
+
+#post_makeinstall_target() {
 
 # Install TearFree option for Intel driver if PROJECT Plex-Intel
+#
+#if [ "$PROJECT" = "Plex-Intel" ]; then
+#   if [ ! -d $INSTALL/usr/share/X11/xorg.conf.d ]; then
+#     mkdir -p $INSTALL/usr/share/X11/xorg.conf.d
+#   fi
+#   cp $PKG_DIR/config/20-intel-tearfree.conf $INSTALL/usr/share/X11/xorg.conf.d
+#fi
 
-if [ "$PROJECT" = "Plex-Intel" ]; then
-   if [ ! -d $INSTALL/usr/share/X11/xorg.conf.d ]; then
-     mkdir -p $INSTALL/usr/share/X11/xorg.conf.d
-   fi
-   cp $PKG_DIR/config/20-intel-tearfree.conf $INSTALL/usr/share/X11/xorg.conf.d
-fi
-
-}
+#}
