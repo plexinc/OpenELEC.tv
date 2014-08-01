@@ -7,6 +7,4 @@ echo "auto" > "/sys/bus/acpi/devices/NTN0530\:00/physical_node/resources"
 modprobe nuvoton_cir
 fi
 
-(sleep 60; \
-/sbin/hwclock -w; \
-)&
+(sleep 60; /sbin/hwclock -w;)&
