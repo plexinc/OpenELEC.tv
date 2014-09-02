@@ -26,15 +26,19 @@ if [ $PROJECT = RPi ]; then
   PKG_SHORTDESC="Plex Home Theater with Rasplex patches"
   PKG_LONGDESC="PlexHT is based on XBMC, and is developed by Plex Inc as a desxtop client for plex media servers. This is an unofficial port of that code."
 else
-  if [ "$PHT_HEAD" = "HEAD" ]; then
-    PKG_VERSION=HEAD
-  else
-    PKG_VERSION=PUBLIC
-  fi
+#  if [ "$PHT_HEAD" = "HEAD" ]; then
+#    PKG_VERSION=HEAD
+#  else
+#    PKG_VERSION=PUBLIC
+#  fi
+  PKG_VERSION=v1.2.2
+  PKG_REV=pht-$PKG_VERSION.tar.gz
   PKG_SITE="http://plex.tv"
-  PKG_URL="https://github.com/plexinc/plex-home-theater-public/archive/pht-frodo.zip"
+#  PKG_URL="https://github.com/plexinc/plex-home-theater-public/archive/$PKG_REV.zip"
+  PKG_URL="https://api.github.com/repos/plexinc/plex-home-theater-public/tarball/pht-$PKG_VERSION"
   PKG_SHORTDESC="plexht: Plex Home Theater"
   PKG_LONGDESC="Plex Home Theater, is blah blah blah blah"
+#  WGET_OPT="-O $SOURCES/$1/pht-$PKG_VERSION.tar.gz"
 fi
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
