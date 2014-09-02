@@ -1,5 +1,5 @@
 # Name of the Distro to build (full name, without special characters)
-  DISTRONAME="rasplex"
+  DISTRONAME="OpenELEC"
 
 # short project description
   DESCRIPTION="OpenELEC is a fast and userfriendly XBMC Mediacenter distribution."
@@ -12,7 +12,7 @@
   GREETING4=""
 
 # Root password to integrate in the target system
-  ROOT_PASSWORD="rasplex"
+  ROOT_PASSWORD="openelec"
 
 # The TARGET_CPU variable controls which processor should be targeted for
 # generated code.
@@ -26,7 +26,7 @@
       #               i686 i586 i486 i386
       # (VIA CPUs)    c3 c3-2
       #
-      TARGET_CPU="atom"
+      TARGET_CPU="i686"
       ;;
 
     x86_64)
@@ -34,7 +34,7 @@
       #               athlon-fx amdfam10 barcelona
       # (Intel CPUs)  atom core2 nocona
       #
-      TARGET_CPU="atom"
+      TARGET_CPU="x86-64"
       ;;
 
     arm)
@@ -50,12 +50,12 @@
       # arm1176jz-s arm1176jzf-s cortex-a8 cortex-a9 cortex-r4
       # cortex-r4f cortex-m3 cortex-m1 xscale iwmmxt iwmmxt2 ep9312.
       #
-      TARGET_CPU="arm1176jzf-s"
+      TARGET_CPU="cortex-a9"
 
       # TARGET_FLOAT:
       # Specifies which floating-point ABI to use. Permissible values are:
       # soft softfp hard
-      TARGET_FLOAT="hard"
+      TARGET_FLOAT="softfp"
 
       # TARGET_FPU:
       # This specifies what floating point hardware (or hardware emulation) is
@@ -63,7 +63,7 @@
       # fpa fpe2 fpe3 maverick vfp vfpv3 vfpv3-fp16 vfpv3-d16 vfpv3-d16-fp16
       # vfpv3xd vfpv3xd-fp16 neon neon-fp16 vfpv4 vfpv4-d16 fpv4-sp-d16
       # neon-vfpv4.
-      TARGET_FPU="vfp"
+      TARGET_FPU="neon"
       ;;
   esac
 
@@ -71,7 +71,7 @@
   OPTIMIZATIONS="size"
 
 # Project CFLAGS
-  PROJECT_CFLAGS=""
+  PROJECT_CFLAGS="-mmmx -msse -msse2 -mfpmath=sse"
 
 # LTO (Link Time Optimization) support
   LTO_SUPPORT="yes"
@@ -79,8 +79,8 @@
 # GOLD (Google Linker) support
   GOLD_SUPPORT="yes"
 
-# Bootloader to use (syslinux / u-boot / atv-bootloader / bcm2835-bootloader)
-  BOOTLOADER="bcm2835-bootloader"
+# Bootloader to use (syslinux / u-boot / atv-bootloader)
+  BOOTLOADER="syslinux"
 
 # u-boot version to use (default)
   UBOOT_VERSION="default"
@@ -102,7 +102,7 @@
 
 # GCC to use. values can be:
 # default:  default mainline gcc
-  GCC_VERSION="4.7"
+  GCC_VERSION="default"
 
 # Kernel to use. values can be:
 # default:  default mainline kernel
@@ -112,30 +112,30 @@
   LINUX_NEXT="no"
 
 # SquashFS compression method (gzip / lzo / xz)
-  SQUASHFS_COMPRESSION="lzo"
+  SQUASHFS_COMPRESSION="gzip"
 
-# Mediacenter to use (xbmc / no)
+# Mediacenter to use (xbmc / plexht / no)
   MEDIACENTER="plexht"
 
 # Skins to install (Confluence)
 # Space separated list is supported,
 # e.g. SKINS="Confluence"
-  SKINS=""
+  SKINS="Confluence"
 
 # Default Skin (Confluence)
-  SKIN_DEFAULT=""
+  SKIN_DEFAULT="Confluence"
 
 # install extra subtitle Fonts for XBMC (yes / no)
   XBMC_EXTRA_FONTS="yes"
 
 # build and install 'RSXS' Screensaver (yes / no)
-  XBMC_SCR_RSXS="no"
+  XBMC_SCR_RSXS="yes"
 
 # build and install 'ProjectM' Visualization (yes / no)
-  XBMC_VIS_PROJECTM="no"
+  XBMC_VIS_PROJECTM="yes"
 
 # build and install 'GOOM' Visualization (yes / no)
-  XBMC_VIS_GOOM="no"
+  XBMC_VIS_GOOM="yes"
 
 # build and install 'Waveform' Visualization (yes / no)
   XBMC_VIS_WAVEFORM="yes"
@@ -144,8 +144,7 @@
   XBMC_VIS_SPECTRUM="yes"
 
 # build and install 'FishBMC' Visualization (yes / no)
-  # does not work on RPi
-  XBMC_VIS_FISHBMC="no"
+  XBMC_VIS_FISHBMC="yes"
 
 # build and install ALSA Audio support (yes / no)
   ALSA_SUPPORT="yes"
@@ -189,13 +188,13 @@
   UPNP_SUPPORT="yes"
 
 # build with MySQL support (yes / no)
-  MYSQL_SUPPORT="no"
+  MYSQL_SUPPORT="yes"
 
 # build xbmc with sshlib support (yes / no)
   SSHLIB_SUPPORT="yes"
 
 # build xbmc with optical drive support (yes / no)
-  OPTICAL_DRIVE_SUPPORT="yes"
+  OPTICAL_DRIVE_SUPPORT="no"
 
 # build with AirPlay support (stream videos from iDevices to XBMC) (yes / no)
   AIRPLAY_SUPPORT="yes"
@@ -207,7 +206,7 @@
   NFS_SUPPORT="yes"
 
 # build with afpfs-ng support (mounting AFP shares with XBMC) (yes / no)
-  AFP_SUPPORT="no"
+  AFP_SUPPORT="yes"
 
 # build and install Samba Client support (yes / no)
   SAMBA_SUPPORT="yes"
@@ -222,7 +221,7 @@
   PPTP_SUPPORT="yes"
 
 # build and install OpenVPN support (yes / no)
-  OPENVPN_SUPPORT="yes"
+  OPENVPN_SUPPORT="no"
 
 # build and install diskmounter support (udevil)
 # this service provide auto mounting support for external drives in the
@@ -230,7 +229,7 @@
   UDEVIL="yes"
 
 # build and install exFAT fuse support (yes / no)
-  EXFAT="yes"
+  EXFAT="no"
 
 # build and install NTFS-3G fuse support (yes / no)
   NTFS3G="yes"
@@ -239,46 +238,46 @@
   HFSTOOLS="yes"
 
 # OpenGL(X) implementation to use (no / Mesa)
-  OPENGL="no"
+  OPENGL="Mesa"
 
-# OpenGL-ES implementation to use (no / bcm2835-driver)
-  OPENGLES="bcm2835-driver"
+# OpenGL-ES implementation to use (no)
+  OPENGLES="no"
 
 # Windowmanager to use (ratpoison / fluxbox / none)
-  WINDOWMANAGER="none"
+  WINDOWMANAGER="fluxbox"
 
 # include uvesafb support (yes / no)
-  UVESAFB_SUPPORT="no"
+  UVESAFB_SUPPORT="yes"
 
 # Displayserver to use (x11 / no)
-  DISPLAYSERVER="no"
+  DISPLAYSERVER="x11"
 
 # Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,nvidia,nouveau,vmware)
 # Space separated list is supported,
-# e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeonsi nvidia nouveau"
-  GRAPHIC_DRIVERS=""
+# e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 nvidia nouveau"
+  GRAPHIC_DRIVERS="r200 r300 r600 radeonsi i915 i965 nvidia"
 
 # XBMC Player implementation to use (default / bcm2835-driver)
-  XBMCPLAYER_DRIVER="bcm2835-driver"
+  XBMCPLAYER_DRIVER="default"
 
 # Use VDPAU video acceleration (needs nVidia driver and a supported card)
-  VDPAU="no"
+  VDPAU="yes"
 
 # Use VAAPI video acceleration (needs intel i965 driver and a supported card)
-  VAAPI="no"
+  VAAPI="yes"
 
 # Use Broadcom CrystalHD Decoder Card for video acceleration 
 # (needs Kernelsupport for Broadcom Decoder Card and a supported card)
-  CRYSTALHD="no"
+  CRYSTALHD="yes"
 
 # build and install remote support (yes / no)
   REMOTE_SUPPORT="yes"
 
 # build and install ATV IR remote support (yes / no)
-  ATVCLIENT_SUPPORT="no"
+  ATVCLIENT_SUPPORT="yes"
 
 # build and install IRServer IR/LCD support (yes / no)
-  IRSERVER_SUPPORT="no"
+  IRSERVER_SUPPORT="yes"
 
 # build and install Joystick support (yes / no)
   JOYSTICK_SUPPORT="yes"
@@ -303,7 +302,7 @@
   LCD_DRIVER="irtrans,imon,imonlcd,mdm166a,MtxOrb,lis,dm140,hd44780,CFontz,SureElec,vlsys_m428"
 
 # Modules to install in initramfs for early boot
-  INITRAMFS_MODULES=""
+  INITRAMFS_MODULES="xhci-hcd"
 
 # additional Firmware to use (dvb-firmware, misc-firmware, wlan-firmware)
 # Space separated list is supported,
@@ -314,16 +313,16 @@
   SENSOR_SUPPORT="yes"
 
 # build with swap support (yes / no)
-  SWAP_SUPPORT="yes"
+  SWAP_SUPPORT="no"
 
 # swap support enabled per default (yes / no)
   SWAP_ENABLED_DEFAULT="no"
 
 # swapfile size if SWAP_SUPPORT=yes in MB
-  SWAPFILESIZE="128"
+  SWAPFILESIZE="256"
 
 # build with installer (yes / no)
-  INSTALLER_SUPPORT="no"
+  INSTALLER_SUPPORT="yes"
 
 # Testpackages for development (yes / no)
   TESTING="no"
@@ -344,8 +343,8 @@
   COREBOOT="no"
 
 # Distribution Specific source location
-  DISTRO_MIRROR="http://sources.rasplex.com/mirror"
-  DISTRO_SRC="http://sources.rasplex.com/$OPENELEC_VERSION"
+  DISTRO_MIRROR="http://sources.openelec.tv/mirror"
+  DISTRO_SRC="http://sources.openelec.tv/$OPENELEC_VERSION"
 
 # Addon Server Url
   ADDON_SERVER_URL="http://addons.openelec.tv"
