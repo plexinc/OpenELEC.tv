@@ -167,7 +167,7 @@
   ENCODER_LAME="yes"
 
 # build and install with BluRay support (yes / no)
-  BLURAY_SUPPORT="yes"
+  BLURAY_SUPPORT="no"
 
 # additional drivers to install:
 # for a list of additinoal drivers see packages/linux-drivers
@@ -188,7 +188,7 @@
   UPNP_SUPPORT="yes"
 
 # build with MySQL support (yes / no)
-  MYSQL_SUPPORT="yes"
+  MYSQL_SUPPORT="no"
 
 # build xbmc with sshlib support (yes / no)
   SSHLIB_SUPPORT="yes"

@@ -33,7 +33,7 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 PKG_CONFIGURE_OPTS_HOST="--with-pcre-prefix=$ROOT/$TOOLCHAIN \
-                         --with-boost=no \
+			 --with-boost=no \
                          --without-pcre \
                          --without-x \
                          --without-tcl \

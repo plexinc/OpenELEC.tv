@@ -34,15 +34,13 @@ else
   PKG_VERSION=v1.2.2
   PKG_REV=pht-$PKG_VERSION.tar.gz
   PKG_SITE="http://plex.tv"
-#  PKG_URL="https://github.com/plexinc/plex-home-theater-public/archive/$PKG_REV.zip"
   PKG_URL="https://api.github.com/repos/plexinc/plex-home-theater-public/tarball/pht-$PKG_VERSION"
   PKG_SHORTDESC="plexht: Plex Home Theater"
   PKG_LONGDESC="Plex Home Theater, is blah blah blah blah"
-#  WGET_OPT="-O $SOURCES/$1/pht-$PKG_VERSION.tar.gz"
 fi
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
-PKG_DEPENDS_TARGET="boost Python zlib bzip2 systemd libass curl libssh rtmpdump fontconfig tinyxml freetype libmad libogg libmodplug faad2 flac libmpeg2 taglib yajl sqlite service.openelec.settings libmicrohttpd ffmpeg libjpeg-turbo libsamplerate tiff libshairplay libshairport libcdio swig libvorbis gnutls debug"
+PKG_DEPENDS_TARGET="boost pcre Python zlib bzip2 systemd libass curl libssh rtmpdump fontconfig tinyxml freetype libmad libogg libmodplug faad2 flac libmpeg2 taglib yajl sqlite service.openelec.settings libmicrohttpd ffmpeg libjpeg-turbo libsamplerate tiff libshairplay libshairport libcdio libvorbis gnutls swig:host debug SDL_mixer SDL_image glu"
 PKG_PRIORITY="optional"
 PKG_SECTION="mediacenter"
 PKG_IS_ADDON="no"
@@ -254,7 +252,7 @@ else
   cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
   [ ! -d config ] && mkdir config
   cd config
-  cmake -DUSE_INTERNAL_FFMPEG=off -DOPENELEC=on -DENABLE_PYTHON=on -DEXTERNAL_PYTHON_HOME="$SYSROOT_PREFIX/usr" -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DCOMPRESS_TEXTURES=on -DENABLE_AUTOUPDATE=off -DTEXTUREPACKERPATH=$PKG_DIR/config/TexturePacker -DCMAKE_INSTALL_PREFIX=/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
+  cmake -DUSE_INTERNAL_FFMPEG=off -DOPENELEC=on -DENABLE_PYTHON=on -DEXTERNAL_PYTHON_HOME="$SYSROOT_PREFIX/usr" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DFREETYPE_LIBRARY="$SYSROOT_PREFIX/usr/lib/freetype2/freetype.so" -DFREETYPE_INCLUDE_DIRS="$SYSROOT_PREFIX/usr/include/freetype2" -DCOMPRESS_TEXTURES=on -DENABLE_AUTOUPDATE=off -DTEXTUREPACKERPATH=$PKG_DIR/config/TexturePacker -DCMAKE_INSTALL_PREFIX=/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
 fi
 
 }
@@ -274,7 +272,7 @@ else
 # dont use some optimizations because of build problems
   LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
 # strip compiler optimization
-  strip_lto
+# strip_lto
 
 # set python variables
   export PYTHON_VERSION="2.7"
@@ -288,7 +286,7 @@ else
   cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config
   export CPLUS_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
   export PYTHON_LIBDIR=`ls -d $SYSROOT_PREFIX/usr/lib/python*`
-  make -j4
+  make -j2 VERBOSE=3
 fi
 
 }
