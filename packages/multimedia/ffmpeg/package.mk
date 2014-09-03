@@ -17,7 +17,8 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="2.3.3"
+#PKG_VERSION="2.3.3"
+PKG_VERSION="0.10.7"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
@@ -162,7 +163,7 @@ configure_target() {
               --disable-w32threads \
               --disable-x11grab \
               --enable-network \
-              --enable-gnutls \
+              --disable-gnutls \
               --disable-gray \
               --enable-swscale-alpha \
               $FFMPEG_OPTIM \
