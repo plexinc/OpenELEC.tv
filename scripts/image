@@ -42,12 +42,12 @@ fi
 #TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
 #IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
 if [ "$PHT_HEAD" = "HEAD" ]; then
-  git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git --work-tree=/data/jenkins/pht-openelec/plexht-HEAD fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git --work-tree=/data/jenkins/pht-openelec/plexht-HEAD reset --hard && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git --work-tree=/data/jenkins/pht-openelec/plexht-HEAD pull
+  git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git --work-tree=/data/jenkins/pht-openelec/plexht-HEAD fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git --work-tree=/data/jenkins/pht-openelec/plexht-HEAD reset --hard origin/master && git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git --work-tree=/data/jenkins/pht-openelec/plexht-HEAD pull
   PHT_GITHASH="`git --git-dir=/data/jenkins/pht-openelec/plexht-HEAD/.git rev-parse --short HEAD`"
   PHT_VERSION="`cat /data/jenkins/pht-openelec/plexht-HEAD/CMakeLists.txt | awk '/MAJOR |MINOR |PATCH / {gsub(")",""); printf $2"."}  END {print ""}'| sed 's/.$//g'`"
   TARGET_VERSION="$PROJECT-$OPENELEC_VERSION-$BUILD_NUMBER-Plex-Home-Theater-$PHT_VERSION-$PHT_GITHASH.$TARGET_ARCH"
 else
-  git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git --work-tree=/data/jenkins/pht-openelec/plexht-PUBLIC fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git --work-tree=/data/jenkins/pht-openelec/plexht-PUBLIC reset --hard && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git --work-tree=/data/jenkins/pht-openelec/plexht-PUBLIC pull
+  git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git --work-tree=/data/jenkins/pht-openelec/plexht-PUBLIC fetch && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git --work-tree=/data/jenkins/pht-openelec/plexht-PUBLIC reset --hard origin/pht-frodo && git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git --work-tree=/data/jenkins/pht-openelec/plexht-PUBLIC pull
   PHT_GITHASH="`git --git-dir=/data/jenkins/pht-openelec/plexht-PUBLIC/.git rev-parse --short HEAD`"
   PHT_VERSION="`cat /data/jenkins/pht-openelec/plexht-PUBLIC/CMakeLists.txt | awk '/MAJOR |MINOR |PATCH / {gsub(")",""); printf $2"."}  END {print ""}'| sed 's/.$//g'`"
   TARGET_VERSION="$PROJECT-$OPENELEC_VERSION-$BUILD_NUMBER-Plex-Home-Theater-$PHT_VERSION-$PHT_GITHASH.$TARGET_ARCH"
