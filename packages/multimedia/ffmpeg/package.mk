@@ -17,13 +17,14 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-#PKG_VERSION="2.3.3"
-PKG_VERSION="0.10.7"
+PKG_VERSION="0.10.6"
+#PKG_VERSION="1.2.6"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
 PKG_SITE="http://ffmpeg.org"
-PKG_URL="https://www.ffmpeg.org/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"
+PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.bz2"
+#PKG_URL="http://www.ffmpeg.org/releases/ffmpeg-1.2.6.tar.bz2"
 PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis gnutls"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
@@ -37,7 +38,7 @@ if [ "$VAAPI" = yes ]; then
 # configure GPU drivers and dependencies:
   get_graphicdrivers
 
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libva-intel-driver"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET $LIBVA"
   FFMPEG_VAAPI="--enable-vaapi"
 else
   FFMPEG_VAAPI="--disable-vaapi"
@@ -121,7 +122,6 @@ configure_target() {
               --sysroot=$SYSROOT_PREFIX \
               --sysinclude="$SYSROOT_PREFIX/usr/include" \
               --target-os="linux" \
-              --extra-version="$PKG_VERSION" \
               --nm="$NM" \
               --ar="$AR" \
               --as="$CC" \
@@ -146,7 +146,6 @@ configure_target() {
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
               --enable-optimizations \
-              --disable-armv5te --disable-armv6t2 \
               --disable-extra-warnings \
               --disable-ffprobe \
               --disable-ffplay \
@@ -215,7 +214,6 @@ configure_target() {
               --disable-libtheora \
               --disable-libvo-aacenc \
               --disable-libvo-amrwbenc \
-              --enable-libvorbis --enable-muxer=ogg --enable-encoder=libvorbis \
               --disable-libvpx \
               --disable-libx264 \
               --disable-libxavs \
@@ -225,6 +223,7 @@ configure_target() {
               --disable-altivec \
               $FFMPEG_CPU \
               $FFMPEG_FPU \
+              --disable-vis \
               --enable-yasm \
               --disable-sram \
               --disable-symver
