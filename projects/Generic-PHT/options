@@ -120,10 +120,10 @@
 # Skins to install (Confluence)
 # Space separated list is supported,
 # e.g. SKINS="Confluence"
-  SKINS="Confluence"
+  SKINS="Mediastream"
 
 # Default Skin (Confluence)
-  SKIN_DEFAULT="Confluence"
+  SKIN_DEFAULT="Mediastream"
 
 # install extra subtitle Fonts for XBMC (yes / no)
   XBMC_EXTRA_FONTS="yes"

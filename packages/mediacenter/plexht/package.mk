@@ -250,8 +250,8 @@ else
   export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
 
   cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
-  [ ! -d config ] && mkdir config
-  cd config
+  [ ! -d build ] && mkdir build
+  cd build
   cmake -DUSE_INTERNAL_FFMPEG=off -DOPENELEC=on -DENABLE_PYTHON=on -DEXTERNAL_PYTHON_HOME="$SYSROOT_PREFIX/usr" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DFREETYPE_LIBRARY="$SYSROOT_PREFIX/usr/lib/libfreetype.so" -DFREETYPE_INCLUDE_DIRS="$SYSROOT_PREFIX/usr/include/freetype2" -DCOMPRESS_TEXTURES=on -DENABLE_AUTOUPDATE=off -DTEXTUREPACKERPATH=$PKG_DIR/config/TexturePacker -DCMAKE_INSTALL_PREFIX=/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
 fi
 
@@ -276,7 +276,7 @@ else
 
 # Make the build
   export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
-  cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config
+  cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build
   export CPLUS_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
   export PYTHON_LIBDIR=`ls -d $SYSROOT_PREFIX/usr/lib/python*`
 #  export TOOLCHAIN_DIR="$ROOT/$BUILD/toolchain"
@@ -288,7 +288,7 @@ fi
 makeinstall_target() {
 
 
-	#PKG_BUILD=$ROOT/$BUILD/$PKG_NAME-$RASPLEX_REF
+	PKG_BUILD=$ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
 
 	mkdir -p $INSTALL/usr/bin
 		cp $PKG_DIR/scripts/cputemp $INSTALL/usr/bin

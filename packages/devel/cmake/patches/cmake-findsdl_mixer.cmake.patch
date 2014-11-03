@@ -1,0 +1,11 @@
+--- cmake-3.0.1/Modules/FindSDL_mixer.cmake 2013-08-11 14:03:13.103127125 +0200
++++ cmake-3.0.1/Modules/FindSDL_mixer.cmake.new     2013-08-11 14:03:51.679130793 +0200
+@@ -40,7 +40,7 @@ find_path(SDL_MIXER_INCLUDE_DIR SDL_mixe
+   HINTS
+     ENV SDLMIXERDIR
+     ENV SDLDIR
+-  PATH_SUFFIXES include/SDL include/SDL12 include/SDL11 include
++  PATH_SUFFIXES include/SDL include/SDL12 include/SDL11 include SDL SDL11 SDL12
+ )
+ 
+ if(NOT SDL_MIXER_LIBRARY AND SDLMIXER_LIBRARY)
