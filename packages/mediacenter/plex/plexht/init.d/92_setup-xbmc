@@ -111,7 +111,7 @@ EOF
 # Add default autostart.sh
 #
 
-if [ ! -f /usr/share/XBMC/config/autostart.sh ]; then
+if [ ! -f $HOME/.config/autostart.sh ]; then
    cp /usr/share/XBMC/config/autostart.sh $HOME/.config/autostart.sh ; chmod +x $HOME/.config/autostart.sh
 fi
 
