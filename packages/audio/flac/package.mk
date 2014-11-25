@@ -39,7 +39,6 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-static \
                            --disable-altivec \
                            --disable-doxygen-docs \
                            --disable-thorough-tests \
-                           --disable-cpplibs \
                            --disable-xmms-plugin \
                            --disable-oggtest \
                            --with-ogg=$SYSROOT_PREFIX/usr \

@@ -15,7 +15,7 @@
   ROOT_PASSWORD="openelec"
 
 # Mediacenter to use (kodi / no)
-  MEDIACENTER="kodi"
+  MEDIACENTER="plexht"
 
 # Skins to install (Confluence)
 # Space separated list is supported,
@@ -29,33 +29,33 @@
   KODI_EXTRA_FONTS="yes"
 
 # build and install 'RSXS' Screensaver (yes / no)
-  KODI_SCR_RSXS="yes"
+  KODI_SCR_RSXS="no"
 
 # build and install 'ProjectM' Visualization (yes / no)
-  KODI_VIS_PROJECTM="yes"
+  KODI_VIS_PROJECTM="no"
 
 # build and install 'GOOM' Visualization (yes / no)
-  KODI_VIS_GOOM="yes"
+  KODI_VIS_GOOM="no"
 
 # build and install 'Waveform' Visualization (yes / no)
-  KODI_VIS_WAVEFORM="yes"
+  KODI_VIS_WAVEFORM="no"
 
 # build and install 'Spectrum' Visualization (yes / no)
-  KODI_VIS_SPECTRUM="yes"
+  KODI_VIS_SPECTRUM="no"
 
 # build and install 'FishBMC' Visualization (yes / no)
   # does not work on RPi
-  KODI_VIS_FISHBMC="yes"
+  KODI_VIS_FISHBMC="no"
 
 # build and install PulseAudio support (yes / no)
-  PULSEAUDIO_SUPPORT="no"
+  PULSEAUDIO_SUPPORT="yes"
 
 # build and install espeak support (yes / no)
-  ESPEAK_SUPPORT="yes"
+  ESPEAK_SUPPORT="no"
 
 # build and install with non-free support
 # (RAR compression support in KODI) (yes / no)
-  KODI_NONFREE_SUPPORT="yes"
+  KODI_NONFREE_SUPPORT="no"
 
 # build and install with BluRay support (yes / no)
   KODI_BLURAY_SUPPORT="yes"
@@ -91,13 +91,13 @@
   KODI_UPNP_SUPPORT="yes"
 
 # build with MySQL support (yes / no)
-  KODI_MYSQL_SUPPORT="yes"
+  KODI_MYSQL_SUPPORT="no"
 
 # build xbmc with sshlib support (yes / no)
   KODI_SSHLIB_SUPPORT="yes"
 
 # build xbmc with optical drive support (yes / no)
-  KODI_OPTICAL_SUPPORT="yes"
+  KODI_OPTICAL_SUPPORT="no"
 
 # KODI Audio encoders for usage with optical drive support
 # Space separated list is supported,
@@ -135,7 +135,7 @@
   PPTP_SUPPORT="yes"
 
 # build and install OpenVPN support (yes / no)
-  OPENVPN_SUPPORT="yes"
+  OPENVPN_SUPPORT="no"
 
 # build and install diskmounter support (udevil)
 # this service provide auto mounting support for external drives in the
