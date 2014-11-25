@@ -118,7 +118,7 @@ fi
 #
 # Add xorg config to /storage/.config if not exsist.
 #
-if [ ! -f $HOME/.config/no-xorg.conf]; then
+if [ ! -f $HOME/.config/no-xorg.conf ]; then
   if [ ! -f $HOME/.config/xorg.conf ]; then
     if [ "$GPUTYPE" = "INTEL" ]; then
      cp /usr/share/XBMC/config/intel-xorg.conf $HOME/.config/xorg.conf
