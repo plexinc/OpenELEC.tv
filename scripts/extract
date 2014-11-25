@@ -49,6 +49,11 @@ for i in $PKG_URL; do
       *.tar.gz | *.tgz)
         tar xzf $f -C $3
         ;;
+      pht-v*)
+        if [ $PKG_NAME = plexht ]; then
+          mkdir -p $3/plexht-$PKG_VERSION ; tar xzf $SOURCES/$1/pht-$PKG_VERSION -C $3/plexht-$PKG_VERSION --strip-components=1
+        fi
+        ;;
       *.tar.xz | *.txz)
         tar xJf $f -C $3
         ;;
