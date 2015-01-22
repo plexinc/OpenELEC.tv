@@ -17,14 +17,15 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="2.4.3"
+PKG_VERSION="0.10.3"
 #PKG_VERSION="1.2.6"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
 PKG_SITE="http://ffmpeg.org"
-PKG_URL="https://www.ffmpeg.org/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis libressl"
+#PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.bz2"
+PKG_URL="http://www.ffmpeg.org/releases/$PKG_NAME-$PKG_VERSION.tar.bz2"
+PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis gnutls"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video."
@@ -33,17 +34,17 @@ PKG_LONGDESC="FFmpeg is a complete, cross-platform solution to record, convert a
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+if [ "$VAAPI" = yes ]; then
 # configure GPU drivers and dependencies:
   get_graphicdrivers
 
-if [ "$VAAPI_SUPPORT" = yes ]; then
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libva-intel-driver"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET $LIBVA"
   FFMPEG_VAAPI="--enable-vaapi"
 else
   FFMPEG_VAAPI="--disable-vaapi"
 fi
 
-if [ "$VDPAU_SUPPORT" = yes ]; then
+if [ "$VDPAU" = yes ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libvdpau"
   FFMPEG_VDPAU="--enable-vdpau"
 else
@@ -54,6 +55,19 @@ if [ "$DEBUG" = yes ]; then
   FFMPEG_DEBUG="--enable-debug --disable-stripping"
 else
   FFMPEG_DEBUG="--disable-debug --enable-stripping"
+fi
+
+if [ "$OPTIMIZATIONS" = size ]; then
+  FFMPEG_OPTIM="--disable-small"
+else
+  FFMPEG_OPTIM="--disable-small"
+fi
+
+if [ "$CRYSTALHD" = yes ]; then
+# disabled, we use XBMC's internal solution
+  FFMPEG_CRYSTALHD="--disable-crystalhd"
+else
+  FFMPEG_CRYSTALHD="--disable-crystalhd"
 fi
 
 case "$TARGET_ARCH" in
@@ -108,7 +122,6 @@ configure_target() {
               --sysroot=$SYSROOT_PREFIX \
               --sysinclude="$SYSROOT_PREFIX/usr/include" \
               --target-os="linux" \
-              --extra-version="$PKG_VERSION" \
               --nm="$NM" \
               --ar="$AR" \
               --as="$CC" \
@@ -123,8 +136,8 @@ configure_target() {
               --extra-libs="" \
               --extra-version="" \
               --build-suffix="" \
-              --disable-static \
-              --enable-shared \
+              --enable-static \
+              --disable-shared \
               --enable-gpl \
               --disable-version3 \
               --disable-nonfree \
@@ -133,7 +146,6 @@ configure_target() {
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
               --enable-optimizations \
-              --disable-armv5te --disable-armv6t2 \
               --disable-extra-warnings \
               --disable-ffprobe \
               --disable-ffplay \
@@ -150,15 +162,15 @@ configure_target() {
               --disable-w32threads \
               --disable-x11grab \
               --enable-network \
-              --disable-gnutls --enable-libressl \
+              --disable-gnutls \
               --disable-gray \
               --enable-swscale-alpha \
-              --disable-small \
+              $FFMPEG_OPTIM \
               --enable-dct \
               --enable-fft \
               --enable-mdct \
               --enable-rdft \
-              --disable-crystalhd \
+              $FFMPEG_CRYSTALHD \
               $FFMPEG_VAAPI \
               $FFMPEG_VDPAU \
               --disable-dxva2 \
@@ -202,7 +214,6 @@ configure_target() {
               --disable-libtheora \
               --disable-libvo-aacenc \
               --disable-libvo-amrwbenc \
-              --enable-libvorbis --enable-muxer=ogg --enable-encoder=libvorbis \
               --disable-libvpx \
               --disable-libx264 \
               --disable-libxavs \
@@ -212,10 +223,13 @@ configure_target() {
               --disable-altivec \
               $FFMPEG_CPU \
               $FFMPEG_FPU \
+              --disable-vis \
               --enable-yasm \
+              --disable-sram \
               --disable-symver
 }
 
 post_makeinstall_target() {
+  rm -rf $INSTALL/usr/bin
   rm -rf $INSTALL/usr/share/ffmpeg/examples
 }
