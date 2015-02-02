@@ -63,6 +63,20 @@ if [ "$RUNLEVEL" = openelec ]; then
   fi
 
   ##############################################################################
+  # creating default xorg.conf file for smooth PlexHT experience
+  ##############################################################################
+
+  logger -t Xorg "### creating optimised xorg.conf for PlexHT Intel build ###"
+
+  if [ ! -f $HOME/.config/no-xorg.conf ]; then
+    if [ ! -f $HOME/.config/xorg.conf ]; then
+      if [ "$GPUTYPE" = "INTEL" ]; then
+       cp /usr/share/XBMC/config/intel-xorg.conf $HOME/.config/xorg.conf
+      fi
+    fi
+  fi
+
+  ##############################################################################
   # creating needed directories and symlinks
   ##############################################################################
 
