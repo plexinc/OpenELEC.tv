@@ -1,6 +1,6 @@
 --- resources/skins/Default/720p/mainWindow.xml	2015-02-02 22:55:39.000000000 +0100
 +++ resources/skins/Default/720p/mainWindow.xml.new	2015-02-02 23:58:04.000000000 +0100
-@@ -712,15 +712,7 @@
+@@ -712,14 +712,7 @@
                              <top>0</top>
                              <width>788</width>
                              <height>98</height>
@@ -12,9 +12,7 @@
 -                            <width>788</width>
 -                            <height>98</height>
 -                            <visible>Control.HasFocus(1200)</visible>
--                            <texture border="5">button-focus2.png</texture>
 +                            <visible>true</visible>
                              <texture border="5">button-focus2.png</texture>
                              <animation type="Visible" reversible="false">
                                  <effect type="fade" start="0" end="100" time="300" />
-
