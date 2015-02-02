@@ -16,7 +16,7 @@
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-PKG_NAME="OpenELEC-settings"
+PKG_NAME="service.openelec.settings"
 PKG_VERSION="0.6.2"
 PKG_REV="1"
 PKG_ARCH="any"
