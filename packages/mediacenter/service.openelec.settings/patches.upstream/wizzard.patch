@@ -1,18 +1,18 @@
---- resources/skins/Default/720p/wizard.xml	2015-02-02 13:55:39.000000000 -0800
-+++ resources/skins/Default/720p/wizard.xml.new	2015-02-02 15:24:58.967375143 -0800
-@@ -352,14 +352,7 @@
-                                 <top>2</top>
-                                 <width>727</width>
-                                 <height>48</height>
--                                <texture border="5">button-nofocus.png</texture>
--                            </control>						
--                            <control type="image">
--                                <left>0</left>
--                                <top>2</top>
--                                <width>727</width>
--                                <height>48</height>
--                                <visible>Control.HasFocus(1200)</visible>
-+                                <visible>true</visible>
-                                 <texture border="5">button-focus2.png</texture>
-                                 <animation type="Visible" reversible="false">
-                                     <effect type="fade" start="0" end="100" time="300" />
+--- resources/skins/Default/720p/wizard.xml	2013-11-16 21:30:14.000000000 +0100
++++ resources/skins/Default/720p/wizard.xml.new	2013-11-28 20:47:19.188208000 +0100
+@@ -341,14 +341,7 @@
+ 						    <posy>2</posy>
+ 						    <width>727</width>
+ 						    <height>48</height>
+-						    <texture border="5">button-nofocus.png</texture>
+-					    </control>						
+-					    <control type="image">
+-						    <posx>0</posx>
+-						    <posy>2</posy>
+-						    <width>727</width>
+-						    <height>48</height>
+-						    <visible>Control.HasFocus(1200)</visible>
++						    <visible>true</visible>
+ 						    <texture border="5">button-focus2.png</texture>
+ 		            <animation type="Visible" reversible="false">
+ 			            <effect type="fade" start="0" end="100" time="300" />
