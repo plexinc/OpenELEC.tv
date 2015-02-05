@@ -49,7 +49,7 @@
 
   # Kernel to use. values can be:
   # default:  default mainline kernel
-    LINUX="default"
+    LINUX="3.18"
 
 
 ################################################################################
