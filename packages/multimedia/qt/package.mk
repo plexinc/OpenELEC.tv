@@ -29,9 +29,10 @@ case $PROJECT in
 		PKG_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa"
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa"
 	;;
-	RPi)
-		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig eglibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc gstreamer gst-plugins-base gst-plugins-good gst-omx gst-plugins-bad gst-plugins-ugly alsa"
-		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers eglibc gstreamer gst-plugins-base gst-plugins-good gst-omx gst-plugins-bad gst-plugins-ugly alsa"
+	RPi|RPi2)
+		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc gstreamer gst-plugins-base gst-plugins-good gst-omx gst-plugins-bad gst-plugins-ugly alsa"
+		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc gstreamer gst-plugins-base gst-plugins-good gst-omx gst-plugins-bad gst-plugins-ugly alsa"
+
 	;;
 esac
 
@@ -57,10 +58,9 @@ case $PROJECT in
 							-skip qtwebkit \
 							-silent \
 							-make libs \
-							-make examples \
 							-nomake tests"
 	;;
-	RPi)
+	RPi|RPi2)
 		PKG_CONFIGURE_OPTS="\
 							-prefix ${ROOT}/${BUILD}/image/system/usr \
 							-hostprefix ${SYSROOT_PREFIX}/usr \
@@ -90,12 +90,6 @@ unpack() {
 	tar -xzf $SOURCES/${PKG_NAME}/qt-everywhere-opensource-src-${PKG_VERSION}.tar.gz -C $BUILD/
 	mv $BUILD/qt-everywhere-opensource-src-${PKG_VERSION} $BUILD/${PKG_NAME}-${PKG_VERSION}
 	
-	pushd $BUILD/${PKG_NAME}-${PKG_VERSION}
-		echo "removing original qtmultimedia"
-		rm -rf qtmultimedia
-		echo "git clone qtmultimedia (gst-1.0 port)"
-		git clone git://qt.gitorious.org/~ismelykh/qt/qtmultimedia-porting -b gst-1.0 qtmultimedia
-	popd
 }
 
 configure_target() {
@@ -110,7 +104,7 @@ configure_target() {
 			./configure ${PKG_CONFIGURE_OPTS}
 			popd
 		;;
-		RPi)
+		RPi|RPi2)
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
 			export QT_FORCE_PKGCONFIG=yes
 			unset QMAKESPEC
@@ -137,7 +131,7 @@ make_target() {
 			make
 			popd
 		;;
-		RPi)
+		RPi|RPi2)
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
 			export QT_FORCE_PKGCONFIG=yes
 			unset QMAKESPEC
@@ -156,7 +150,7 @@ makeinstall_target() {
 			make install
 			popd
 		;;
-		RPi)
+		RPi|RPi2)
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
 			export QT_FORCE_PKGCONFIG=yes
 			unset QMAKESPEC
@@ -176,7 +170,7 @@ post_install() {
 	case $PROJECT in
 		Generic)
 		;;
-		RPi)
+		RPi|RPi2)
 			# need to remove libc.so and libpthread.so linker scripts to enable cross compilation with qmake.
 			# otherwise it would try to fail when linking with the wrong libraries.
 			
