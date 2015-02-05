@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="kodi-audioencoder-lame"
-PKG_VERSION="46592f8"
+PKG_VERSION="3eb59de"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

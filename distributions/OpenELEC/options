@@ -113,9 +113,6 @@
 # build with libnfs support (mounting nfs shares with KODI) (yes / no)
   KODI_NFS_SUPPORT="yes"
 
-# build with afpfs-ng support (mounting AFP shares with KODI) (yes / no)
-  KODI_AFP_SUPPORT="no"
-
 # build with Samba Client support (mounting SAMBA shares with KODI) (yes / no)
   KODI_SAMBA_SUPPORT="yes"
 
@@ -199,11 +196,6 @@
 # Support for partitioning and formating disks in initramfs (yes / no)
 # This adds support for parted and mkfs.ext3/4 to initramfs for OEM usage
   INITRAMFS_PARTED_SUPPORT="no"
-
-# additional Firmware to use (dvb-firmware, misc-firmware, wlan-firmware)
-# Space separated list is supported,
-# e.g. FIRMWARE="dvb-firmware misc-firmware wlan-firmware"
-  FIRMWARE="misc-firmware wlan-firmware dvb-firmware"
 
 # build with swap support (yes / no)
   SWAP_SUPPORT="no"

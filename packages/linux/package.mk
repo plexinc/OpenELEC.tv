@@ -22,8 +22,12 @@ case "$LINUX" in
     PKG_VERSION="cuboxi-3.14-dc5edb8"
     PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
     ;;
+  3.18)
+    PKG_VERSION="3.18.5"
+    PKG_URL="http://www.kernel.org/pub/linux/kernel/v3.x/$PKG_NAME-$PKG_VERSION.tar.xz"
+    ;;
   *)
-    PKG_VERSION="3.17.4"
+    PKG_VERSION="3.17.8"
     PKG_URL="http://www.kernel.org/pub/linux/kernel/v3.x/$PKG_NAME-$PKG_VERSION.tar.xz"
     ;;
 esac
@@ -32,7 +36,7 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kernel.org"
 PKG_DEPENDS_HOST="ccache:host"
-PKG_DEPENDS_TARGET="toolchain cpio:host kmod:host pciutils xz:host wireless-regdb"
+PKG_DEPENDS_TARGET="toolchain cpio:host kmod:host pciutils xz:host wireless-regdb keyutils"
 PKG_DEPENDS_INIT="toolchain"
 PKG_NEED_UNPACK="$LINUX_DEPENDS"
 PKG_PRIORITY="optional"
@@ -133,6 +137,7 @@ make_target() {
   rm -f $INSTALL/lib/modules/*/source
 
   ( cd $ROOT
+    rm -rf $ROOT/$BUILD/initramfs
     $SCRIPTS/install initramfs
   )
 
@@ -176,7 +181,17 @@ makeinstall_target() {
   if [ "$BOOTLOADER" = "u-boot" ]; then
     mkdir -p $INSTALL/usr/share/bootloader
     for dtb in arch/arm/boot/dts/*.dtb; do
-      cp $dtb $INSTALL/usr/share/bootloader
+      cp $dtb $INSTALL/usr/share/bootloader 2>/dev/null || :
+    done
+  elif [ "$BOOTLOADER" = "bcm2835-bootloader" ]; then
+    mkdir -p $INSTALL/usr/share/bootloader/overlays
+    touch $INSTALL/usr/share/bootloader/overlays/README.TXT
+    for dtb in arch/arm/boot/dts/*.dtb; do
+      if `echo "$dtb" | grep ".*/bcm2[^/]*$" >/dev/null`; then
+        cp $dtb $INSTALL/usr/share/bootloader 2>/dev/null || :
+      else
+        cp $dtb $INSTALL/usr/share/bootloader/overlays 2>/dev/null || :
+      fi
     done
   fi
 

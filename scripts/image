@@ -203,7 +203,13 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
     KERNEL_ARCH="arm"
   fi
 
-  cp -PR $BUILD/linux-*/arch/$KERNEL_ARCH/boot/$KERNEL_IMAGE $TARGET_IMG/$IMAGE_NAME.kernel
+  if [ "$BOOTLOADER" = "bcm2835-bootloader" ]; then
+    echo "injecting DeviceTreeBlobs to kernel..."
+    perl scripts/mkknlimg $BUILD/linux-*/arch/$KERNEL_ARCH/boot/$KERNEL_IMAGE $TARGET_IMG/$IMAGE_NAME.kernel
+    echo "...done"
+  else
+    cp -PR $BUILD/linux-*/arch/$KERNEL_ARCH/boot/$KERNEL_IMAGE $TARGET_IMG/$IMAGE_NAME.kernel
+  fi
   chmod 0644 $TARGET_IMG/$IMAGE_NAME.kernel
 
 # create squashfs file
@@ -294,7 +300,7 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
         echo "mkimage: see scripts/image and scripts/mkimage if you dont trust us :)"
         # variables used in image script must be passed
         sudo env \
-          PATH="$PATH" \
+          PATH="$PATH:/sbin" \
           ROOT="$ROOT" \
           TOOLCHAIN="$TOOLCHAIN" \
           TARGET_IMG="$TARGET_IMG" \
@@ -333,6 +339,9 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
           -e "s%@DESCRIPTION@%$DESCRIPTION%g" \
           -i $RELEASE_DIR/os.json
 
+      sed -e "s%@DISTRONAME@%$DISTRONAME%g" \
+          -i $RELEASE_DIR/partitions.json
+
     # create System dir
       mkdir -p $RELEASE_DIR/System
 
@@ -351,6 +360,15 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
         cp $TARGET_IMG/$IMAGE_NAME.system $RELEASE_DIR/System/SYSTEM
         cp $TARGET_IMG/$IMAGE_NAME.kernel $RELEASE_DIR/System/kernel.img
 
+        if [ -f $INSTALL/usr/share/bootloader/*.dtb ]; then
+          cp -PR $INSTALL/usr/share/bootloader/*.dtb $RELEASE_DIR/System
+        fi
+
+        if [ -f $INSTALL/usr/share/bootloader/overlays/* ]; then
+          mkdir -p $RELEASE_DIR/System/overlays
+          cp -PR $INSTALL/usr/share/bootloader/overlays/* $RELEASE_DIR/System/overlays
+        fi
+
       # create md5sum's
         ( cd $RELEASE_DIR/System;
           md5sum -t SYSTEM > SYSTEM.md5;
@@ -366,12 +384,12 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
       mkdir -p $RELEASE_DIR/Storage
 
     # remove an previous created release tarball
-      rm -rf $RELEASE_DIR/System.tar.xz
-      rm -rf $RELEASE_DIR/Storage.tar.xz
+      rm -rf $RELEASE_DIR/${DISTRONAME}System.tar.xz
+      rm -rf $RELEASE_DIR/${DISTRONAME}Storage.tar.xz
 
     # create filesystem tarballs
-      tar cJf $RELEASE_DIR/System.tar.xz -C $RELEASE_DIR/System/ .
-      tar cJf $RELEASE_DIR/Storage.tar.xz -C $RELEASE_DIR/Storage/ .
+      tar cJf $RELEASE_DIR/${DISTRONAME}System.tar.xz -C $RELEASE_DIR/System/ .
+      tar cJf $RELEASE_DIR/${DISTRONAME}Storage.tar.xz -C $RELEASE_DIR/Storage/ .
 
     # remove an filesystem dirs
       rm -rf $RELEASE_DIR/System

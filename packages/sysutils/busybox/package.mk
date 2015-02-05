@@ -26,7 +26,6 @@ PKG_URL="http://busybox.net/downloads/$PKG_NAME-$PKG_VERSION.tar.bz2"
 PKG_DEPENDS_HOST=""
 PKG_DEPENDS_TARGET="toolchain busybox:host hdparm dosfstools e2fsprogs zip unzip pciutils usbutils parted"
 PKG_DEPENDS_INIT="toolchain"
-PKG_NEED_UNPACK="packages/sysutils/busybox/config/*"
 PKG_PRIORITY="required"
 PKG_SECTION="system"
 PKG_SHORTDESC="BusyBox: The Swiss Army Knife of Embedded Linux"
@@ -100,6 +99,10 @@ configure_target() {
 
     # set install dir
     sed -i -e "s|^CONFIG_PREFIX=.*$|CONFIG_PREFIX=\"$INSTALL\"|" .config
+
+    if [ ! "$DEVTOOLS" = yes ]; then
+      sed -i -e "s|^CONFIG_DEVMEM=.*$|# CONFIG_DEVMEM is not set|" .config
+    fi
 
     if [ ! "$CRON_SUPPORT" = "yes" ] ; then
       sed -i -e "s|^CONFIG_CROND=.*$|# CONFIG_CROND is not set|" .config
