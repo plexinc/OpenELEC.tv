@@ -30,8 +30,8 @@ case $PROJECT in
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa"
 	;;
 	RPi|RPi2)
-		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc gstreamer gst-plugins-base gst-plugins-good gst-omx gst-plugins-bad gst-plugins-ugly alsa"
-		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc gstreamer gst-plugins-base gst-plugins-good gst-omx gst-plugins-bad gst-plugins-ugly alsa"
+		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc  alsa"
+		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc alsa"
 
 	;;
 esac
@@ -60,7 +60,7 @@ case $PROJECT in
 							-make libs \
 							-nomake tests"
 	;;
-	RPi|RPi2)
+	RPi)
 		PKG_CONFIGURE_OPTS="\
 							-prefix ${ROOT}/${BUILD}/image/system/usr \
 							-hostprefix ${SYSROOT_PREFIX}/usr \
@@ -80,9 +80,33 @@ case $PROJECT in
 							-I $SYSROOT_PREFIX/usr/include/glib-2.0 \
 							-I $SYSROOT_PREFIX/usr/lib/glib-2.0/include \
 							-make libs \
-							-make examples \
+							-nomake examples \
 							-nomake tests"
 	;;
+
+ 	RPi2)
+                PKG_CONFIGURE_OPTS="\
+                                                        -prefix ${ROOT}/${BUILD}/image/system/usr \
+                                                        -hostprefix ${SYSROOT_PREFIX}/usr \
+                                                        -release \
+                                                        -v \
+                                                        -opensource \
+                                                        -confirm-license \
+                                                        -no-pch \
+                                                        -no-rpath \
+                                                        -optimized-qmake \
+                                                        -skip qtwebkit \
+                                                        -device linux-rasp-pi-g++ \
+                                                        -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7a-openelec-linux-gnueabi-
+                                                        -opengl es2\
+                                                        -I $SYSROOT_PREFIX/usr/include/interface/vmcs_host \
+                                                        -I $SYSROOT_PREFIX/usr/include/gstreamer-1.0 \
+                                                        -I $SYSROOT_PREFIX/usr/include/glib-2.0 \
+                                                        -I $SYSROOT_PREFIX/usr/lib/glib-2.0/include \
+                                                        -make libs \
+                                                        -nomake examples \
+                                                        -nomake tests"
+        ;;
 esac
 
 unpack() {
