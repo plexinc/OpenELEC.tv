@@ -1,0 +1,15 @@
+--- a/qtbase/mkspecs/devices/linux-rasp-pi-g++/qmake.conf	2014-12-05 08:24:38.000000000 -0800
++++ b/qtbase/mkspecs/devices/linux-rasp-pi-g++/qmake.conf	2015-02-05 12:48:42.240278498 -0800
+@@ -29,9 +29,9 @@
+ 
+ QMAKE_CFLAGS           += \
+                           -marm \
+-                          -mfpu=vfp \
+-                          -mtune=arm1176jzf-s \
+-                          -march=armv6zk \
++                          -mfpu=neon \
++                          -mtune=cortex-a7 \
++                          -march=armv7-a \
+                           -mabi=aapcs-linux
+ 
+ QMAKE_CXXFLAGS          = $$QMAKE_CFLAGS
