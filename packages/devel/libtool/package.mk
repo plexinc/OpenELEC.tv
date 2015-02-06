@@ -34,4 +34,4 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 PKG_CONFIGURE_OPTS_HOST="--enable-static --disable-shared HELP2MAN=/bin/true"
-
+PKG_CONFIGURE_OPTS_TARGET="--enable-static --disable-shared HELP2MAN=/bin/true"
