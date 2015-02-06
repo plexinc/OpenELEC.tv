@@ -104,6 +104,7 @@ case $PROJECT in
                                                         -I $SYSROOT_PREFIX/usr/include/glib-2.0 \
                                                         -I $SYSROOT_PREFIX/usr/lib/glib-2.0/include \
                                                         -make libs \
+                                                        -static \
                                                         -nomake examples \
                                                         -nomake tests"
         ;;
