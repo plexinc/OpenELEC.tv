@@ -17,7 +17,16 @@
 ################################################################################
 
 PKG_NAME="konvergo"
-PKG_VERSION="0.1"
+
+case $PROJECT in
+     Generic)
+     PKG_VERSION="0.1"
+     ;;
+     RPi|RPi2)
+     PKG_VERSION="0.1-rpi2"
+     ;;
+esac
+
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
