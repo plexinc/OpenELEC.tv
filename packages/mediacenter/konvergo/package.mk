@@ -60,7 +60,7 @@ configure_target() {
         	;;
 
         	RPi|RPi2)
-		cmake -DCMAKE_BUILD_TYPE=Debug -DQTROOT=${ROOT}/${BUILD}/image/system/usr -DUSE_QTQUICK=on -DENABLE_MPV=off -DENABLE_OMX=on
+		cmake -DCMAKE_BUILD_TYPE=Debug -DQTROOT=${SYSROOT_PREFIX}/usr -DUSE_QTQUICK=on -DENABLE_MPV=off -DENABLE_OMX=on
         	;;
 	esac
 }
