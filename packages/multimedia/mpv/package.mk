@@ -36,16 +36,12 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-cplayer --disable-ap
 
 configure_target() {
 
-	pushd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 	./bootstrap.py
         ./waf configure ${PKG_CONFIGURE_OPTS_TARGET}
-        popd
 }
 
 make_target() {
-	pushd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
         ./waf build
-        popd
 }
 
 pre_install() {
@@ -54,7 +50,5 @@ pre_install() {
 
 makeinstall_target() {
 
-	pushd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
         ./waf install
-        popd
 }
