@@ -1,0 +1,10 @@
+--- a/scrlib/stdio.in.h	2011-08-07 06:42:06.000000000 -0700
++++ b/srclib/stdio.in.h	2015-02-08 07:21:17.588555895 -0800
+@@ -695,7 +695,6 @@
+ /* It is very rare that the developer ever has full control of stdin,
+    so any use of gets warrants an unconditional warning.  Assume it is
+    always declared, since it is required by C89.  */
+-_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+ #endif
+ 
+ 
