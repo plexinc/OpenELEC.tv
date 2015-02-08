@@ -52,8 +52,7 @@ case $PROJECT in
 esac
 
 configure_target() {
-
-	pushd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 
 	case $PROJECT in
         	Generic)
@@ -64,35 +63,4 @@ configure_target() {
 		cmake -DCMAKE_BUILD_TYPE=Debug -DQTROOT=${ROOT}/${BUILD}/image/system/usr -DUSE_QTQUICK=on -DENABLE_MPV=off -DENABLE_OMX=on
         	;;
 	esac
-
-	popd
 }
-
-make_target() {
-  	make
-}
-
-makeinstall_target() {
-        case $PROJECT in
-                Generic)
-                        pushd ${ROOT}/${PKG_BUILD}
-                        make install
-                        popd
-                ;;
-                RPi|RPi2)
-                        unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
-                        export QT_FORCE_PKGCONFIG=yes
-                        unset QMAKESPEC
-
-                        pushd ${ROOT}/${PKG_BUILD}
-                        make install
-                        popd
-                ;;
-        esac
-}
-
-pre_install() {
-        makeinstall_target
-}
-
-
