@@ -88,6 +88,7 @@ case $PROJECT in
                 PKG_CONFIGURE_OPTS="\
                                                         -prefix ${ROOT}/${BUILD}/image/system/usr \
                                                         -hostprefix ${SYSROOT_PREFIX}/usr \
+                                                        -sysroot ${SYSROOT_PREFIX}
                                                         -release \
                                                         -v \
                                                         -opensource \
