@@ -1,0 +1,13 @@
+--- a/qtbase/mkspecs/devices/linux-rasp-pi-g++/qmake.conf       2014-12-05 08:24:38.000000000 -0800
++++ b/qtbase/mkspecs/devices/linux-rasp-pi-g++/qmake.conf       2015-02-05 12:48:42.240278498 -0800
+@@ -11,7 +11,9 @@
+ 
+ QMAKE_INCDIR_EGL        = $$[QT_SYSROOT]/opt/vc/include \
+                           $$[QT_SYSROOT]/opt/vc/include/interface/vcos/pthreads \
+-                          $$[QT_SYSROOT]/opt/vc/include/interface/vmcs_host/linux
++                          $$[QT_SYSROOT]/opt/vc/include/interface/vmcs_host/linux \
++                          ##SYSROOT_PREFIX##
++
+ QMAKE_INCDIR_OPENGL_ES2 = $${QMAKE_INCDIR_EGL}
+ 
+ QMAKE_LIBS_EGL          = -lEGL -lGLESv2
