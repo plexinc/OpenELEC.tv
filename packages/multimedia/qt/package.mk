@@ -21,8 +21,8 @@ PKG_VERSION="5.4.0"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
-PKG_SITE="http://qt-project.org"
-PKG_URL="http://download.qt-project.org/official_releases/qt/5.4/$PKG_VERSION/single/qt-everywhere-opensource-src-$PKG_VERSION.tar.gz"
+PKG_SITE="https://nightlies.plex.tv"
+PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-everywhere-opensource-src-$PKG_VERSION.tar.gz"
 
 case $PROJECT in
 	Generic)
