@@ -86,7 +86,7 @@ case $PROJECT in
 
  	RPi2)
                 PKG_CONFIGURE_OPTS="\
-                                                        -prefix ${ROOT}/${BUILD}/image/system/usr \
+                                                        -prefix ${SYSROOT_PREFIX}/usr \
                                                         -hostprefix ${SYSROOT_PREFIX}/usr \
                                                         -sysroot ${SYSROOT_PREFIX}
                                                         -release \
