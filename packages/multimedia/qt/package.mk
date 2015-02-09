@@ -17,7 +17,7 @@
 #  ################################################################################
 
 PKG_NAME="qt"
-PKG_VERSION="5.4.0"
+PKG_VERSION="5.4.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -48,6 +48,7 @@ case $PROJECT in
 	Generic)
 		PKG_CONFIGURE_OPTS="\
 							-sysroot ${SYSROOT_PREFIX} \
+							-prefix ${SYSROOT_PREFIX}/usr \
 							-release \
 							-opensource \
 							-confirm-license \
@@ -62,6 +63,7 @@ case $PROJECT in
  	RPi|RPi2)
                 PKG_CONFIGURE_OPTS="\
                                                         -sysroot ${SYSROOT_PREFIX} \
+                                                        -prefix ${SYSROOT_PREFIX}/usr \
                                                         -release \
                                                         -v \
                                                         -opensource \
