@@ -23,7 +23,7 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://nightlies.plex.tv"
 PKG_URL="$PKG_SITE/plex-oe-sources/icu4c-$PKG_VERSION-src.tgz"
-PKG_DEPENDS_TARGET="toolchain"
+PKG_DEPENDS_TARGET="toolchain icu:host"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="LibICU"
@@ -32,7 +32,8 @@ PKG_LONGDESC="ICU is a mature, widely used set of C/C++ and Java libraries provi
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-PKG_CONFIGURE_OPTS_TARGET="--disable-samples --with-cross-build"
+PKG_CONFIGURE_OPTS_HOST="--disable-samples --disable-test"
+PKG_CONFIGURE_OPTS_TARGET="--disable-samples  --disable-test --with-cross-build ${SYSROOT_PREFIX}"
 
 unpack() {
 
