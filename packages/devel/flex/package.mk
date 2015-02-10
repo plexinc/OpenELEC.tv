@@ -24,6 +24,7 @@ PKG_LICENSE="GPL"
 PKG_SITE="http://flex.sourceforge.net/"
 PKG_URL="$SOURCEFORGE_SRC/flex/$PKG_NAME-$PKG_VERSION.tar.bz2"
 PKG_DEPENDS_HOST="ccache:host"
+PKG_DEPENDS_TARGET="ccache:host"
 PKG_PRIORITY="optional"
 PKG_SECTION="toolchain/devel"
 PKG_SHORTDESC="flex: Fast lexical analyzer generator"
@@ -33,6 +34,7 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 PKG_CONFIGURE_OPTS_HOST="--enable-static --disable-shared --disable-rpath --with-gnu-ld"
+PKG_CONFIGURE_OPTS_TARGET="--enable-static --disable-shared --disable-rpath --with-gnu-ld"
 
 post_makeinstall_host() {
   cat > $ROOT/$TOOLCHAIN/bin/lex << "EOF"
