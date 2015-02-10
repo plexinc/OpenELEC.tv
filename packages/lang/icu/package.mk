@@ -32,8 +32,8 @@ PKG_LONGDESC="ICU is a mature, widely used set of C/C++ and Java libraries provi
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-PKG_CONFIGURE_OPTS_HOST="--disable-samples --disable-test"
-PKG_CONFIGURE_OPTS_TARGET="--disable-samples  --disable-test --with-cross-build ${SYSROOT_PREFIX}"
+PKG_CONFIGURE_OPTS_HOST="--disable-samples --disable-test --prefix=$PWD/icu_host"
+PKG_CONFIGURE_OPTS_TARGET="--disable-samples  --disable-test --with-cross-build=$ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/icu_host"
 
 unpack() {
 
@@ -43,3 +43,8 @@ unpack() {
         
 }
 
+configure_host() {
+	mkdir $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/icu_host
+	cd $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/icu_host
+	$ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/runConfigureICU Linux --prefix=$ROOT/$TOOLCHAIN --enable-extras=no --enable-tests=no --enable-samples=no
+}
