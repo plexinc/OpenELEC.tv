@@ -17,7 +17,7 @@
 #  ################################################################################
 
 PKG_NAME="qt"
-PKG_VERSION="5.4.1"
+PKG_VERSION="5.4.0"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -63,7 +63,7 @@ case $PROJECT in
  	RPi|RPi2)
                 PKG_CONFIGURE_OPTS="\
                                                         -sysroot ${SYSROOT_PREFIX} \
-                                                        -prefix ${SYSROOT_PREFIX}/usr \
+                                                        -prefix ${SYSROOT_PREFIX}/usr/local/qt5 \
                                                         -release \
                                                         -v \
                                                         -opensource \
@@ -71,7 +71,6 @@ case $PROJECT in
                                                         -no-pch \
                                                         -no-rpath \
                                                         -optimized-qmake \
-                                                        -skip qtwebkit \
                                                         -device linux-rasp-pi-g++ \
                                                         -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7a-openelec-linux-gnueabi-
                                                         -opengl es2\
