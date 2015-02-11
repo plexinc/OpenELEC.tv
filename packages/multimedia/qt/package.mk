@@ -92,6 +92,11 @@ unpack() {
 	
 }
 
+pre_configure_target() {
+   cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+   sed -i "s,##SYSROOT_PREFIX##,${SYSROOT_PREFIX}/usr/include,g" qtbase/src/gui/gui.pro 
+}
+
 configure_target() {
 
 	case $PROJECT in

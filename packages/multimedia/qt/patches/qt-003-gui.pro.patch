@@ -4,7 +4,7 @@
  
      contains(QT_CONFIG, opengles2) {
          !isEmpty(QMAKE_INCDIR_OPENGL_ES2): CMAKE_GL_INCDIRS = $$cmakeTargetPaths($$QMAKE_INCDIR_OPENGL_ES2)
-+	CMAKE_GL_INCDIRS+=" /home/pi/OpenELEC.tv/build.OpenELEC-RPi2.arm-5.0.1/toolchain/armv7a-openelec-linux-gnueabi/sysroot/usr/include"
++	CMAKE_GL_INCDIRS+=" ##SYSROOT_PREFIX##"
          CMAKE_OPENGL_INCDIRS = $$cmakePortablePaths($$QMAKE_INCDIR_OPENGL_ES2)
          CMAKE_OPENGL_LIBS = $$cmakeProcessLibs($$QMAKE_LIBS_OPENGL_ES2)
          !isEmpty(QMAKE_LIBDIR_OPENGL_ES2): CMAKE_OPENGL_LIBDIR = $$cmakePortablePaths($$QMAKE_LIBDIR_OPENGL_ES2)
