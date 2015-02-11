@@ -54,8 +54,7 @@ esac
 unpack() {
 
         mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
-        cd $BUILD/${PKG_NAME}-${PKG_VERSION}
-        git clone -b $PKG_VERSION git@github.com:plexinc/konvergo.git --depth=1 .
+        git clone -b $PKG_VERSION git@github.com:plexinc/konvergo.git --depth=1 $BUILD/${PKG_NAME}-${PKG_VERSION}/.
 	
 }
 
