@@ -20,10 +20,10 @@ PKG_NAME="konvergo"
 
 case $PROJECT in
      Generic)
-     PKG_VERSION="0.1"
+     PKG_VERSION="master"
      ;;
      RPi|RPi2)
-     PKG_VERSION="0.1-rpi2"
+     PKG_VERSION="Konvergo_RPi2"
      ;;
 esac
 
@@ -31,7 +31,7 @@ PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://nightlies.plex.tv"
-PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
 PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libiconv libcec mpv SDL2"
 PKG_DEPENDS_HOST="toolchain"
 PKG_PRIORITY="optional"
@@ -50,6 +50,19 @@ case $PROJECT in
     PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET omxplayer"
   ;;
 esac
+
+unpack() {
+
+        if [ ! -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
+          mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
+        fi
+        cd $BUILD/${PKG_NAME}-${PKG_VERSION}
+        if [ "`pwd`" == "$BUILD/${PKG_NAME}-${PKG_VERSION}" ]; then
+          rm -rf * .*
+        fi
+        git clone -b $PKG_VERSION git@github.com:plexinc/konvergo.git --depth=1 .
+	
+}
 
 configure_target() {
         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
