@@ -63,7 +63,7 @@ case $PROJECT in
  	RPi|RPi2)
                 PKG_CONFIGURE_OPTS="\
                                                         -sysroot ${SYSROOT_PREFIX} \
-                                                        -prefix ${SYSROOT_PREFIX}/usr/local/qt5 \
+                                                        -extprefix ${SYSROOT_PREFIX}/usr/local/qt5 \
                                                         -release \
                                                         -v \
                                                         -opensource \
