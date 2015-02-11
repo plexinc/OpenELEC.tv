@@ -53,13 +53,8 @@ esac
 
 unpack() {
 
-        if [ ! -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
-          mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
-        fi
+        mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
         cd $BUILD/${PKG_NAME}-${PKG_VERSION}
-        if [ "`pwd`" == "$BUILD/${PKG_NAME}-${PKG_VERSION}" ]; then
-          rm -rf * .*
-        fi
         git clone -b $PKG_VERSION git@github.com:plexinc/konvergo.git --depth=1 .
 	
 }
