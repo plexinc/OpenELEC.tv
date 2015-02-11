@@ -32,7 +32,7 @@ PKG_LONGDESC="
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-cplayer --disable-apple-remote --prefix=${ROOT}/${BUILD}/image/system/usr"
+PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-cplayer --disable-apple-remote --prefix=${SYSROOT_PREFIX}/usr"
 
 configure_target() {
 
