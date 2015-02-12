@@ -32,7 +32,7 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://nightlies.plex.tv"
 PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
-PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libiconv libcec mpv SDL2"
+PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libiconv libX11 xrandr libcec mpv SDL2"
 PKG_DEPENDS_HOST="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="mediacenter"
@@ -76,7 +76,8 @@ configure_target() {
 			-DCMAKE_FIND_ROOT_PATH="${SYSROOT_PREFIX}/usr/local/qt5" \
 			-DUSE_QTQUICK=on \
 			-DENABLE_MPV=on \
-			-DENABLE_OMX=on
+			-DENABLE_OMX=on \
+			-DCMAKE_VERBOSE_MAKEFILE=on
         	;;
 	esac
 }
