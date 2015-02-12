@@ -61,9 +61,24 @@ unpack() {
 configure_target() {
         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 
+        # Create seperate config build dir to not work in the github tree
+        [ ! -d config ] && mkdir config
+        cd config
+
+        # Configure the build
 	case $PROJECT in
         	Generic)
-		cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" -DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX}" -DCMAKE_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include" -DQTROOT=${SYSROOT_PREFIX}/usr/local/qt5 -DUSE_QTQUICK=on -DENABLE_MPV=on
+		cmake \
+                        -DCMAKE_BUILD_TYPE=Debug \
+                        -DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
+                        -DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
+                        -DCMAKE_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include" \
+                        -DQTROOT=${SYSROOT_PREFIX}/usr/local/qt5 \
+                        -DCMAKE_FIND_ROOT_PATH="${SYSROOT_PREFIX}/usr/local/qt5" \
+                        -DUSE_QTQUICK=on \
+                        -DENABLE_MPV=on \
+                        -DCMAKE_VERBOSE_MAKEFILE=on \
+                        $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
 
         	RPi|RPi2)
@@ -77,7 +92,12 @@ configure_target() {
 			-DUSE_QTQUICK=on \
 			-DENABLE_MPV=on \
 			-DENABLE_OMX=on \
-			-DCMAKE_VERBOSE_MAKEFILE=on
+			-DCMAKE_VERBOSE_MAKEFILE=on \
+                        $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
 	esac
+}
+
+makeinstall_target() {
+ echo "Dummy Make Instal"
 }
