@@ -30,7 +30,7 @@ case $PROJECT in
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa"
 	;;
 	RPi|RPi2)
-		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu"
+		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite"
 		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc alsa"
 
 	;;
@@ -68,18 +68,12 @@ case $PROJECT in
                                                         -v \
                                                         -opensource \
                                                         -confirm-license \
-                                                        -no-pch \
-                                                        -no-rpath \
                                                         -optimized-qmake \
+							-shared \
                                                         -device linux-rasp-pi-g++ \
                                                         -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7a-openelec-linux-gnueabi-
                                                         -opengl es2\
-                                                        -I $SYSROOT_PREFIX/usr/include/interface/vmcs_host \
-                                                        -I $SYSROOT_PREFIX/usr/include/gstreamer-1.0 \
-                                                        -I $SYSROOT_PREFIX/usr/include/glib-2.0 \
-                                                        -I $SYSROOT_PREFIX/usr/lib/glib-2.0/include \
                                                         -make libs \
-                                                        -static \
                                                         -nomake examples \
                                                         -nomake tests"
         ;;
