@@ -52,5 +52,8 @@ makeinstall_target() {
 	mkdir -p $INSTALL/usr/lib
         cp ${SYSROOT_PREFIX}/usr/lib/libmpv.so ${INSTALL}/usr/lib
 
+	cd ${INSTALL}/usr/lib/
+	ln -s libmpv.so libmpv.so.1
+
         cd ${ROOT}
 }
