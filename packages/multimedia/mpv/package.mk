@@ -48,5 +48,9 @@ make_target() {
 makeinstall_target() {
         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
         ./waf install
+
+	mkdir -p $INSTALL/usr/lib
+        cp ${SYSROOT_PREFIX}/usr/lib/libmpv.so ${INSTALL}/usr/lib
+
         cd ${ROOT}
 }
