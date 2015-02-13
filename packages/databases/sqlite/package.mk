@@ -65,7 +65,7 @@ PKG_AUTORECONF="yes"
 
 
 PKG_CONFIGURE_OPTS_TARGET="--enable-static \
-                           --disable-shared \
+                           --enable-shared \
                            --disable-readline \
                            --enable-threadsafe \
                            --enable-dynamic-extensions \

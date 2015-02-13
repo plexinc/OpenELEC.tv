@@ -35,20 +35,18 @@ PKG_AUTORECONF="no"
 PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-cplayer --disable-apple-remote --prefix=${SYSROOT_PREFIX}/usr"
 
 configure_target() {
-
+        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 	./bootstrap.py
         ./waf configure ${PKG_CONFIGURE_OPTS_TARGET}
 }
 
 make_target() {
+        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
         ./waf build
 }
 
-pre_install() {
-        makeinstall_target
-}
-
 makeinstall_target() {
-
+        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
         ./waf install
+        cd ${ROOT}
 }

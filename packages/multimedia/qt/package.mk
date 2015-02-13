@@ -75,6 +75,7 @@ case $PROJECT in
                                                         -opengl es2\
                                                         -make libs \
                                                         -nomake examples \
+                                                        -no-pch \
                                                         -nomake tests"
         ;;
 esac
