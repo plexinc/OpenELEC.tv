@@ -99,5 +99,10 @@ configure_target() {
 }
 
 makeinstall_target() {
- echo "Dummy Make Instal"
+
+  	mkdir -p $INSTALL/usr/bin
+        cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config/src/Konvergo ${INSTALL}/usr/bin/
+
+	mkdir -p $INSTALL/usr/share/konvergo
+	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/konvergo
 }
