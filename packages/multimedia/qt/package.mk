@@ -30,7 +30,7 @@ case $PROJECT in
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa"
 	;;
 	RPi|RPi2)
-		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite"
+		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libpng libxcb"
 		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc alsa"
 
 	;;
@@ -116,4 +116,13 @@ configure_target() {
 			./configure ${PKG_CONFIGURE_OPTS}
 		;;
 	esac
+}
+
+makeinstall_target() {
+
+	cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+	make install
+
+	mkdir -p $INSTALL/usr/lib
+	cp ${SYSROOT_PREFIX}/usr/local/qt5/lib/lib* ${INSTALL}/usr/lib
 }
