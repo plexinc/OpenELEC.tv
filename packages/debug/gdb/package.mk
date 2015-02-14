@@ -53,7 +53,6 @@ PKG_CONFIGURE_OPTS_TARGET="bash_cv_have_mbstate_t=set \
                            --disable-libquadmath-support \
                            --enable-libada \
                            --enable-libssp \
-                           --prefix=${SYSROOT_PREFIX}/usr \
                            --disable-werror"
 
 
@@ -86,10 +85,10 @@ make_target() {
 makeinstall_target() {
 
                         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
-                        make install
-                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdb/gdbserver
-                        make install
+                        make install prefix=$INSTALL/usr
 
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdb/gdbserver
+                        make install prefix=$INSTALL/usr
 }
 
 post_makeinstall_target() {
