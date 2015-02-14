@@ -53,15 +53,24 @@ PKG_CONFIGURE_OPTS_TARGET="bash_cv_have_mbstate_t=set \
                            --disable-libquadmath-support \
                            --enable-libada \
                            --enable-libssp \
+                           --prefix=${SYSROOT_PREFIX}/usr \
                            --disable-werror"
 
+
+case $PROJECT in
+        Generic)
+        ;;
+        RPi|RPi2)
+                PKG_CONFIGURE_OPTS_TARGET="${PKG_CONFIGURE_OPTS_TARGET} --host=arm-none-linux-gnueabi"
+        ;;
+esac
 
 configure_target() {
 
 			cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
-			./configure ${PKG_CONFIGURE_OPTS}
-                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdbserver
-                        ./configure ${PKG_CONFIGURE_OPTS}
+			./configure ${PKG_CONFIGURE_OPTS_TARGET}
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdb/gdbserver
+                        ./configure ${PKG_CONFIGURE_OPTS_TARGET}
 
 }
 
@@ -69,7 +78,7 @@ make_target() {
 
                         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
                         make 
-                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdbserver
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdb/gdbserver
                         make
 
 }
@@ -78,7 +87,7 @@ makeinstall_target() {
 
                         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
                         make install
-                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdbserver
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdb/gdbserver
                         make install
 
 }
