@@ -66,7 +66,6 @@ case $PROJECT in
                                                         -extprefix ${SYSROOT_PREFIX}/usr/local/qt5 \
                                                         -release \
                                                         -v \
-							-qt-xcb \
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
