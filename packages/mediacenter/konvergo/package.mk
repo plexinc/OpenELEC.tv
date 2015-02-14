@@ -51,6 +51,11 @@ case $PROJECT in
   ;;
 esac
 
+#add gdb tools if we are in debug
+if [ "$DEBUG" = yes ]; then
+	PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} gdb"
+fi
+
 unpack() {
 
         mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
