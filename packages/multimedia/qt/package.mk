@@ -46,19 +46,19 @@ PKG_AUTORECONF="no"
 
 case $PROJECT in
 	Generic)
-		PKG_CONFIGURE_OPTS="\
-							-sysroot ${SYSROOT_PREFIX} \
-							-prefix ${SYSROOT_PREFIX}/usr \
-							-release \
-							-opensource \
-							-confirm-license \
-							-no-pch \
-							-no-rpath \
-							-optimized-qmake \
-							-skip qtwebkit \
-							-silent \
-							-make libs \
-							-nomake tests"
+                PKG_CONFIGURE_OPTS="\
+                                                        -sysroot ${SYSROOT_PREFIX} \
+                                                        -extprefix ${SYSROOT_PREFIX}/usr/local/qt5 \
+                                                        -release \
+                                                        -v \
+                                                        -opensource \
+                                                        -confirm-license \
+                                                        -optimized-qmake \
+                                                        -shared \
+                                                        -make libs \
+                                                        -nomake examples \
+                                                        -no-pch \
+                                                        -nomake tests"
 	;;
  	RPi|RPi2)
                 PKG_CONFIGURE_OPTS="\
