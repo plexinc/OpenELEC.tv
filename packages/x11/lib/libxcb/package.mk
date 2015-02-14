@@ -45,8 +45,5 @@ pre_configure_target() {
   PKG_CONFIG="$PKG_CONFIG --define-variable=pythondir=$PYTHON_TOOLCHAIN_PATH"
   PKG_CONFIG="$PKG_CONFIG --define-variable=xcbincludedir=$SYSROOT_PREFIX/usr/share/xcb"
 
-  mkdir -p $INSTALL/usr/lib
-        cp ${SYSROOT_PREFIX}/usr/lib/libxcb.so ${INSTALL}/usr/lib
-
   CFLAGS="$CFLAGS -fPIC -DPIC"
 }
