@@ -55,6 +55,34 @@ PKG_CONFIGURE_OPTS_TARGET="bash_cv_have_mbstate_t=set \
                            --enable-libssp \
                            --disable-werror"
 
+
+configure_target() {
+
+			cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+			./configure ${PKG_CONFIGURE_OPTS}
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdbserver
+                        ./configure ${PKG_CONFIGURE_OPTS}
+
+}
+
+make_target() {
+
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+                        make 
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdbserver
+                        make
+
+}
+
+makeinstall_target() {
+
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+                        make install
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdbserver
+                        make install
+
+}
+
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/share/gdb/python
 }
