@@ -73,8 +73,8 @@ configure_target() {
         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 
         # Create seperate config build dir to not work in the github tree
-        [ ! -d config ] && mkdir config
-        cd config
+        [ ! -d build ] && mkdir build
+        cd build
 
         # Configure the build
 	case $PROJECT in
@@ -112,7 +112,7 @@ configure_target() {
 makeinstall_target() {
 
   	mkdir -p $INSTALL/usr/bin
-        cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config/src/Konvergo ${INSTALL}/usr/bin/
+        cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/Konvergo ${INSTALL}/usr/bin/
 
 	mkdir -p $INSTALL/usr/share/konvergo
 	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/konvergo
