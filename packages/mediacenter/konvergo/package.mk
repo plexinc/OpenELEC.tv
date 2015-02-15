@@ -61,6 +61,12 @@ unpack() {
         mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
         git clone -b $PKG_VERSION git@github.com:plexinc/konvergo.git  $BUILD/${PKG_NAME}-${PKG_VERSION}/.
 	
+	if [ "$DEBUG" = yes ]; then
+		cd $BUILD/${PKG_NAME}-${PKG_VERSION}
+		git submodule update --init
+		cp $PKG_DIR/QtCreatorDeployment.txt $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/
+		cd $ROOT
+	fi	
 }
 
 configure_target() {
