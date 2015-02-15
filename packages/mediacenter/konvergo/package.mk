@@ -64,7 +64,13 @@ unpack() {
 	if [ "$DEBUG" = yes ]; then
 		cd $BUILD/${PKG_NAME}-${PKG_VERSION}
 		git submodule update --init
+
+		#This is used when using QtCreator from the build tree to deploy to /storage root
 		cp $PKG_DIR/QtCreatorDeployment.txt $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/
+
+		#This allows cross compiler to find the libs that are used by other libs for QT5 
+		cp $PKG_DIR/ld.so.conf $SYSROOT_PREFIX/etc/
+
 		cd $ROOT
 	fi	
 }
