@@ -51,19 +51,36 @@ case $PROJECT in
   ;;
 esac
 
+#add gdb tools if we are in debug
+if [ "$DEBUG" = yes ]; then
+	PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} gdb"
+fi
+
 unpack() {
 
         mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
         git clone -b $PKG_VERSION git@github.com:plexinc/konvergo.git  $BUILD/${PKG_NAME}-${PKG_VERSION}/.
 	
+	if [ "$DEBUG" = yes ]; then
+		cd $BUILD/${PKG_NAME}-${PKG_VERSION}
+		git submodule update --init
+
+		#This is used when using QtCreator from the build tree to deploy to /storage root
+		cp $PKG_DIR/QtCreatorDeployment.txt $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/
+
+		#This allows cross compiler to find the libs that are used by other libs for QT5 
+		cp $PKG_DIR/ld.so.conf $SYSROOT_PREFIX/etc/
+
+		cd $ROOT
+	fi	
 }
 
 configure_target() {
         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 
         # Create seperate config build dir to not work in the github tree
-        [ ! -d config ] && mkdir config
-        cd config
+        [ ! -d build ] && mkdir build
+        cd build
 
         # Configure the build
 	case $PROJECT in
@@ -101,7 +118,7 @@ configure_target() {
 makeinstall_target() {
 
   	mkdir -p $INSTALL/usr/bin
-        cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config/src/Konvergo ${INSTALL}/usr/bin/
+        cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/Konvergo ${INSTALL}/usr/bin/
 
 	mkdir -p $INSTALL/usr/share/konvergo
 	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/konvergo
