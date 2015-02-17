@@ -79,6 +79,7 @@ PKG_CONFIGURE_OPTS_TARGET="--without-ada \
 
 pre_configure_target() {
   # causes some segmentation fault's (dialog) when compiled with gcc's link time optimization.
+  CFLAGS="$CFLAGS -fPIC"
   strip_lto
 }
 

@@ -105,6 +105,8 @@ pre_configure_host() {
 }
 
 pre_configure_target() {
+#  strip_lto
+
   export CFLAGS="$CFLAGS -fPIC"
   export CXXFLAGS="$CXXFLAGS -fPIC"
 }

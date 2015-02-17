@@ -51,6 +51,7 @@ PKG_CONFIGURE_OPTS_TARGET="BASH_SHELL=/bin/sh \
                            --enable-obsolete-rpc \
                            --disable-build-nscd \
                            --disable-nscd \
+			   --enable-shared \
                            --enable-lock-elision"
 
 if [ "$DEBUG" = yes ]; then
