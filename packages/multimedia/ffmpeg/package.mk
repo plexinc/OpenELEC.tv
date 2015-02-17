@@ -149,7 +149,7 @@ configure_target() {
               --disable-w32threads \
               --disable-x11grab \
               --enable-network \
-              --disable-gnutls --enable-openssl \
+              --disable-gnutls --enable-openssl --enable-nonfree \
               --disable-gray \
               --enable-swscale-alpha \
               --disable-small \
