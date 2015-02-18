@@ -123,9 +123,6 @@ makeinstall_target() {
 	cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 	make install
 
-	mkdir -p $INSTALL/usr/lib
-	cp ${SYSROOT_PREFIX}/usr/local/qt5/lib/lib* ${INSTALL}/usr/lib
-
-	mkdir -p $INSTALL/usr/plugins
-	cp -R ${SYSROOT_PREFIX}/usr/local/qt5/plugins/* $INSTALL/usr/plugins/
+	mkdir -p $INSTALL/usr/
+	cp -R ${SYSROOT_PREFIX}/usr/local/qt5/* ${INSTALL}/usr/
 }
