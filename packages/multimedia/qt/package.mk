@@ -51,6 +51,7 @@ case $PROJECT in
                                                         -extprefix ${SYSROOT_PREFIX}/usr/local/qt5 \
                                                         -release \
                                                         -v \
+							-debug \
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
@@ -68,6 +69,7 @@ case $PROJECT in
                                                         -extprefix ${SYSROOT_PREFIX}/usr/local/qt5 \
                                                         -release \
                                                         -v \
+							-debug \
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
