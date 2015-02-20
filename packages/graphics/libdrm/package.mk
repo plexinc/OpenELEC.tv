@@ -52,6 +52,8 @@ for drv in $GRAPHIC_DRIVERS; do
     DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-nouveau/enable-nouveau/'`
 done
 
+. config/options $1
+
 PKG_CONFIGURE_OPTS_TARGET="--disable-udev \
                            --enable-largefile \
                            --with-kernel-source=$(kernel_path) \
