@@ -1,33 +1,29 @@
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
-#      Copyright (C) 2009-2012 Stephan Raue (stephan@openelec.tv)
+#      Copyright (C) 2009-2014 Stephan Raue (stephan@openelec.tv)
 #
-#  This Program is free software; you can redistribute it and/or modify
+#  OpenELEC is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2, or (at your option)
-#  any later version.
+#  the Free Software Foundation, either version 2 of the License, or
+#  (at your option) any later version.
 #
-#  This Program is distributed in the hope that it will be useful,
+#  OpenELEC is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with OpenELEC.tv; see the file COPYING.  If not, write to
-#  the Free Software Foundation, 51 Franklin Street, Suite 500, Boston, MA 02110, USA.
-#  http://www.gnu.org/copyleft/gpl.html
+#  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
 PKG_NAME="Mesa"
-PKG_VERSION="9.2.5"
+PKG_VERSION="10.4.4"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://www.mesa3d.org/"
-#PKG_URL="ftp://freedesktop.org/pub/mesa/$PKG_VERSION/MesaLib-$PKG_VERSION.tar.bz2"
-PKG_URL="ftp://freedesktop.org/pub/mesa/older-versions/9.x/$PKG_VERSION/MesaLib-$PKG_VERSION.tar.bz2"
-PKG_DEPENDS="libXdamage libdrm expat libXext libXfixes libX11"
-PKG_BUILD_DEPENDS_TARGET="toolchain Python-host makedepend:host libxml2-host expat glproto dri2proto libdrm libXext libXdamage libXfixes libXxf86vm libxcb libX11"
+PKG_URL="ftp://freedesktop.org/pub/mesa/$PKG_VERSION/MesaLib-$PKG_VERSION.tar.bz2"
+PKG_DEPENDS_TARGET="toolchain Python:host expat glproto dri2proto presentproto libdrm libXext libXdamage libXfixes libXxf86vm libxcb libX11 systemd dri3proto libxshmfence"
 PKG_PRIORITY="optional"
 PKG_SECTION="graphics"
 PKG_SHORTDESC="mesa: 3-D graphics library with OpenGL API"
@@ -40,31 +36,19 @@ PKG_AUTORECONF="yes"
   get_graphicdrivers
 
 if [ "$LLVM_SUPPORT" = "yes" ]; then
-  PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET llvm"
-  PKG_DEPENDS="$PKG_DEPENDS llvm"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET elfutils llvm"
   export LLVM_CONFIG="$SYSROOT_PREFIX/usr/bin/llvm-config-host"
-  MESA_GALLIUM_LLVM="--enable-gallium-llvm --with-llvm-shared-libs"
+  MESA_GALLIUM_LLVM="--enable-gallium-llvm --enable-llvm-shared-libs"
 else
   MESA_GALLIUM_LLVM="--disable-gallium-llvm"
 fi
 
-if [ "$MESA_VDPAU_SUPPORT" = "yes" ]; then
-  PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libvdpau"
-  PKG_DEPENDS="$PKG_DEPENDS libvdpau"
+if [ "$VDPAU_SUPPORT" = "yes" ]; then
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libvdpau"
   MESA_VDPAU="--enable-vdpau"
 else
   MESA_VDPAU="--disable-vdpau"
 fi
-
-if [ "$MESA_VAAPI_SUPPORT" = "yes" ]; then
-  PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libva"
-  PKG_DEPENDS="$PKG_DEPENDS libva"
-fi
-
-XA_CONFIG="--disable-xa"
-for drv in $GRAPHIC_DRIVERS; do
-  [ "$drv" = "vmware" ] && XA_CONFIG="--enable-xa"
-done
 
 PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            CXX_FOR_BUILD=$HOST_CXX \
@@ -79,36 +63,37 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --enable-asm \
                            --disable-selinux \
                            --enable-opengl \
-                           --enable-glx-tls \
                            --enable-driglx-direct \
                            --disable-gles1 \
                            --disable-gles2 \
                            --disable-openvg \
                            --enable-dri \
+                           --disable-dri3 \
                            --enable-glx \
                            --disable-osmesa \
-                           --disable-egl \
-                           --disable-xorg \
-                           $XA_CONFIG \
-                           --disable-gbm \
+                           --enable-egl --with-egl-platforms=x11,drm \
+                           --disable-xa \
+                           --enable-gbm \
+                           --disable-nine \
                            --disable-xvmc \
                            $MESA_VDPAU \
-                           --disable-opencl \
+                           --disable-omx \
+                           --disable-va \
+                           --disable-opencl --enable-opencl-icd \
                            --disable-xlib-glx \
-                           --disable-gallium-egl \
-                           --disable-gallium-gbm \
                            --disable-r600-llvm-compiler \
                            --disable-gallium-tests \
+                           --disable-gallium-osmesa \
                            --enable-shared-glapi \
-                           --disable-glx-tls \
-                           --disable-gallium-g3dvl \
+                           --enable-sysfs \
+                           --enable-glx-tls \
                            $MESA_GALLIUM_LLVM \
                            --disable-silent-rules \
                            --with-gl-lib-name=GL \
                            --with-osmesa-lib-name=OSMesa \
                            --with-gallium-drivers=$GALLIUM_DRIVERS \
                            --with-dri-drivers=$DRI_DRIVERS \
-                           --with-expat=$SYSROOT_PREFIX/usr"
+                           --with-sysroot=$SYSROOT_PREFIX"
 
 post_makeinstall_target() {
   # rename and relink for cooperate with nvidia drivers
