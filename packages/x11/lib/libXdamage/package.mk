@@ -1,21 +1,19 @@
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
-#      Copyright (C) 2009-2012 Stephan Raue (stephan@openelec.tv)
+#      Copyright (C) 2009-2014 Stephan Raue (stephan@openelec.tv)
 #
-#  This Program is free software; you can redistribute it and/or modify
+#  OpenELEC is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2, or (at your option)
-#  any later version.
+#  the Free Software Foundation, either version 2 of the License, or
+#  (at your option) any later version.
 #
-#  This Program is distributed in the hope that it will be useful,
+#  OpenELEC is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with OpenELEC.tv; see the file COPYING.  If not, write to
-#  the Free Software Foundation, 51 Franklin Street, Suite 500, Boston, MA 02110, USA.
-#  http://www.gnu.org/copyleft/gpl.html
+#  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
 PKG_NAME="libXdamage"
@@ -25,8 +23,7 @@ PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://www.X.org"
 PKG_URL="http://xorg.freedesktop.org/archive/individual/lib/$PKG_NAME-$PKG_VERSION.tar.bz2"
-PKG_DEPENDS="libX11 libXfixes"
-PKG_BUILD_DEPENDS_TARGET="toolchain util-macros damageproto fixesproto libX11 libXfixes"
+PKG_DEPENDS_TARGET="toolchain util-macros damageproto fixesproto libX11 libXfixes"
 PKG_PRIORITY="optional"
 PKG_SECTION="x11/lib"
 PKG_SHORTDESC="libXdamage: X11 damaged region extension library"
@@ -34,3 +31,9 @@ PKG_LONGDESC="LibXdamage provides an X Window System client interface to the DAM
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
+
+PKG_CONFIGURE_OPTS_TARGET="--enable-static --disable-shared"
+
+pre_configure_target() {
+  export CFLAGS="$CFLAGS -fPIC"
+}
