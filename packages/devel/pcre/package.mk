@@ -42,12 +42,18 @@ PKG_CONFIGURE_OPTS_TARGET="--disable-shared \
              --enable-static \
              --enable-utf8 \
              --enable-unicode-properties \
+	     --enable-pcre16 \
              --with-gnu-ld"
 
 pre_configure_target() {
   CFLAGS="$CFLAGS -fPIC"
   CXXFLAGS="$CXXFLAGS -fPIC"
   LDFLAGS="$LDFLAGS -fPIC"
+}
+
+makeinstall_target() {
+  make install DESTDIR=$ROOT/$TOOLCHAIN
+  make install DESTDIR=$SYSROOT_PREFIX
 }
 
 post_makeinstall_target() {
