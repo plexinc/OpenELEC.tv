@@ -30,8 +30,8 @@ case $PROJECT in
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa"
 	;;
 	RPi|RPi2)
-		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libxcb"
-		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa"
+		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libX11 xrandr libXdmcp libxslt libXcomposite libwebp"
+		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc alsa"
 
 	;;
 esac
@@ -75,7 +75,7 @@ case $PROJECT in
                                                         -optimized-qmake \
 							-shared \
                                                         -device linux-rasp-pi-g++ \
-                                                        -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7a-openelec-linux-gnueabi-
+                                                        -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7ve-openelec-linux-gnueabi-
                                                         -opengl es2\
                                                         -make libs \
                                                         -nomake examples \
