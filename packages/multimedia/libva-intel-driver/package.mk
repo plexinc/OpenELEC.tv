@@ -33,4 +33,10 @@ PKG_LONGDESC="libva-driver-intel: Intel G45+ driver for VAAPI"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
-PKG_CONFIGURE_OPTS_TARGET="--disable-silent-rules --with-drivers-path=/usr/lib/va"
+PKG_CONFIGURE_OPTS_TARGET="--host=$TARGET_NAME \
+            --build=$HOST_NAME \
+            --prefix=/usr \
+            --enable-shared \
+            --disable-static \
+            --disable-silent-rules \
+            --with-drivers-path=/usr/lib/va"

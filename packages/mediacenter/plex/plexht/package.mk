@@ -39,6 +39,11 @@ PKG_LONGDESC="Plex Home Theater, is blah blah blah blah"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+if [ "$PROJECT" = "Plex-Intel" ] || [ "$PROJECT" = "Plex-Intel-Pioneer" ] || [ "$PROJECT" = "Plex-Generic" ]; then
+  PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libva-intel-driver"
+  PKG_DEPENDS="$PKG_DEPENDS libva-intel-driver"
+fi
+
 # for dbus support
   PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET dbus"
   PKG_DEPENDS="$PKG_DEPENDS dbus"

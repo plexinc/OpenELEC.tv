@@ -32,15 +32,20 @@ PKG_LONGDESC="The main motivation for VAAPI (Video Acceleration API) is to enabl
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
-PKG_CONFIGURE_OPTS_TARGET="--disable-silent-rules \
-                           --disable-docs \
-                           --enable-drm \
-                           --enable-x11 \
-                           --enable-glx \
-                           --disable-egl \
-                           --disable-wayland \
-                           --disable-dummy-driver \
-                           --with-drivers-path=/usr/lib/va"
+PKG_CONFIGURE_OPTS_TARGET="--host=$TARGET_NAME \
+            --build=$HOST_NAME \
+            --prefix=/usr \
+            --enable-shared \
+            --disable-static \
+            --disable-silent-rules \
+            --disable-docs \
+            --enable-drm \
+            --enable-x11 \
+            --enable-glx \
+            --disable-egl \
+            --disable-wayland \
+            --disable-dummy-driver \
+            --with-drivers-path=/usr/lib/va"
 
 pre_configure_target() {
 # todo: libva fails to build in subdirs
