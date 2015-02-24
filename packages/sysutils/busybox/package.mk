@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="busybox"
-PKG_VERSION="1.22.1"
+PKG_VERSION="1.23.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -122,6 +122,9 @@ configure_target() {
     CFLAGS=`echo $CFLAGS | sed -e "s|-Ofast|-Os|"`
     CFLAGS=`echo $CFLAGS | sed -e "s|-O.|-Os|"`
 
+    # busybox fails to build with GOLD support enabled with binutils-2.25
+    strip_gold
+
     LDFLAGS="$LDFLAGS -fwhole-program"
 
     make oldconfig
@@ -137,6 +140,9 @@ configure_init() {
     # optimize for size
     CFLAGS=`echo $CFLAGS | sed -e "s|-Ofast|-Os|"`
     CFLAGS=`echo $CFLAGS | sed -e "s|-O.|-Os|"`
+
+    # busybox fails to build with GOLD support enabled with binutils-2.25
+    strip_gold
 
     LDFLAGS="$LDFLAGS -fwhole-program"
 
@@ -208,6 +214,9 @@ post_install() {
   add_group root 0
   add_group users 100
 
+  add_user nobody x 65534 65534 "Nobody" "/" "/bin/sh"
+  add_group nogroup 65534
+
   enable_service debug-shell.service
   enable_service shell.service
   enable_service show-version.service
@@ -235,6 +244,11 @@ makeinstall_init() {
   mkdir -p $INSTALL/etc
     touch $INSTALL/etc/fstab
     ln -sf /proc/self/mounts $INSTALL/etc/mtab
+
+  if [ -f $PROJECT_DIR/$PROJECT/initramfs/platform_init ]; then
+    cp $PROJECT_DIR/$PROJECT/initramfs/platform_init $INSTALL
+    chmod 755 $INSTALL/platform_init
+  fi
 
   cp $PKG_DIR/scripts/init $INSTALL
   chmod 755 $INSTALL/init
