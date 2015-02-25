@@ -15,8 +15,8 @@ PKG_LONGDESC="Ruby programming language"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
-PKG_CONFIGURE_OPTS_HOST="--without-gmp"
-#PKG_CONFIGURE_OPTS_TARGET="--with-baseruby"
+PKG_CONFIGURE_OPTS_HOST="--without-gmp --disable-install-rdoc"
+PKG_CONFIGURE_OPTS_TARGET="--disable-install-rdoc"
 
 pre_configure_host() {
   export OPT="$HOST_CFLAGS"
