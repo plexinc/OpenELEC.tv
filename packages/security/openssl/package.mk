@@ -108,4 +108,6 @@ post_makeinstall_target() {
     ln -sf $SSL_CERTIFICATES/cacert.pem $INSTALL/etc/ssl/cert.pem
   mkdir $INSTALL/etc/pki/tls/certs
     ln -sf $SSL_CERTIFICATES/cacert.pem $INSTALL/etc/pki/tls/certs/ca-bundle.crt 
+  cp $PKG_DIR/config/openssl.cnf $INSTALL/etc/pki/tls/openssl.cnf
 }
+
