@@ -1,12 +1,12 @@
 ##
 ## ca-bundle.crt -- Bundle of CA Root Certificates
 ##
-## Certificate data from Mozilla as of: Wed Apr 13 08:13:21 2011
+## Certificate data from Mozilla as of: Thu Apr  7 03:47:06 2011
 ##
 ## This is a bundle of X.509 certificates of public Certificate Authorities
 ## (CA). These were automatically extracted from Mozilla's root certificates
 ## file (certdata.txt).  This file can be found in the mozilla source tree:
-## http://mxr.mozilla.org/mozilla/source/security/nss/lib/ckfw/builtins/certdata.txt?raw=1
+## '/mozilla/security/nss/lib/ckfw/builtins/certdata.txt'
 ##
 ## It contains the certificates in PEM format and therefore
 ## can be directly used with curl / libcurl / php_curl, or with
@@ -49,7 +49,7 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-# @(#) $RCSfile: certdata.txt,v $ $Revision: 1.74 $ $Date: 2011/04/13 00:10:24 $
+# @(#) $RCSfile: certdata.txt,v $ $Revision: 1.73 $ $Date: 2011/04/06 23:57:06 $
 
 GTE CyberTrust Global Root
 ==========================
