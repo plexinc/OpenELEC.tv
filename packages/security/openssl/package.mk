@@ -104,4 +104,8 @@ post_makeinstall_target() {
 # create new cert: perl ./mk-ca-bundle.pl
   mkdir -p $INSTALL/$SSL_CERTIFICATES
     cp $PKG_DIR/cert/ca-bundle.crt $INSTALL/$SSL_CERTIFICATES/cacert.pem
+  mkdir -p $INSTALL/etc/ssl
+    ln -sf $SSL_CERTIFICATES/cacert.pem $INSTALL/etc/ssl/cert.pem
+  mkdir $INSTALL/etc/pki/tls/certs
+    ln -sf $SSL_CERTIFICATES/cacert.pem $INSTALL/etc/pki/tls/certs/ca-bundle.crt 
 }
