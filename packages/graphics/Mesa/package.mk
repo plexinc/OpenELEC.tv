@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="Mesa"
-PKG_VERSION="10.3.7"
+PKG_VERSION="10.4.5"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -66,25 +66,28 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --disable-selinux \
                            --enable-opengl \
                            --enable-driglx-direct \
-                           --disable-gles1 \
-			   --enable-gles2 \
+                           --enable-gles1 \
+                           --enable-gles2 \
                            --disable-openvg \
                            --enable-dri \
                            --disable-dri3 \
                            --enable-glx \
                            --disable-osmesa \
                            --enable-egl --with-egl-platforms=x11,drm \
-                           $XA_CONFIG \
+                           --disable-xa \
                            --enable-gbm \
+                           --disable-nine \
                            --disable-xvmc \
                            $MESA_VDPAU \
-                           --disable-opencl \
+                           --disable-omx \
+                           --disable-va \
+                           --disable-opencl --enable-opencl-icd \
                            --disable-xlib-glx \
-                           --disable-gallium-egl \
-                           --disable-gallium-gbm \
                            --disable-r600-llvm-compiler \
                            --disable-gallium-tests \
+                           --disable-gallium-osmesa \
                            --enable-shared-glapi \
+                           --enable-sysfs \
                            --enable-glx-tls \
                            $MESA_GALLIUM_LLVM \
                            --disable-silent-rules \
@@ -94,8 +97,8 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --with-dri-drivers=$DRI_DRIVERS \
                            --with-sysroot=$SYSROOT_PREFIX"
 
-
 make_install_target() {
+    LDFLAGS="-static -s $LDFLAGS"
     make install
 }
 
@@ -106,5 +109,5 @@ post_makeinstall_target() {
     ln -sf libGL.so.1 $INSTALL/usr/lib/libGL.so
     ln -sf /var/lib/libGL.so $INSTALL/usr/lib/libGL.so.1
     mv $INSTALL/usr/lib/libGL.so.1.2.0 $INSTALL/usr/lib/libGL_mesa.so.1
-#    cp -R cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/include/* ${SYSROOT_PREFIX}/usr/include/.
+    cp -R ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/include/* ${SYSROOT_PREFIX}/usr/include/.
 }
