@@ -17,7 +17,7 @@
 #  ################################################################################
 
 PKG_NAME="qt"
-PKG_VERSION="5.4.0"
+PKG_VERSION="5.4.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -26,11 +26,11 @@ PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-everywhere-opensource-src-$PKG_VERS
 
 case $PROJECT in
 	Generic)
-		PKG_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libxcb"
-		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa"
+		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libxcb libXcursor"
+		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxcb"
 	;;
 	RPi|RPi2)
-		PKG_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libX11 xrandr libXdmcp libxslt libXcomposite libwebp"
+		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libX11 xrandr libXdmcp libxslt libXcomposite libwebp"
 		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc alsa"
 
 	;;
@@ -56,11 +56,13 @@ case $PROJECT in
                                                         -confirm-license \
                                                         -optimized-qmake \
                                                         -shared \
-							-opengl es2 \
+                                                        -opengl es2\
                                                         -make libs \
-							-qt-xcb \
+							-no-pch \
                                                         -nomake examples \
-                                                        -no-pch \
+							-I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/sysroot/usr/include \
+                                                        -I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/include/c++/4.8.4 \
+                                                        -I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/include/c++/4.8.4/x86_64-openelec-linux-gnu \
                                                         -nomake tests"
 	;;
  	RPi|RPi2)
@@ -79,6 +81,7 @@ case $PROJECT in
                                                         -opengl es2\
                                                         -make libs \
                                                         -nomake examples \
+							-I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/sysroot/usr/include \
                                                         -no-pch \
                                                         -nomake tests"
         ;;
@@ -89,11 +92,6 @@ unpack() {
 	tar -xzf $SOURCES/${PKG_NAME}/qt-everywhere-opensource-src-${PKG_VERSION}.tar.gz -C $BUILD/
 	mv $BUILD/qt-everywhere-opensource-src-${PKG_VERSION} $BUILD/${PKG_NAME}-${PKG_VERSION}
 	
-}
-
-pre_configure_target() {
-   cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
-   sed -i "s,##SYSROOT_PREFIX##,${SYSROOT_PREFIX}/usr/include,g" qtbase/src/gui/gui.pro 
 }
 
 configure_target() {
