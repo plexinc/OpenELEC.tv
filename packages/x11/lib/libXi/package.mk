@@ -32,7 +32,7 @@ PKG_LONGDESC="LibXi provides an X Window System client interface to the XINPUT e
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
-PKG_CONFIGURE_OPTS_TARGET="--enable-static --disable-shared \
+PKG_CONFIGURE_OPTS_TARGET="--enable-shared \
                            --enable-malloc0returnsnull \
                            --disable-silent-rules \
                            --disable-docs \
@@ -42,3 +42,9 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-static --disable-shared \
                            --without-xsltproc \
                            --without-asciidoc \
                            --with-gnu-ld"
+
+pre_configure_target() {
+  CFLAGS="$CFLAGS -fPIC"
+  CXXFLAGS="$CXXFLAGS -fPIC"
+  LDFLAGS="$LDFLAGS -fPIC"
+}
