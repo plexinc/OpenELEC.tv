@@ -50,8 +50,12 @@ PKG_CONFIGURE_OPTS_TARGET="--sysconfdir=/etc/ssh \
                            --without-pam"
 
 pre_configure_target() {
+  strip_lto
   export LD="$TARGET_CC"
   export LDFLAGS="$TARGET_CFLAGS $TARGET_LDFLAGS"
+  export CFLAGS="$CFLAGS -fPIC"
+  export CXXFLAGS="$CXXFLAGS -fPIC"
+  export LDFLAGS="$LDFLAGS -fPIC"
 }
 
 post_makeinstall_target() {

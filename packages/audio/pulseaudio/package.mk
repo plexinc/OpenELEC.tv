@@ -94,7 +94,10 @@ pre_build_target() {
 
 pre_configure_target() {
   # pulseaudio fails to build with LTO support
-    strip_lto
+#    strip_lto
+    CFLAGS="$CFLAGS -fPIC"
+    CXXFLAGS="$CXXFLAGS -fPIC"
+    LDFLAGS="$LDFLAGS -fPIC"
 }
 
 pre_make_target() {

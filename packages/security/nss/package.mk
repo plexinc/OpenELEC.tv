@@ -19,12 +19,12 @@
 ################################################################################
 
 PKG_NAME="nss"
-PKG_VERSION="3.15.5"
+PKG_VERSION="3.17.4"
 PKG_REV="1"
 PKG_ARCH="i386 x86_64"
 PKG_LICENSE="Mozilla Public License"
 PKG_SITE="http://ftp.mozilla.org/"
-PKG_URL="http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_15_5_RTM/src/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_URL="http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_4_RTM/src/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain nss:host nspr"
 PKG_PRIORITY="optional"
 PKG_SECTION="security"
@@ -66,6 +66,7 @@ make_target() {
   [ "$TARGET_ARCH" = "x86_64" ] && TARGET_USE_64="USE_64=1"
 
   #strip_lto
+  #NSPR_INCLUDE_DIR=$SYSROOT_PREFIX/usr/include/nspr 
 
   make BUILD_OPT=1 $TARGET_USE_64 \
      NSPR_INCLUDE_DIR=$SYSROOT_PREFIX/usr/include/nspr \

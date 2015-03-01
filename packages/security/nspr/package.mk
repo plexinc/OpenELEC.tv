@@ -19,7 +19,7 @@
 ################################################################################
 
 PKG_NAME="nspr"
-PKG_VERSION="4.10.4"
+PKG_VERSION="4.10.8"
 PKG_REV="1"
 PKG_ARCH="i386 x86_64"
 PKG_LICENSE="Mozilla Public License"

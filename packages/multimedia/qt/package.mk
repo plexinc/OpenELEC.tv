@@ -26,8 +26,8 @@ PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-everywhere-opensource-src-$PKG_VERS
 
 case $PROJECT in
 	Generic)
-		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libxcb libXcursor libXtst"
-		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxcb"
+		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libxcb libXcursor libXtst pciutils pulseaudio nss"
+		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxcb libXcursor libXtst pciutils pulseaudio nss"
 	;;
 	RPi|RPi2)
 		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libX11 xrandr libXdmcp libxslt libXcomposite libwebp"
@@ -48,7 +48,8 @@ case $PROJECT in
 	Generic)
                 PKG_CONFIGURE_OPTS="\
                                                         -sysroot ${SYSROOT_PREFIX} \
-                                                        -extprefix ${SYSROOT_PREFIX}/usr/local/qt5 \
+                                                        -prefix /usr/local/qt5 \
+                                                        -hostprefix ${ROOT}/${BUILD} \
                                                         -release \
                                                         -v \
 							-debug \
@@ -59,10 +60,10 @@ case $PROJECT in
                                                         -opengl es2\
                                                         -make libs \
 							-no-pch \
-                                                        -nomake examples \
 							-I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/sysroot/usr/include \
                                                         -I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/include/c++/4.8.4 \
                                                         -I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/include/c++/4.8.4/x86_64-openelec-linux-gnu \
+                                                        -nomake examples \
                                                         -nomake tests"
 	;;
  	RPi|RPi2)
@@ -120,6 +121,29 @@ configure_target() {
 		
 			cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 			./configure ${PKG_CONFIGURE_OPTS}
+		;;
+	esac
+}
+
+make_target() {
+export PYTHON_EXEC="$SYSROOT_PREFIX/usr/bin/python2.7"
+	case $PROJECT in
+		Generic)
+			export PYTHONPATH="$SYSROOT_PREFIX/usr/lib/python2.7/lib-dynload"
+			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
+			export QT_FORCE_PKGCONFIG=yes
+			unset QMAKESPEC
+
+			cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+			make
+		;;
+		RPi|RPi2)
+			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
+			export QT_FORCE_PKGCONFIG=yes
+			unset QMAKESPEC
+		
+			cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+			make
 		;;
 	esac
 }
