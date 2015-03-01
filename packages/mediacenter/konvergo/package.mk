@@ -23,7 +23,7 @@ case $PROJECT in
      PKG_VERSION="master"
      ;;
      RPi|RPi2)
-     PKG_VERSION="Konvergo_RPi2"
+     PKG_VERSION="master"
      ;;
 esac
 

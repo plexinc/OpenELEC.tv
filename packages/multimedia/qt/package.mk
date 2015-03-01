@@ -68,20 +68,19 @@ case $PROJECT in
  	RPi|RPi2)
                 PKG_CONFIGURE_OPTS="\
                                                         -sysroot ${SYSROOT_PREFIX} \
-                                                        -extprefix ${SYSROOT_PREFIX}/usr/local/qt5 \
-                                                        -release \
+                                                        -prefix /usr/local/qt5 \
+                                                        -hostprefix ${ROOT}/${BUILD} \
                                                         -v \
-							-debug \
+                                                        -debug \
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
-							-shared \
+                                                        -shared \
                                                         -device linux-rasp-pi-g++ \
                                                         -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7ve-openelec-linux-gnueabi-
                                                         -opengl es2\
                                                         -make libs \
                                                         -nomake examples \
-							-I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/sysroot/usr/include \
                                                         -no-pch \
                                                         -nomake tests"
         ;;
@@ -92,6 +91,11 @@ unpack() {
 	tar -xzf $SOURCES/${PKG_NAME}/qt-everywhere-opensource-src-${PKG_VERSION}.tar.gz -C $BUILD/
 	mv $BUILD/qt-everywhere-opensource-src-${PKG_VERSION} $BUILD/${PKG_NAME}-${PKG_VERSION}
 	
+}
+
+pre_configure_target() {
+   cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+   sed -i "s,##SYSROOT_PREFIX##,${SYSROOT_PREFIX}/usr/include,g" qtbase/src/gui/gui.pro 
 }
 
 configure_target() {
@@ -123,8 +127,8 @@ configure_target() {
 makeinstall_target() {
 
 	cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
-	make install
+	make install DESTDIR=${SYSROOT_PREFIX}/usr/local/qt5
 
-	mkdir -p $INSTALL/usr/
-	cp -R ${SYSROOT_PREFIX}/usr/local/qt5/* ${INSTALL}/usr/
+	mkdir -p $INSTALL/usr/local/qt5
+	cp -R ${SYSROOT_PREFIX}/usr/local/qt5/* ${INSTALL}/usr/local/qt5
 }

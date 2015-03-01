@@ -1,0 +1,200 @@
+         Build fix for 32-bit.
+diff --git a/qtwebkit/Source/WebKit2/Platform/CoreIPC/ArgumentDecoder.cpp b/qtwebkit/Source/WebKit2/Platform/CoreIPC/ArgumentDecoder.cpp
+index c7562279e6dbf3c334a6b16a154fa7768741f1bb..dd3b8b1f3916fdb49ec83bbad64617a2d4e83a80 100644
+--- a/qtwebkit/Source/WebKit2/Platform/CoreIPC/ArgumentDecoder.cpp
++++ b/qtwebkit/Source/WebKit2/Platform/CoreIPC/ArgumentDecoder.cpp
+@@ -126,13 +126,19 @@ bool ArgumentDecoder::decodeVariableLengthByteArray(DataReference& dataReference
+     return true;
+ }
+ 
++template<typename Type>
++static void decodeValueFromBuffer(Type& value, uint8_t*& buffer)
++{
++    memcpy(&value, buffer, sizeof(value));
++    buffer += sizeof(Type);
++}
++
+ bool ArgumentDecoder::decode(bool& result)
+ {
+     if (!alignBufferPosition(sizeof(result), sizeof(result)))
+         return false;
+     
+-    result = *reinterpret_cast<bool*>(m_bufferPos);
+-    m_bufferPos += sizeof(result);
++    decodeValueFromBuffer(result, m_bufferPos);
+     return true;
+ }
+ 
+@@ -141,8 +147,7 @@ bool ArgumentDecoder::decode(uint8_t& result)
+     if (!alignBufferPosition(sizeof(result), sizeof(result)))
+         return false;
+ 
+-    result = *reinterpret_cast<uint8_t*>(m_bufferPos);
+-    m_bufferPos += sizeof(result);
++    decodeValueFromBuffer(result, m_bufferPos);
+     return true;
+ }
+ 
+@@ -151,8 +156,7 @@ bool ArgumentDecoder::decode(uint16_t& result)
+     if (!alignBufferPosition(sizeof(result), sizeof(result)))
+         return false;
+ 
+-    result = *reinterpret_cast_ptr<uint16_t*>(m_bufferPos);
+-    m_bufferPos += sizeof(result);
++    decodeValueFromBuffer(result, m_bufferPos);
+     return true;
+ }
+ 
+@@ -160,9 +164,8 @@ bool ArgumentDecoder::decode(uint32_t& result)
+ {
+     if (!alignBufferPosition(sizeof(result), sizeof(result)))
+         return false;
+-    
+-    result = *reinterpret_cast_ptr<uint32_t*>(m_bufferPos);
+-    m_bufferPos += sizeof(result);
++
++    decodeValueFromBuffer(result, m_bufferPos);
+     return true;
+ }
+ 
+@@ -171,8 +174,7 @@ bool ArgumentDecoder::decode(uint64_t& result)
+     if (!alignBufferPosition(sizeof(result), sizeof(result)))
+         return false;
+     
+-    result = *reinterpret_cast_ptr<uint64_t*>(m_bufferPos);
+-    m_bufferPos += sizeof(result);
++    decodeValueFromBuffer(result, m_bufferPos);
+     return true;
+ }
+ 
+@@ -181,8 +183,7 @@ bool ArgumentDecoder::decode(int32_t& result)
+     if (!alignBufferPosition(sizeof(result), sizeof(result)))
+         return false;
+     
+-    result = *reinterpret_cast_ptr<uint32_t*>(m_bufferPos);
+-    m_bufferPos += sizeof(result);
++    decodeValueFromBuffer(result, m_bufferPos);
+     return true;
+ }
+ 
+@@ -190,9 +191,8 @@ bool ArgumentDecoder::decode(int64_t& result)
+ {
+     if (!alignBufferPosition(sizeof(result), sizeof(result)))
+         return false;
+-    
+-    result = *reinterpret_cast_ptr<uint64_t*>(m_bufferPos);
+-    m_bufferPos += sizeof(result);
++
++    decodeValueFromBuffer(result, m_bufferPos);
+     return true;
+ }
+ 
+@@ -200,9 +200,8 @@ bool ArgumentDecoder::decode(float& result)
+ {
+     if (!alignBufferPosition(sizeof(result), sizeof(result)))
+         return false;
+-    
+-    result = *reinterpret_cast_ptr<float*>(m_bufferPos);
+-    m_bufferPos += sizeof(result);
++
++    decodeValueFromBuffer(result, m_bufferPos);
+     return true;
+ }
+ 
+@@ -211,8 +210,7 @@ bool ArgumentDecoder::decode(double& result)
+     if (!alignBufferPosition(sizeof(result), sizeof(result)))
+         return false;
+     
+-    result = *reinterpret_cast_ptr<double*>(m_bufferPos);
+-    m_bufferPos += sizeof(result);
++    decodeValueFromBuffer(result, m_bufferPos);
+     return true;
+ }
+ 
+diff --git a/qtwebkit/Source/WebKit2/Platform/CoreIPC/ArgumentEncoder.cpp b/qtwebkit/Source/WebKit2/Platform/CoreIPC/ArgumentEncoder.cpp
+index 777536ffa7d466242fe26cbd1b0121977929e266..62e3586d45f43c151ba0d5b3712f88257e165792 100644
+--- a/qtwebkit/Source/WebKit2/Platform/CoreIPC/ArgumentEncoder.cpp
++++ b/qtwebkit/Source/WebKit2/Platform/CoreIPC/ArgumentEncoder.cpp
+@@ -123,67 +123,64 @@ void ArgumentEncoder::encodeVariableLengthByteArray(const DataReference& dataRef
+     encodeFixedLengthData(dataReference.data(), dataReference.size(), 1);
+ }
+ 
++template<typename Type>
++static void copyValueToBuffer(Type value, uint8_t* buffer)
++{
++    memcpy(buffer, &value, sizeof(Type));
++}
++
+ void ArgumentEncoder::encode(bool n)
+ {
+     uint8_t* buffer = grow(sizeof(n), sizeof(n));
+-    
+-    *reinterpret_cast<bool*>(buffer) = n;
++    copyValueToBuffer(n, buffer);
+ }
+ 
+ void ArgumentEncoder::encode(uint8_t n)
+ {
+     uint8_t* buffer = grow(sizeof(n), sizeof(n));
+-
+-    *reinterpret_cast<uint8_t*>(buffer) = n;
++    copyValueToBuffer(n, buffer);
+ }
+ 
+ void ArgumentEncoder::encode(uint16_t n)
+ {
+     uint8_t* buffer = grow(sizeof(n), sizeof(n));
+-
+-    *reinterpret_cast_ptr<uint16_t*>(buffer) = n;
++    copyValueToBuffer(n, buffer);
+ }
+ 
+ void ArgumentEncoder::encode(uint32_t n)
+ {
+     uint8_t* buffer = grow(sizeof(n), sizeof(n));
+-    
+-    *reinterpret_cast_ptr<uint32_t*>(buffer) = n;
++    copyValueToBuffer(n, buffer);
+ }
+ 
+ void ArgumentEncoder::encode(uint64_t n)
+ {
+     uint8_t* buffer = grow(sizeof(n), sizeof(n));
+-    
+-    *reinterpret_cast_ptr<uint64_t*>(buffer) = n;
++    copyValueToBuffer(n, buffer);
+ }
+ 
+ void ArgumentEncoder::encode(int32_t n)
+ {
+     uint8_t* buffer = grow(sizeof(n), sizeof(n));
+-    
+-    *reinterpret_cast_ptr<int32_t*>(buffer) = n;
++    copyValueToBuffer(n, buffer);
+ }
+ 
+ void ArgumentEncoder::encode(int64_t n)
+ {
+     uint8_t* buffer = grow(sizeof(n), sizeof(n));
+-    
+-    *reinterpret_cast_ptr<int64_t*>(buffer) = n;
++    copyValueToBuffer(n, buffer);
+ }
+ 
+ void ArgumentEncoder::encode(float n)
+ {
+     uint8_t* buffer = grow(sizeof(n), sizeof(n));
+-
+-    *reinterpret_cast_ptr<float*>(buffer) = n;
++    copyValueToBuffer(n, buffer);
+ }
+ 
+ void ArgumentEncoder::encode(double n)
+ {
+     uint8_t* buffer = grow(sizeof(n), sizeof(n));
+-
+-    *reinterpret_cast_ptr<double*>(buffer) = n;
++    copyValueToBuffer(n, buffer);
+ }
+ 
+ void ArgumentEncoder::addAttachment(const Attachment& attachment)
