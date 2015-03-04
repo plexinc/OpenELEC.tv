@@ -26,8 +26,8 @@ PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-everywhere-opensource-src-$PKG_VERS
 
 case $PROJECT in
 	Generic)
-		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libxcb libXcursor libXtst pciutils pulseaudio nss"
-		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxcb libXcursor libXtst pciutils pulseaudio nss"
+		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libxcb libXcursor libXtst pciutils pulseaudio nss libxkbcommon"
+		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxcb libXcursor libXtst pciutils pulseaudio nss libxkbcommon"
 	;;
 	RPi|RPi2)
 		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libX11 xrandr libXdmcp libxslt libXcomposite libwebp libevdev"
@@ -59,6 +59,8 @@ case $PROJECT in
                                                         -opengl es2\
                                                         -make libs \
 							-no-pch \
+							-xplatform linux-g++-64
+							-device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/host- \
 							-I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/sysroot/usr/include \
                                                         -I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/include/c++/4.8.4 \
                                                         -I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/include/c++/4.8.4/x86_64-openelec-linux-gnu \
@@ -77,8 +79,8 @@ case $PROJECT in
                                                         -optimized-qmake \
                                                         -shared \
                                                         -device linux-rasp-pi-g++ \
-                                                        -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7ve-openelec-linux-gnueabi-
-                                                        -opengl es2\
+                                                        -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7ve-openelec-linux-gnueabi- \
+                                                        -opengl es2 \
                                                         -make libs \
                                                         -nomake examples \
                                                         -no-pch \
