@@ -30,7 +30,7 @@ case $PROJECT in
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxcb libXcursor libXtst pciutils pulseaudio nss"
 	;;
 	RPi|RPi2)
-		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libX11 xrandr libXdmcp libxslt libXcomposite libwebp"
+		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libX11 xrandr libXdmcp libxslt libXcomposite libwebp libevdev"
 		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc alsa"
 
 	;;
@@ -52,7 +52,6 @@ case $PROJECT in
                                                         -hostprefix ${ROOT}/${BUILD} \
                                                         -release \
                                                         -v \
-							-debug \
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
@@ -72,7 +71,7 @@ case $PROJECT in
                                                         -prefix /usr/local/qt5 \
                                                         -hostprefix ${ROOT}/${BUILD} \
                                                         -v \
-                                                        -debug \
+                                                        -release \
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
@@ -126,9 +125,9 @@ configure_target() {
 }
 
 make_target() {
-export PYTHON_EXEC="$SYSROOT_PREFIX/usr/bin/python2.7"
 	case $PROJECT in
 		Generic)
+			export PYTHON_EXEC="$SYSROOT_PREFIX/usr/bin/python2.7"
 			export PYTHONPATH="$SYSROOT_PREFIX/usr/lib/python2.7/lib-dynload"
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
 			export QT_FORCE_PKGCONFIG=yes
