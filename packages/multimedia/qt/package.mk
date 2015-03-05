@@ -47,9 +47,9 @@ PKG_AUTORECONF="no"
 case $PROJECT in
 	Generic)
                 PKG_CONFIGURE_OPTS="\
-                                                        -sysroot ${SYSROOT_PREFIX} \
-                                                        -prefix /usr/local/qt5 \
-                                                        -hostprefix ${ROOT}/${BUILD} \
+							-sysroot ${SYSROOT_PREFIX} \
+							-prefix /usr/local/qt5
+                                                        -hostprefix ${SYSROOT_PREFIX} \
                                                         -release \
                                                         -v \
                                                         -opensource \
@@ -59,11 +59,11 @@ case $PROJECT in
                                                         -opengl es2\
                                                         -make libs \
 							-no-pch \
-							-xplatform linux-g++-64
-							-device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/host- \
-							-I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/sysroot/usr/include \
-                                                        -I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/include/c++/4.8.4 \
-                                                        -I $ROOT/$TOOLCHAIN/x86_64-openelec-linux-gnu/include/c++/4.8.4/x86_64-openelec-linux-gnu \
+							-no-rpath \
+							-qt-xkbcommon \
+							-arch $TARGET_ARCH
+							-platform linux-g++ \
+							-xplatform linux-g++-openelec \
                                                         -nomake examples \
                                                         -nomake tests"
 	;;
@@ -92,21 +92,84 @@ unpack() {
 
 	tar -xzf $SOURCES/${PKG_NAME}/qt-everywhere-opensource-src-${PKG_VERSION}.tar.gz -C $BUILD/
 	mv $BUILD/qt-everywhere-opensource-src-${PKG_VERSION} $BUILD/${PKG_NAME}-${PKG_VERSION}
+        mkdir -p $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/linux-g++-openelec
+
+## BIIIIIG HACK TIME!!
+
+if [ "$TARGET_ARCH" = i386 ]; then
+    ARCHFLAGS="-m32"
+elif [ "$TARGET_ARCH" = x86_64 ]; then
+    ARCHFLAGS="-m64"
+fi
+
+cat > $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/linux-g++-openelec/qmake.conf <<EOF
+
+MAKEFILE_GENERATOR      = UNIX
+TARGET_PLATFORM         = unix
+TEMPLATE                = app
+CONFIG                  += qt warn_on release incremental link_prl
+QT                      += core gui network
+QMAKE_INCREMENTAL_STYLE = sublib
+
+CFG_ARCH                = $TARGET_ARCH
+QMAKE_CFLAGS            = $ARCHFLAGS
+QMAKE_LFLAGS            = $ARCHFLAGS
+QMAKE_CXXFLAGS          = $ARCHFLAGS
+
+include(../common/linux.conf)
+include(../common/gcc-base-unix.conf)
+include(../common/g++-unix.conf)
+load(qt_config)
+
+# Set RPATH location to search for dynamic libraries relative to executable
+QMAKE_LFLAGS            += '-Wl,-rpath,\'\\\$\$ORIGIN/../lib\'' 
+QMAKE_LFLAGS            += '-Wl,-rpath-link,$ROOT/$PKG_BUILD/install/lib'
+
+QMAKE_CC                = $TARGET_CC
+QMAKE_CXX               = $TARGET_CXX
+QMAKE_LINK              = $TARGET_CXX
+QMAKE_LINK_SHLIB        = $TARGET_CXX
+QMAKE_AR                = $TARGET_AR cqs
+QMAKE_OBJCOPY           = $TARGET_OBJCOPY
+QMAKE_RANLIB            = $TARGET_RANLIB
+QMAKE_STRIP             = $TARGET_STRIP
+
+# Headers Search Path
+QMAKE_INCDIR          = $LIB_PREFIX/include
+QMAKE_INCDIR         += $LIB_PREFIX/include/freetype2 $MYSQL_INCDIR
+QMAKE_INCDIR_X11      = $LIB_PREFIX/include/X11
+QMAKE_INCDIR_OPENGL   = $LIB_PREFIX/include
+QMAKE_INCDIR_QT       = $ROOT/$PKG_BUILD/install/include
+
+# Libraries Search Path
+QMAKE_LIBDIR          = $LIB_PREFIX/lib
+QMAKE_LIBDIR_X11      = $LIB_PREFIX/lib
+QMAKE_LIBDIR_OPENGL   = $LIB_PREFIX/lib
+QMAKE_LIBDIR_QT       = $ROOT/$PKG_BUILD/install/lib
+
+load(qt_config)
+EOF
 	
 }
 
 pre_configure_target() {
    cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
    sed -i "s,##SYSROOT_PREFIX##,${SYSROOT_PREFIX}/usr/include,g" qtbase/src/gui/gui.pro 
+   sed -i "s|/usr/local/install|$ROOT/$PKG_BUILD/install|g" configure
+   CFLAGS="$CFLAGS -fPIC -fno-lto"
+   CXXFLAGS="$CXXFLAGS -fPIC -fno-lto"
+   LDFLAGS="$LDFLAGS -fPIC -fno-lto"
 }
 
 configure_target() {
 
 	case $PROJECT in
 		Generic)
+			env
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
 			export QT_FORCE_PKGCONFIG=yes
 			unset QMAKESPEC
+			PKG_CONFIG_PATH="$SYSROOT_PREFIX/usr/lib/pkgconfig"
 
 			cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 			./configure ${PKG_CONFIGURE_OPTS}
@@ -133,7 +196,11 @@ make_target() {
 			export PYTHONPATH="$SYSROOT_PREFIX/usr/lib/python2.7/lib-dynload"
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
 			export QT_FORCE_PKGCONFIG=yes
+			PKG_CONFIG_PATH="$SYSROOT_PREFIX/usr/lib/pkgconfig"
 			unset QMAKESPEC
+			CFLAGS=" -fPIC -fno-lto"
+			CXXFLAGS=" -fPIC -fno-lto"
+			LDFLAGS=" -fPIC -fno-lto"
 
 			cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 			make
