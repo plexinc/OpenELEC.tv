@@ -165,7 +165,6 @@ configure_target() {
 
 	case $PROJECT in
 		Generic)
-			env
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
 			export QT_FORCE_PKGCONFIG=yes
 			unset QMAKESPEC
