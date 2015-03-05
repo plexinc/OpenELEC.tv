@@ -198,9 +198,6 @@ make_target() {
 			export QT_FORCE_PKGCONFIG=yes
 			PKG_CONFIG_PATH="$SYSROOT_PREFIX/usr/lib/pkgconfig"
 			unset QMAKESPEC
-			CFLAGS=" -fPIC -fno-lto"
-			CXXFLAGS=" -fPIC -fno-lto"
-			LDFLAGS=" -fPIC -fno-lto"
 
 			cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 			make
