@@ -35,6 +35,5 @@ PKG_AUTORECONF="no"
 PKG_CONFIGURE_OPTS_TARGET=""
 
 post_makeinstall_target() {
-  cp -R ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/xkbcommon ${SYSROOT}/usr/include/.
+  cp -R ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/xkbcommon ${SYSROOT_PREFIX}/usr/include/.
 }
-
