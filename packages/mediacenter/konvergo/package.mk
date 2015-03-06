@@ -72,7 +72,15 @@ unpack() {
 		cp $PKG_DIR/ld.so.conf $SYSROOT_PREFIX/etc/
 
 		cd $ROOT
-	fi	
+	fi
+
+	#grab a prebuilt archive for web stuff
+	mkdir -p $BUILD/${PKG_NAME}-${PKG_VERSION}/dependencies/web-client/
+	cd $BUILD/${PKG_NAME}-${PKG_VERSION}/dependencies/web-client/
+	wget http://nightlies.plex.tv/plex-oe-sources/webclient-0.1.tar.gz
+	tar xvf webclient-0.1.tar.gz
+	rm webclient-0.1.tar.gz
+	cd ${ROOT}	
 }
 
 configure_target() {
