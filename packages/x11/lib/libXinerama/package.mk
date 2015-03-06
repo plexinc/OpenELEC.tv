@@ -33,3 +33,9 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
 PKG_CONFIGURE_OPTS_TARGET="--enable-static --disable-shared --enable-malloc0returnsnull"
+
+pre_configure_target() {
+  CFLAGS="$CFLAGS -fPIC"
+  CXXFLAGS="$CXXFLAGS -fPIC"
+  LDFLAGS="$LDFLAGS -fPIC"
+}
