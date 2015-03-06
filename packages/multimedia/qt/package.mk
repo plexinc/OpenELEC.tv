@@ -61,6 +61,7 @@ case $PROJECT in
 							-no-pch \
 							-no-rpath \
 							-qt-xkbcommon \
+                                                        -skip qtwebengine \
 							-arch $TARGET_ARCH
 							-platform linux-g++ \
 							-xplatform linux-g++-openelec \
