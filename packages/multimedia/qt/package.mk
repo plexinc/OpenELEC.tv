@@ -49,7 +49,7 @@ case $PROJECT in
                 PKG_CONFIGURE_OPTS="\
 							-sysroot ${SYSROOT_PREFIX} \
 							-prefix /usr/local/qt5
-                                                        -hostprefix ${SYSROOT_PREFIX} \
+                                                        -hostprefix ${ROOT}/${BUILD} \
                                                         -release \
                                                         -v \
                                                         -opensource \
