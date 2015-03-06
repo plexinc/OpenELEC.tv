@@ -77,6 +77,7 @@ case $PROJECT in
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
+                                                        -qt-xkbcommon \
                                                         -shared \
                                                         -device linux-rasp-pi-g++ \
                                                         -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7ve-openelec-linux-gnueabi- \
