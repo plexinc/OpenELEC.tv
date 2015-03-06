@@ -38,7 +38,7 @@ PKG_AUTORECONF="yes"
 if [ "$LLVM_SUPPORT" = "yes" ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET elfutils llvm"
   export LLVM_CONFIG="$SYSROOT_PREFIX/usr/bin/llvm-config-host"
-  MESA_GALLIUM_LLVM="--enable-gallium-llvm --with-llvm-shared-libs"
+  MESA_GALLIUM_LLVM="--enable-gallium-llvm --enable-llvm-shared-libs"
 else
   MESA_GALLIUM_LLVM="--disable-gallium-llvm"
 fi
@@ -49,8 +49,6 @@ if [ "$VDPAU_SUPPORT" = "yes" ]; then
 else
   MESA_VDPAU="--disable-vdpau"
 fi
-
-XA_CONFIG="--disable-xa"
 
 PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            CXX_FOR_BUILD=$HOST_CXX \
@@ -66,7 +64,7 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --disable-selinux \
                            --enable-opengl \
                            --enable-driglx-direct \
-                           --enable-gles1 \
+                           --disable-gles1 \
                            --enable-gles2 \
                            --disable-openvg \
                            --enable-dri \
@@ -97,11 +95,6 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --with-dri-drivers=$DRI_DRIVERS \
                            --with-sysroot=$SYSROOT_PREFIX"
 
-make_install_target() {
-    LDFLAGS="-static -s $LDFLAGS"
-    make install
-}
-
 post_makeinstall_target() {
   # rename and relink for cooperate with nvidia drivers
     rm -rf $INSTALL/usr/lib/libGL.so
@@ -109,5 +102,4 @@ post_makeinstall_target() {
     ln -sf libGL.so.1 $INSTALL/usr/lib/libGL.so
     ln -sf /var/lib/libGL.so $INSTALL/usr/lib/libGL.so.1
     mv $INSTALL/usr/lib/libGL.so.1.2.0 $INSTALL/usr/lib/libGL_mesa.so.1
-    cp -R ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/include/* ${SYSROOT_PREFIX}/usr/include/.
 }
