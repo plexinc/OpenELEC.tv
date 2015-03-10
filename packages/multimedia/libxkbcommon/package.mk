@@ -30,9 +30,9 @@ PKG_SHORTDESC=""
 PKG_LONGDESC=""
 
 PKG_IS_ADDON="no"
-PKG_AUTORECONF="no"
+PKG_AUTORECONF="yes"
 
-PKG_CONFIGURE_OPTS_TARGET=""
+PKG_CONFIGURE_OPTS_TARGET="--enable-static --enable-shared"
 
 post_makeinstall_target() {
   cp -R ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/xkbcommon ${SYSROOT_PREFIX}/usr/include/.

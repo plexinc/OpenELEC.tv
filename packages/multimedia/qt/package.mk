@@ -26,11 +26,11 @@ PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-everywhere-opensource-src-$PKG_VERS
 
 case $PROJECT in
 	Generic)
-		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libxcb libXcursor libXtst pciutils  nss libxkbcommon"
-		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxcb libXcursor libXtst pciutils pulseaudio nss libxkbcommon"
+		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu libXcursor libXtst pciutils  nss libxkbcommon"
+		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libXcursor libXtst pciutils pulseaudio nss libxkbcommon"
 	;;
 	RPi|RPi2)
-		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu sqlite libX11 xrandr libXdmcp libxslt libXcomposite libwebp libevdev libxkbcommon"
+		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu libX11 xrandr libXdmcp libxslt libXcomposite libwebp libevdev libxkbcommon"
 		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc alsa libxkbcommon"
 
 	;;
@@ -59,8 +59,9 @@ case $PROJECT in
                                                         -opengl es2\
                                                         -make libs \
 							-no-pch \
-							-no-rpath \
-							-qt-xkbcommon \
+							-system-xkbcommon \
+							-qt-xcb \
+							-no-sql-sqlite2
                                                         -skip qtwebengine \
 							-arch $TARGET_ARCH
 							-platform linux-g++ \
