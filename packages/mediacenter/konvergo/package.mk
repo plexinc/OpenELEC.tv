@@ -63,7 +63,6 @@ unpack() {
 	
 	if [ "$DEBUG" = yes ]; then
 		cd $BUILD/${PKG_NAME}-${PKG_VERSION}
-		git submodule update --init
 
 		#This is used when using QtCreator from the build tree to deploy to /storage root
 		cp $PKG_DIR/QtCreatorDeployment.txt $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/
@@ -94,7 +93,7 @@ configure_target() {
 	case $PROJECT in
         	Generic)
 		cmake \
-                        -DCMAKE_BUILD_TYPE=Debug \
+                        -DCMAKE_BUILD_TYPE=Release \
                         -DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
                         -DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
                         -DCMAKE_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include" \
@@ -130,6 +129,24 @@ makeinstall_target() {
 
 	mkdir -p $INSTALL/usr/share/konvergo
 	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/konvergo
+
+	if [ "$DEBUG" = yes ]; then
+		#This allows cross compiler to find the libs that are used by other libs for QT5
+                mkdir -p ${INSTALL}/etc
+		cp $PKG_DIR/ld.so.conf $INSTALL/etc/		
+	fi
+}
+
+post_install() {
+# link default.target to kodi.target
+  ln -sf konvergo.target $INSTALL/usr/lib/systemd/system/default.target
+
+# enable default services
+  enable_service konvergo-autostart.service
+  enable_service konvergo.service
+  enable_service konvergo.target
+  enable_service konvergo-waitonnetwork.service
+
 }
 
 post_install() {
