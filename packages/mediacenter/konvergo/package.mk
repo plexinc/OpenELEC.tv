@@ -57,10 +57,14 @@ if [ "$DEBUG" = yes ]; then
 fi
 
 unpack() {
+        if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
+          cd $BUILD/${PKG_NAME}-${PKG_VERSION} ; rm -rf build
+          git pull ; git reset --hard
+        else
+          rm -rf $BUILD/${PKG_NAME}-${PKG_VERSION}
+          git clone -b $PKG_VERSION git@github.com:plexinc/konvergo.git  $BUILD/${PKG_NAME}-${PKG_VERSION}
+        fi
 
-        mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
-        git clone -b $PKG_VERSION git@github.com:plexinc/konvergo.git  $BUILD/${PKG_NAME}-${PKG_VERSION}/.
-	
 	if [ "$DEBUG" = yes ]; then
 		cd $BUILD/${PKG_NAME}-${PKG_VERSION}
 
@@ -73,12 +77,11 @@ unpack() {
 		cd $ROOT
 	fi
 
-	#grab a prebuilt archive for web stuff
-	mkdir -p $BUILD/${PKG_NAME}-${PKG_VERSION}/dependencies/web-client/
-	cd $BUILD/${PKG_NAME}-${PKG_VERSION}/dependencies/web-client/
-	wget http://nightlies.plex.tv/plex-oe-sources/webclient-0.1.tar.gz
-	tar xvf webclient-0.1.tar.gz
-	rm webclient-0.1.tar.gz
+	# Grab a prebuilt archive for web stuff using WEB_CLIENT_VERSION from knovergo cmake file
+        WEB_CLIENT_VERSION=`cat $BUILD/${PKG_NAME}-${PKG_VERSION}/CMakeModules/WebClientVariables.cmake|awk '/WEB_CLIENT_VERSION/ {gsub(")$","") ; print $2}'`
+        mkdir -p cd $BUILD/${PKG_NAME}-${PKG_VERSION}/build/src
+	cd $BUILD/${PKG_NAME}-${PKG_VERSION}/build/src
+        wget https://nightlies.plex.tv/directdl/plex-web-client-konvergo/master/plex-web-client-konvergo-${WEB_CLIENT_VERSION}.cpp.bz2 -O web-client-${WEB_CLIENT_VERSION}.cpp.bz2
 	cd ${ROOT}	
 }
 
