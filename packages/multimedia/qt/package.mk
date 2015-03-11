@@ -62,10 +62,27 @@ case $PROJECT in
 							-system-xkbcommon \
 							-qt-xcb \
 							-no-sql-sqlite2
-                                                        -skip qtwebengine \
 							-arch $TARGET_ARCH
 							-platform linux-g++ \
 							-xplatform linux-g++-openelec \
+                                                        -skip qtandroidextras \
+                                                        -skip qtconnectivity \
+                                                        -skip qtdoc \
+                                                        -skip qtenginio \
+                                                        -skip qtgraphicaleffects \
+                                                        -skip qtlocation \
+                                                        -skip qtmacextras \
+                                                        -skip qtquick1 \
+                                                        -skip qtscript \
+                                                        -skip qtsensors \
+                                                        -skip qtserialport \
+                                                        -skip qtwayland \
+                                                        -skip qtwebengine \
+                                                        -skip qtwebkit-examples \
+                                                        -skip qtwinextras \
+                                                        -skip qtxmlpatterns \
+                                                        -skip qttranslations \
+                                                        -skip qtmultimedia \
                                                         -nomake examples \
                                                         -nomake tests"
 	;;
@@ -90,7 +107,6 @@ case $PROJECT in
                                                         -nomake examples \
                                                         -no-pch \
                                                         -nomake tests \
-                                                        -skip qtwebengine \
                                                         -skip qtandroidextras \
                                                         -skip qtconnectivity \
                                                         -skip qtdoc \
