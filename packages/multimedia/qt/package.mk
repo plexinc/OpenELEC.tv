@@ -267,4 +267,7 @@ makeinstall_target() {
 
         mkdir -p $INSTALL/usr/local/qt5/plugins
         cp -R ${SYSROOT_PREFIX}/usr/local/qt5/plugins/* ${INSTALL}/usr/local/qt5/plugins
+
+        mkdir -p $INSTALL/usr/local/qt5/qml
+        cp -R ${SYSROOT_PREFIX}/usr/local/qt5/qml/* ${INSTALL}/usr/local/qt5/qml
 }
