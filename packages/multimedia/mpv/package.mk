@@ -17,12 +17,12 @@
 ################################################################################
 
 PKG_NAME="mpv"
-PKG_VERSION="0.7.4"
+PKG_VERSION="master"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://nightlies.plex.tv"
-PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
 PKG_DEPENDS_TARGET="toolchain libmad libass ffmpeg qt"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
@@ -33,6 +33,12 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-cplayer --disable-apple-remote --prefix=${SYSROOT_PREFIX}/usr"
+
+unpack() {
+
+        mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
+        git clone -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
+}
 
 configure_target() {
         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
