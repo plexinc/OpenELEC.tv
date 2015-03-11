@@ -131,3 +131,15 @@ makeinstall_target() {
 	mkdir -p $INSTALL/usr/share/konvergo
 	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/konvergo
 }
+
+post_install() {
+# link default.target to kodi.target
+  ln -sf konvergo.target $INSTALL/usr/lib/systemd/system/default.target
+
+# enable default services
+  enable_service konvergo-autostart.service
+  enable_service konvergo.service
+  enable_service konvergo.target
+  enable_service konvergo-waitonnetwork.service
+
+}
