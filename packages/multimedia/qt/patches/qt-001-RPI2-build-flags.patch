@@ -3,10 +3,11 @@
 @@ -29,9 +29,9 @@
  
  QMAKE_CFLAGS           += \
-                           -marm \
+-                          -marm \
 -                          -mfpu=vfp \
 -                          -mtune=arm1176jzf-s \
 -                          -march=armv6zk \
++                          -mthumb
 +                          -mfpu=neon \
 +                          -mtune=cortex-a7 \
 +                          -march=armv7-a \
