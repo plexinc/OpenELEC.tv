@@ -31,7 +31,7 @@ case $PROJECT in
 	;;
 	RPi|RPi2)
 		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu libX11 xrandr libXdmcp libxslt libXcomposite libwebp libevdev libxkbcommon"
-		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig mysql openssl linux-headers glibc alsa libxkbcommon"
+		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxkbcommon"
 
 	;;
 esac
@@ -79,7 +79,9 @@ case $PROJECT in
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
-                                                        -qt-xkbcommon \
+                                                        -qt-xcb \
+                                                        -no-sql-sqlite2 \
+                                                        -system-xkbcommon \
                                                         -shared \
                                                         -device linux-rasp-pi-g++ \
                                                         -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7ve-openelec-linux-gnueabi- \
@@ -87,7 +89,28 @@ case $PROJECT in
                                                         -make libs \
                                                         -nomake examples \
                                                         -no-pch \
-                                                        -nomake tests"
+                                                        -nomake tests \
+                                                        -skip qtwebengine \
+                                                        -skip qtandroidextras \
+                                                        -skip qtconnectivity \
+                                                        -skip qtdoc \
+                                                        -skip qtenginio \
+                                                        -skip qtgraphicaleffects \
+                                                        -skip qtlocation \
+                                                        -skip qtmacextras \
+                                                        -skip qtquick1 \
+                                                        -skip qtscript \
+                                                        -skip qtsensors \
+                                                        -skip qtserialport \
+                                                        -skip qtwayland \
+                                                        -skip qtwebengine \
+                                                        -skip qtwebkit-examples \
+                                                        -skip qtwinextras \
+                                                        -skip qtx11extras \
+                                                        -skip qtxmlpatterns \
+                                                        -skip qttranslations \
+                                                        -skip qtmultimedia \
+							"
         ;;
 esac
 
@@ -220,6 +243,12 @@ makeinstall_target() {
 	cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 	make install DESTDIR=${SYSROOT_PREFIX}/usr/local/qt5
 
-	mkdir -p $INSTALL/usr/local/qt5
-	cp -R ${SYSROOT_PREFIX}/usr/local/qt5/* ${INSTALL}/usr/local/qt5
+	mkdir -p $INSTALL/usr/local/qt5/lib
+	cp -R ${SYSROOT_PREFIX}/usr/local/qt5/lib/* ${INSTALL}/usr/local/qt5/lib
+
+	mkdir -p $INSTALL/usr/local/qt5/libexec
+        cp -R ${SYSROOT_PREFIX}/usr/local/qt5/libexec/* ${INSTALL}/usr/local/qt5/libexec
+
+        mkdir -p $INSTALL/usr/local/qt5/plugins
+        cp -R ${SYSROOT_PREFIX}/usr/local/qt5/plugins/* ${INSTALL}/usr/local/qt5/plugins
 }
