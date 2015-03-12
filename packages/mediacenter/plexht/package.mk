@@ -59,9 +59,9 @@ if [ "$DISPLAYSERVER" = "x11" ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libXrandr"
 fi
 
-if [ "$OPENGL" = "Mesa" ]; then
+if [ "$OPENGL" = "mesa" ]; then
 # for OpenGL (GLX) support
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET Mesa glu glew"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET mesa glu glew"
 fi
 
 if [ "$OPENGLES_SUPPORT" = yes ]; then
