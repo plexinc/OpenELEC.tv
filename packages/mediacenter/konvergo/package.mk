@@ -42,15 +42,6 @@ PKG_LONGDESC="Plex Konvergo is the king or PC clients for Plex :P"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-case $PROJECT in
-  Generic)
-  ;;
-
-  RPi|RPi2)
-    PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET omxplayer"
-  ;;
-esac
-
 #add gdb tools if we are in debug
 if [ "$DEBUG" = yes ]; then
 	PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} gdb"
