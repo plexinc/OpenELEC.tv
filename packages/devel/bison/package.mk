@@ -40,3 +40,7 @@ post_configure_host() {
 # $PATH. The following addition will correct this:
   echo '#define YYENABLE_NLS 1' >> lib/config.h
 }
+
+post_make_install_target() {
+  rm -rf $INSTALL/*
+}
