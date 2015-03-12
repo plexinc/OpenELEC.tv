@@ -40,7 +40,7 @@ unpack() {
         tar -xzf $SOURCES/${PKG_NAME}/icu4c-$PKG_VERSION-src.tgz -C $BUILD/
         mv $BUILD/icu/source $BUILD/${PKG_NAME}-${PKG_VERSION}
         rm -rf $BUILD/icu
-        
+        cp  $PKG_DIR/icudt54l.dat $BUILD/${PKG_NAME}-${PKG_VERSION}/data/in/
 }
 
 configure_host() {
