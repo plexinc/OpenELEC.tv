@@ -21,3 +21,7 @@ PKG_CONFIGURE_OPTS_TARGET="--disable-install-rdoc"
 pre_configure_host() {
   export OPT="$HOST_CFLAGS"
 }
+
+post_makeinstall_target() {
+  rm -rf $INSTALL/*
+}
