@@ -131,7 +131,6 @@ IMAGE_NAME="$DISTRONAME-$TARGET_VERSION"
   $SCRIPTS/install $BOOTLOADER
   $SCRIPTS/install busybox
   $SCRIPTS/install util-linux
-  $SCRIPTS/install corefonts
   $SCRIPTS/install network
 
 # Graphic support
