@@ -6,12 +6,7 @@ set -e
   CONFIG=config
   SCRIPTS=scripts
   PACKAGES=packages
-  if [ -z $SOURCES ]; then
-    SOURCES=sources
-  else
-    ln -s $SOURCES $ROOT/sources
-    SOURCES=sources
-  fi
+  SOURCES=sources
   BUILD_BASE=build
   TARGET=target
   ADDONS=addons
