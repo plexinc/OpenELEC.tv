@@ -32,6 +32,19 @@ PKG_LONGDESC="FFmpeg is a complete, cross-platform solution to record, convert a
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+unpack() {
+
+case $PROJECT in
+	Generic)
+        tar -xzf $SOURCES/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.gz -C $BUILD
+	;;
+	RPi|RPi2)
+        git clone -b rpi git@github.com:wm4/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
+	;;
+esac
+
+}
+
 # configure GPU drivers and dependencies:
   get_graphicdrivers
 
