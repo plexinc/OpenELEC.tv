@@ -1,0 +1,11 @@
+--- a/qtbase/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp	2015-03-18 01:40:36.608596767 -0700
++++ b/qtbase/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp	2015-03-18 01:40:11.498003001 -0700
+@@ -160,7 +160,7 @@
+ EGLNativeWindowType QEglFSPiHooks::createNativeWindow(QPlatformWindow *window, const QSize &size, const QSurfaceFormat &format)
+ {
+     Q_UNUSED(window)
+-    return createDispmanxLayer(QPoint(0, 0), size, 1, format.hasAlpha() ? DISPMANX_FLAGS_ALPHA_FROM_SOURCE : DISPMANX_FLAGS_ALPHA_FIXED_ALL_PIXELS);
++    return createDispmanxLayer(QPoint(0, 0), size, 10, format.hasAlpha() ? DISPMANX_FLAGS_ALPHA_FROM_SOURCE : DISPMANX_FLAGS_ALPHA_FIXED_ALL_PIXELS);
+ }
+ 
+ void QEglFSPiHooks::destroyNativeWindow(EGLNativeWindowType window)
