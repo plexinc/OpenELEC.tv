@@ -98,6 +98,14 @@ case "$TARGET_FPU" in
   ;;
 esac
 
+case $PROJECT in
+      Generic)
+      ;;
+      RPi|RPi2)
+      FFMPEG_MMAL="--enable-mmal"
+      ;;
+esac
+
 pre_configure_target() {
   cd $ROOT/$PKG_BUILD
   rm -rf .$TARGET_NAME
@@ -226,7 +234,8 @@ configure_target() {
               $FFMPEG_CPU \
               $FFMPEG_FPU \
               --enable-yasm \
-              --disable-symver
+              --disable-symver \
+              $FFMPEG_MMAL
 }
 
 post_makeinstall_target() {
