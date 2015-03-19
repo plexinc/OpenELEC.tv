@@ -60,6 +60,11 @@ post_makeinstall_target() {
 
   mkdir -p $INSTALL/usr/config
     cp -PR $PKG_DIR/config/modprobe.d $INSTALL/usr/config
+
+  # If building for RPi/RPi2 ensure we load the alsa snd module on boot.
+  if [ $PROJECT = RPi2 -o $PROJECT = RPi ]; then
+    cp -PR $PKG_DIR/config/modules-load.d $INSTALL/usr/config
+  fi
 }
 
 post_install() {
