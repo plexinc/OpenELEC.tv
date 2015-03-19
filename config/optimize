@@ -4,8 +4,8 @@ if [ "$OPTIMIZATIONS" = normal ];then
 fi
 
 if [ "$OPTIMIZATIONS" = size ];then
-  GCC_OPTIM="-Os -fexcess-precision=fast"
-  LD_OPTIM="-Wl,--as-needed"
+  GCC_OPTIM="-Os"
+  LD_OPTIM=""
 fi
 
 if [ "$LTO_SUPPORT" = yes ];then
