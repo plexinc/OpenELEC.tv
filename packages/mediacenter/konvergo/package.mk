@@ -109,7 +109,7 @@ configure_target() {
 			-DCMAKE_FIND_ROOT_PATH="${SYSROOT_PREFIX}/usr/local/qt5" \
 			-DUSE_QTQUICK=on \
 			-DENABLE_MPV=on \
-			-DTARGET="RPI" \
+			-DBUILD_TARGET="RPI" \
 			-DCMAKE_VERBOSE_MAKEFILE=on \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
