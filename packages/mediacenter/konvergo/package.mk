@@ -87,6 +87,7 @@ configure_target() {
 	case $PROJECT in
         	Generic)
 		cmake \
+			-DMAKE_INSTALL_PREFIX=/usr \
                         -DCMAKE_BUILD_TYPE=Release \
                         -DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
                         -DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
@@ -101,6 +102,7 @@ configure_target() {
 
         	RPi|RPi2)
 		cmake \
+			-DMAKE_INSTALL_PREFIX=/usr \
 			-DCMAKE_BUILD_TYPE=Debug \
 			-DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
 			-DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
@@ -123,6 +125,7 @@ makeinstall_target() {
 
 	mkdir -p $INSTALL/usr/share/konvergo
 	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/konvergo
+        cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/share/* ${INSTALL}/usr/share
 
 	if [ "$DEBUG" = yes ]; then
 		#This allows cross compiler to find the libs that are used by other libs for QT5
