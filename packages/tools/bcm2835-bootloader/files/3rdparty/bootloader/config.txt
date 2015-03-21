@@ -25,7 +25,7 @@
 ################################################################################
 
 # default GPU memory split (do not change if you do not know what you are doing)
-  gpu_mem=128
+  gpu_mem=256
 
 # SDRAM size based GPU memory split, uncomment and setup to override 'gpu_mem'
   gpu_mem_256=112
@@ -50,10 +50,11 @@
 # mode 'High'                   :    950   |    450    |    450     |      6
 # mode 'Turbo'                  :   1000   |    500    |    500     |      6
 
-# arm_freq=700
-# core_freq=250
-# sdram_freq=400
-# over_voltage=0
+# arm_freq=1000
+# core_freq=500
+# sdram_freq=500
+# over_voltage=2
+# gpu_freq=350
 
 # set to 'force_turbo=1' to disable dynamic overclocking (you can lose your warranty!)
   force_turbo=0
