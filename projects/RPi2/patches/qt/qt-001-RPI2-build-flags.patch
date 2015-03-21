@@ -7,10 +7,10 @@
 -                          -mfpu=vfp \
 -                          -mtune=arm1176jzf-s \
 -                          -march=armv6zk \
-+                          -mthumb
-+                          -mfpu=neon \
++                          -mthumb \
++                          -mfpu=neon-vfpv4 \
 +                          -mtune=cortex-a7 \
-+                          -march=armv7-a \
++                          -march=armv7ve \
                            -mabi=aapcs-linux
  
  QMAKE_CXXFLAGS          = $$QMAKE_CFLAGS
