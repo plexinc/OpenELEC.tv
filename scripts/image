@@ -370,6 +370,7 @@ IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$P
           pushd sign > /dev/null
           echo --update_package=/sdcard/$IMAGE_NAME-update.zip > factory_update_param.aml
           cp $INSTALL_SRC_DIR/files/recovery.img .
+          cp $INSTALL_SRC_DIR/files/aml_autoscript .
           zip -q $TARGET_IMG/$IMAGE_NAME.zip *
           popd > /dev/null
         fi
