@@ -1,18 +1,18 @@
---- a/src/ui/webview.qml	2015-03-20 13:38:23.461304969 -0700
-+++ b/src/ui/webview.qml	2015-03-20 13:42:07.625404038 -0700
-@@ -60,15 +60,6 @@
-       }
+--- a/src/ui/webview.qml	2015-03-23 19:52:54.495220539 +0000
++++ b/src/ui/webview.qml.orig	2015-03-23 21:32:39.990011209 +0000
+@@ -41,15 +41,6 @@
      }
+   }
  
--    MpvVideo
--    {
--      id: video
--      objectName: "video"
--      // It's not a real item. Its renderer draws onto the view's background.
--      width: 0
--      height: 0
--    }
+-  MpvVideo
+-  {
+-    id: video
+-    objectName: "video"
+-    // It's not a real item. Its renderer draws onto the view's background.
+-    width: 0
+-    height: 0
+-  }
 -
-     Timer {
-       id: splashTimer
-       interval: 1000
+   Timer {
+     id: splashTimer
+     interval: 1000
