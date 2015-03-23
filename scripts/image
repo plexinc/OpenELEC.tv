@@ -44,7 +44,7 @@ KONVERGO_VERSION="`git clone --no-checkout --depth 1 git@github.com:plexinc/konv
 KONVERGO_GITSHA=`git ls-remote git@github.com:plexinc/konvergo.git HEAD|awk '{print substr($0,0,7)}'`
 
 TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
-IMAGE_NAME="$DISTRONAME-$TARGET_VERSION-$BUILD_NUMBER-Konvergo-$KONVERGO_VERSION-$BUILD_NUMBER-$KONVERGO_GITSHA"
+IMAGE_NAME="$DISTRONAME-$TARGET_VERSION-Konvergo-$KONVERGO_VERSION-$BUILD_NUMBER-$KONVERGO_GITSHA"
 
 # setup fakeroot
   rm -rf $FAKEROOT_SCRIPT   # remove $FAKEROOT_SCRIPT if it exist
