@@ -1,5 +1,5 @@
---- qtbase/src/corelib/io/qlockfile_unix.cpp	2015-02-17 05:56:51.000000000 +0100
-+++ qtbase/src/corelib/io/qlockfile_unix.cpp.new	2015-03-23 10:17:41.743481127 +0100
+--- a/qtbase/src/corelib/io/qlockfile_unix.cpp	2015-02-17 05:56:51.000000000 +0100
++++ b/qtbase/src/corelib/io/qlockfile_unix.cpp.new	2015-03-23 10:17:41.743481127 +0100
 @@ -157,13 +157,17 @@
      if (!setNativeLocks(fd))
          qWarning() << "setNativeLocks failed:" << strerror(errno);
