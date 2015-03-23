@@ -1,0 +1,24 @@
+--- qtbase/src/corelib/io/qlockfile_unix.cpp	2015-02-17 05:56:51.000000000 +0100
++++ qtbase/src/corelib/io/qlockfile_unix.cpp.new	2015-03-23 10:17:41.743481127 +0100
+@@ -157,13 +157,17 @@
+     if (!setNativeLocks(fd))
+         qWarning() << "setNativeLocks failed:" << strerror(errno);
+ 
++    if (qt_write_loop(fd, fileData.constData(), fileData.size()) < fileData.size()) {
++        close(fd);
++        if (!QFile::remove(fileName))
++            qWarning("QLockFile: Could not remove our own lock file %s.", qPrintable(fileName));
++        return QLockFile::UnknownError; // partition full
++    }
++
+     // We hold the lock, continue.
+     fileHandle = fd;
+ 
+-    QLockFile::LockError error = QLockFile::NoError;
+-    if (qt_write_loop(fd, fileData.constData(), fileData.size()) < fileData.size())
+-        error = QLockFile::UnknownError; // partition full
+-    return error;
++    return QLockFile::NoError;
+ }
+ 
+ bool QLockFilePrivate::removeStaleLock()
