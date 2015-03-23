@@ -191,11 +191,6 @@ QMAKE_LIBDIR_QT       = $ROOT/$PKG_BUILD/install/lib
 
 load(qt_config)
 EOF
-
-## Temp adding a qmake.conf for RPi2 until we get to QT 5.5
-
-mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/devices/linux-rasp-pi2-g++
-cp $PKG_DIR/devices/linux-rasp-pi2-g++/* $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/devices/linux-rasp-pi2-g++/.
 }
 
 pre_configure_target() {
