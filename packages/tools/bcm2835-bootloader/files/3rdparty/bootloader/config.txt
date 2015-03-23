@@ -104,6 +104,12 @@
 # decode_DDP=0x00000000
 
 ################################################################################
+# Fix audio when using HDMI monitor
+################################################################################
+
+hdmi_drive=2
+
+################################################################################
 # End of default configuration
 # all values below this line were inserted from config.txt.bk (your old config)
 # and can be merged with the above values
