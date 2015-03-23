@@ -63,7 +63,9 @@ post_makeinstall_target() {
 
   # If building for RPi/RPi2 ensure we load the alsa snd module on boot.
   if [ $PROJECT = RPi2 -o $PROJECT = RPi ]; then
-    cp -PR $PKG_DIR/config/modules-load.d $INSTALL/usr/config
+  mkdir -p $INSTALL/etc
+  echo "snd_bcm2835" >> $INSTALL/etc/modules
+  #  cp -PR $PKG_DIR/config/modules-load.d $INSTALL/usr/config
   fi
 }
 
