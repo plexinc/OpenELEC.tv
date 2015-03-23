@@ -100,7 +100,7 @@ case $PROJECT in
                                                         -no-sql-sqlite2 \
                                                         -system-xkbcommon \
                                                         -shared \
-                                                        -device linux-rasp-pi2-g++ \
+                                                        -device linux-rasp-pi-g++ \
                                                         -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7ve-openelec-linux-gnueabi- \
                                                         -opengl es2 \
                                                         -make libs \
