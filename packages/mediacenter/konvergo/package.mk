@@ -23,7 +23,7 @@ case $PROJECT in
      PKG_VERSION="master"
      ;;
      RPi|RPi2)
-     PKG_VERSION="qml_mainwindow"
+     PKG_VERSION="master"
      ;;
 esac
 
