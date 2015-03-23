@@ -195,39 +195,7 @@ EOF
 ## Temp adding a qmake.conf for RPi2 until we get to QT 5.5
 
 mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/devices/linux-rasp-pi2-g++
-
-cat > $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/devices/linux-rasp-pi2-g++/qmake.conf <<EOF
-# qmake configuration for the Raspberry Pi 2
-
-include(../common/linux_device_pre.conf)
-
-QMAKE_LFLAGS           += -Wl,-rpath-link,$$[QT_SYSROOT]/opt/vc/lib
-
-QMAKE_LIBDIR_OPENGL_ES2 = $$[QT_SYSROOT]/opt/vc/lib
-QMAKE_LIBDIR_EGL        = $$QMAKE_LIBDIR_OPENGL_ES2
-
-QMAKE_INCDIR_EGL        = $$[QT_SYSROOT]/opt/vc/include \
-                          $$[QT_SYSROOT]/opt/vc/include/interface/vcos/pthreads \
-                          $$[QT_SYSROOT]/opt/vc/include/interface/vmcs_host/linux
-QMAKE_INCDIR_OPENGL_ES2 = $${QMAKE_INCDIR_EGL}
-
-QMAKE_LIBS_EGL          = -lEGL -lGLESv2
-QMAKE_CFLAGS += -march=armv7ve -marm -mthumb-interwork -mfpu=neon-vfpv4 -mtune=cortex-a7 -mabi=aapcs-linux
-QMAKE_CXXFLAGS          = $$QMAKE_CFLAGS
-
-DISTRO_OPTS += hard-float
-
-# Preferred eglfs backend
-EGLFS_DEVICE_INTEGRATION = eglfs_brcm
-
-include(../common/linux_arm_device_post.conf)
-
-load(qt_config)
-EOF
-
-cat > $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/devices/linux-rasp-pi2-g++/qplatformdefs.h <<EOF
-#include "../../linux-g++/qplatformdefs.h"
-EOF
+cp $PKG_DIR/devices/raspi2.conf $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/devices/linux-rasp-pi2-g++/qmake.conf
 }
 
 pre_configure_target() {
