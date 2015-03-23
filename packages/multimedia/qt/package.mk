@@ -194,9 +194,9 @@ EOF
 
 ## Temp adding a qmake.conf for RPi2 until we get to QT 5.5
 
-mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}/mkspecs/devices/linux-rasp-pi2-g++
+mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/devices/linux-rasp-pi2-g++
 
-cat > $BUILD/${PKG_NAME}-${PKG_VERSION}/mkspecs/devices/linux-rasp-pi2-g++/qmake.conf <<EOF
+cat > $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/devices/linux-rasp-pi2-g++/qmake.conf <<EOF
 # qmake configuration for the Raspberry Pi 2
 
 include(../common/linux_device_pre.conf)
@@ -225,7 +225,7 @@ include(../common/linux_arm_device_post.conf)
 load(qt_config)
 EOF
 
-cat > $BUILD/${PKG_NAME}-${PKG_VERSION}/mkspecs/devices/linux-rasp-pi2-g++/qplatformdefs.h <<EOF
+cat > $BUILD/${PKG_NAME}-${PKG_VERSION}/qtbase/mkspecs/devices/linux-rasp-pi2-g++/qplatformdefs.h <<EOF
 #include "../../linux-g++/qplatformdefs.h"
 EOF
 }
