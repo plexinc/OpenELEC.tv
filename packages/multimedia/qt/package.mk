@@ -212,7 +212,7 @@ QMAKE_INCDIR_EGL        = $$[QT_SYSROOT]/opt/vc/include \
 QMAKE_INCDIR_OPENGL_ES2 = $${QMAKE_INCDIR_EGL}
 
 QMAKE_LIBS_EGL          = -lEGL -lGLESv2
-QMAKE_CFLAGS += -march=armv7-a -marm -mthumb-interwork -mfpu=neon-vfpv4 -mtune=cortex-a7 -mabi=aapcs-linux
+QMAKE_CFLAGS += -march=armv7ve -marm -mthumb-interwork -mfpu=neon-vfpv4 -mtune=cortex-a7 -mabi=aapcs-linux
 QMAKE_CXXFLAGS          = $$QMAKE_CFLAGS
 
 DISTRO_OPTS += hard-float
