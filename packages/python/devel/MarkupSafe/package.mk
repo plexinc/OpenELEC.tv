@@ -16,26 +16,26 @@
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-PKG_NAME="wireless-regdb"
-PKG_VERSION="2014.11.18"
+PKG_NAME="MarkupSafe"
+PKG_VERSION="0.23"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
-PKG_SITE="http://wireless.kernel.org/en/developers/Regulatory"
-PKG_URL="https://www.kernel.org/pub/software/network/$PKG_NAME/$PKG_NAME-$PKG_VERSION.tar.xz"
-PKG_DEPENDS_TARGET="toolchain"
+PKG_SITE="https://pypi.python.org/pypi/MarkupSafe"
+PKG_URL="https://pypi.python.org/packages/source/M/MarkupSafe/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_DEPENDS_HOST="Python:host setuptools:host"
 PKG_PRIORITY="optional"
-PKG_SECTION="network"
-PKG_SHORTDESC="wireless-regdb: regulatory database"
-PKG_LONGDESC="wireless-regdb is a regulatory database"
+PKG_SECTION="python/devel"
+PKG_SHORTDESC="MarkupSafe: Implements a XML/HTML/XHTML Markup safe string for Python"
+PKG_LONGDESC="MarkupSafe implements a XML/HTML/XHTML Markup safe string for Python"
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-make_target() {
-  : # nothing to do
+make_host() {
+ : # nothing todo
 }
 
-makeinstall_target() {
-  : # nothing to do
+makeinstall_host() {
+  python setup.py install --prefix=$ROOT/$TOOLCHAIN
 }

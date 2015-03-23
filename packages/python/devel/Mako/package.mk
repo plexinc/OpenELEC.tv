@@ -16,26 +16,26 @@
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-PKG_NAME="wireless-regdb"
-PKG_VERSION="2014.11.18"
+PKG_NAME="Mako"
+PKG_VERSION="1.0.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
-PKG_SITE="http://wireless.kernel.org/en/developers/Regulatory"
-PKG_URL="https://www.kernel.org/pub/software/network/$PKG_NAME/$PKG_NAME-$PKG_VERSION.tar.xz"
-PKG_DEPENDS_TARGET="toolchain"
+PKG_SITE="https://pypi.python.org/pypi/Mako/"
+PKG_URL="https://pypi.python.org/packages/source/M/Mako/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_DEPENDS_HOST="Python:host setuptools:host MarkupSafe:host"
 PKG_PRIORITY="optional"
-PKG_SECTION="network"
-PKG_SHORTDESC="wireless-regdb: regulatory database"
-PKG_LONGDESC="wireless-regdb is a regulatory database"
+PKG_SECTION="python/devel"
+PKG_SHORTDESC="Mako: A super-fast templating language that borrows the best ideas from the existing templating languages."
+PKG_LONGDESC="Mako is a super-fast templating language that borrows the best ideas from the existing templating languages."
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-make_target() {
-  : # nothing to do
+make_host() {
+ : # nothing todo
 }
 
-makeinstall_target() {
-  : # nothing to do
+makeinstall_host() {
+  python setup.py install --prefix=$ROOT/$TOOLCHAIN
 }

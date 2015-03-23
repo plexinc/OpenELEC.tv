@@ -31,10 +31,10 @@ else
 #  else
 #    PKG_VERSION=PUBLIC
 #  fi
-  PKG_VERSION=v1.3.0
+  PKG_VERSION="v1.3.6.441-309e72d1"
   PKG_REV=$PKG_VERSION
   PKG_SITE="http://plex.tv"
-  PKG_URL="https://api.github.com/repos/plexinc/plex-home-theater-public/tarball/pht-$PKG_VERSION"
+  PKG_URL="http://plexrpms.markwalker.dk/OpenELEC/packages/plex-dummy.tar.gz"
   PKG_SHORTDESC="plexht: Plex Home Theater"
   PKG_LONGDESC="Plex Home Theater, is blah blah blah blah"
 fi
@@ -180,7 +180,12 @@ export PYTHON_LDFLAGS="-L$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION -lpython$
 export PYTHON_SITE_PKG="$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION/site-packages"
 export ac_python_version="$PYTHON_VERSION"
 
-
+unpack() {
+        rm -rf $BUILD/${PKG_NAME}-${PKG_VERSION}
+	git clone --depth 1 --branch ${PKG_VERSION} git@github.com:plexinc/plex-home-theater-public.git $BUILD/${PKG_NAME}-${PKG_VERSION}
+        rm -f $BUILD/${PKG_NAME}-${PKG_VERSION}/xbmc/cores/dvdplayer/DVDCodecs/Audio/DVDAudioCodecPassthroughFFmpeg.h
+        rm -f $BUILD/${PKG_NAME}-${PKG_VERSION}/xbmc/cores/dvdplayer/DVDCodecs/Audio/DVDAudioCodecPassthroughFFmpeg.cpp
+}
 
 configure_target() {
 
@@ -315,7 +320,7 @@ makeinstall_target() {
 			cp $i $INSTALL/usr/lib/plexhometheater/system/players/dvdplayer/`basename $(echo $i | sed  -r 's:lib([a-zA-Z]+)\\.so\\.([0-9]*).*:\1-\2-arm.so:')`
 	done
 
-  mkdir -p $INSTALL/usr/share/xbmc/
+  mkdir -p $INSTALL/usr/share/XBMC/
 
 	cd $PKG_BUILD
 	echo "pkg build: $PKG_BUILD"
@@ -329,61 +334,67 @@ makeinstall_target() {
 	find addons language media sounds userdata system \
 			-regextype posix-extended -type f \
 			-not -iregex ".*-linux.*|.*-arm.*|.*\.vis|.*\.xbs|.*svn.*|.*\.orig|.*\.so|.*\.dll|.*\.pyd|.*python|.*\.zlib|.*\.conf" \
-			-exec install -D -m 0644 "{}" $INSTALL/usr/share/xbmc/"{}" ";"
+			-exec install -D -m 0644 "{}" $INSTALL/usr/share/XBMC/"{}" ";"
 	cd -
 
 	if [ ! "$XBMC_SCR_RSXS" = yes ]; then
-		rm -rf $INSTALL/usr/share/xbmc/addons/screensaver.rsxs.*
+		rm -rf $INSTALL/usr/share/XBMC/addons/screensaver.rsxs.*
 	fi
 
 	if [ ! "$XBMC_VIS_PROJECTM" = yes ]; then
-		rm -rf $INSTALL/usr/share/xbmc/addons/visualization.projectm
+		rm -rf $INSTALL/usr/share/XBMC/addons/visualization.projectm
 	fi
 
 
 
-	rm -rf $INSTALL/usr/share/xbmc/addons/visualization.dxspectrum
-	rm -rf $INSTALL/usr/share/xbmc/addons/visualization.itunes
-	rm -rf $INSTALL/usr/share/xbmc/addons/visualization.milkdrop
-	rm -rf $INSTALL/usr/share/xbmc/addons/script.module.pysqlite
-	rm -rf $INSTALL/usr/share/xbmc/addons/script.module.simplejson
+	rm -rf $INSTALL/usr/share/XBMC/addons/visualization.dxspectrum
+	rm -rf $INSTALL/usr/share/XBMC/addons/visualization.itunes
+	rm -rf $INSTALL/usr/share/XBMC/addons/visualization.milkdrop
+	rm -rf $INSTALL/usr/share/XBMC/addons/script.module.pysqlite
+	rm -rf $INSTALL/usr/share/XBMC/addons/script.module.simplejson
 
-	mkdir -p $INSTALL/usr/share/xbmc/addons
-			cp -R $PKG_DIR/config/os.openelec.tv $INSTALL/usr/share/xbmc/addons
-			$SED "s|@OS_VERSION@|$OS_VERSION|g" -i $INSTALL/usr/share/xbmc/addons/os.openelec.tv/addon.xml
-			cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/xbmc/addons
-			$SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/xbmc/addons/repository.openelec.tv/addon.xml
+	mkdir -p $INSTALL/usr/share/XBMC/addons
+			cp -R $PKG_DIR/config/os.openelec.tv $INSTALL/usr/share/XBMC/addons
+			$SED "s|@OS_VERSION@|$OS_VERSION|g" -i $INSTALL/usr/share/XBMC/addons/os.openelec.tv/addon.xml
+			cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/XBMC/addons
+			$SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/XBMC/addons/repository.openelec.tv/addon.xml
 
 
   mkdir -p $INSTALL/usr/lib/python"$PYTHON_VERSION"/site-packages/xbmc
     cp -R $PKG_BUILD/tools/EventClients/lib/python/* $INSTALL/usr/lib/python"$PYTHON_VERSION"/site-packages/xbmc
 
 
-	mkdir -p $INSTALL/usr/share/xbmc/system/
+	mkdir -p $INSTALL/usr/share/XBMC/system/
 	mkdir -p $INSTALL/usr/bin/
-	mkdir -p $INSTALL/usr/share/xbmc/tools/
+	mkdir -p $INSTALL/usr/share/XBMC/tools/
 
-	cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/xbmc/system/
-	cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/xbmc/
-	cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/xbmc/system/
-	cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/xbmc/
+	cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/XBMC/system/
+	cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/XBMC/
+	cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/XBMC/system/
+	cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/XBMC/
 
 
 }
 
 post_install() {
-# link default.target to xbmc.target
-  ln -sf xbmc.target $INSTALL/usr/lib/systemd/system/default.target
+# link default.target to plexht.target
+  ln -sf plexht.target $INSTALL/usr/lib/systemd/system/default.target
 
-  enable_service xbmc-autostart.service
-  enable_service xbmc-cleanlogs.service
-  enable_service xbmc-config.service
-  enable_service xbmc-hacks.service
-  enable_service xbmc-sources.service
-  enable_service xbmc-halt.service
-  enable_service xbmc-poweroff.service
-  enable_service xbmc-reboot.service
-  enable_service xbmc-waitonnetwork.service
-  enable_service xbmc.service
-  enable_service xbmc-lirc-suspend.service
+# for compatibility
+  ln -sf plexht.target $INSTALL/usr/lib/systemd/system/kodi.target
+  ln -sf plexht.service $INSTALL/usr/lib/systemd/system/kodi.service
+  ln -sf plexht.target $INSTALL/usr/lib/systemd/system/xbmc.target
+  ln -sf plexht.service $INSTALL/usr/lib/systemd/system/xbmc.service
+
+# enable default services
+  enable_service plexht-autostart.service
+  enable_service plexht-cleanlogs.service
+  enable_service plexht-hacks.service
+  enable_service plexht-sources.service
+  enable_service plexht-halt.service
+  enable_service plexht-poweroff.service
+  enable_service plexht-reboot.service
+  enable_service plexht-waitonnetwork.service
+  enable_service plexht.service
+  enable_service plexht-lirc-suspend.service
 }

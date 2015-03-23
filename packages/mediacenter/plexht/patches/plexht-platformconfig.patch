@@ -1,0 +1,11 @@
+--- a/plex/CMakeModules/PlatformConfigLINUX.cmake	2015-03-12 19:25:28.722096999 +0100
++++ b/plex/CMakeModules/PlatformConfigLINUX.cmake.orig	2015-03-12 19:27:25.866096999 +0100
+@@ -46,7 +46,7 @@
+ endif()
+ 
+ if(ENABLE_PYTHON)
+-   list(APPEND LINK_PKG Python)
++  plex_find_library(python2.7 0 1 ${EXTERNAL_PYTHON_HOME}/lib 1)
+ endif(ENABLE_PYTHON)
+ 
+ foreach(l ${LINK_PKG})
