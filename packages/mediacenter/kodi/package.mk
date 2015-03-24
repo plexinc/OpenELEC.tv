@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="kodi"
-PKG_VERSION="14-b5dbdb5"
+PKG_VERSION="14-e7ba06f"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -82,14 +82,6 @@ if [ "$ALSA_SUPPORT" = yes ]; then
   KODI_ALSA="--enable-alsa"
 else
   KODI_ALSA="--disable-alsa"
-fi
-
-if [ "$PULSEAUDIO_SUPPORT" = yes ]; then
-# for PulseAudio support
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET pulseaudio"
-  KODI_PULSEAUDIO="--enable-pulse"
-else
-  KODI_PULSEAUDIO="--disable-pulse"
 fi
 
 if [ "$ESPEAK_SUPPORT" = yes ]; then
@@ -262,6 +254,8 @@ if [ ! "$KODIPLAYER_DRIVER" = default ]; then
     KODI_CXXFLAGS="$KODI_CXXFLAGS $BCM2835_INCLUDES"
   elif [ "$KODIPLAYER_DRIVER" = libfslvpuwrap ]; then
     KODI_CODEC="--enable-codec=imxvpu"
+  elif [ "$KODIPLAYER_DRIVER" = libamcodec ]; then
+    KODI_CODEC="--enable-codec=amcodec"
   else
     KODI_OPENMAX="--disable-openmax"
   fi
@@ -319,7 +313,7 @@ PKG_CONFIGURE_OPTS_TARGET="gl_cv_func_gettimeofday_clobber=no \
                            $KODI_XORG \
                            --disable-ccache \
                            $KODI_ALSA \
-                           $KODI_PULSEAUDIO \
+                           --disable-pulse \
                            --enable-rtmp \
                            $KODI_SAMBA \
                            $KODI_NFS \
@@ -413,10 +407,7 @@ post_makeinstall_target() {
 
   mkdir -p $INSTALL/usr/lib/kodi
     cp $PKG_DIR/scripts/kodi-config $INSTALL/usr/lib/kodi
-    cp $PKG_DIR/scripts/kodi-hacks $INSTALL/usr/lib/kodi
-    cp $PKG_DIR/scripts/kodi-sources $INSTALL/usr/lib/kodi
-# TODO: remove this later:
-    cp $PKG_DIR/scripts/kodi-rebrand $INSTALL/usr/lib/kodi
+    cp $PKG_DIR/scripts/kodi.sh $INSTALL/usr/lib/kodi
 
   mkdir -p $INSTALL/usr/lib/openelec
     cp $PKG_DIR/scripts/systemd-addon-wrapper $INSTALL/usr/lib/openelec
@@ -453,8 +444,11 @@ post_makeinstall_target() {
   mkdir -p $INSTALL/usr/lib/python"$PYTHON_VERSION"/site-packages/kodi
     cp -R tools/EventClients/lib/python/* $INSTALL/usr/lib/python"$PYTHON_VERSION"/site-packages/kodi
 
-# install project specific configs
   mkdir -p $INSTALL/usr/share/kodi/config
+    cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/kodi/config
+    cp $PKG_DIR/config/sources.xml $INSTALL/usr/share/kodi/config
+
+# install project specific configs
     if [ -f $PROJECT_DIR/$PROJECT/kodi/guisettings.xml ]; then
       cp -R $PROJECT_DIR/$PROJECT/kodi/guisettings.xml $INSTALL/usr/share/kodi/config
     fi
@@ -494,15 +488,10 @@ post_install() {
 # enable default services
   enable_service kodi-autostart.service
   enable_service kodi-cleanlogs.service
-  enable_service kodi-hacks.service
-  enable_service kodi-sources.service
   enable_service kodi-halt.service
   enable_service kodi-poweroff.service
   enable_service kodi-reboot.service
   enable_service kodi-waitonnetwork.service
   enable_service kodi.service
   enable_service kodi-lirc-suspend.service
-
-# TODO: remove this later
-  enable_service kodi-rebrand.service
 }

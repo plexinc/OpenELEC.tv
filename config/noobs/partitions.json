@@ -1,17 +1,17 @@
 {
   "partitions": [
     {
-      "label":                     "@DISTRONAME@System",
+      "label":                     "@DISTRONAME@_@PROJECT@_System",
       "filesystem_type":           "FAT",
-      "partition_size_nominal":    1024,
+      "partition_size_nominal":    160,
       "want_maximised":            false,
       "uncompressed_tarball_size": 120,
       "mkfs_options":              ""
     },
     {
-      "label":                     "@DISTRONAME@Storage",
+      "label":                     "@DISTRONAME@_@PROJECT@_Storage",
       "filesystem_type":           "ext4",
-      "partition_size_nominal":    1024,
+      "partition_size_nominal":    864,
       "want_maximised":            true,
       "uncompressed_tarball_size": 10,
       "mkfs_options":              ""

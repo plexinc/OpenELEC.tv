@@ -57,8 +57,10 @@
 
   # Kernel to use. values can be:
   # default:  default mainline kernel
-    LINUX="3.18"
+    LINUX="default"
 
+  # NOOBS supported hex versions
+    NOOBS_HEX="1040,1041"
 
 ################################################################################
 # setup build defaults
@@ -87,7 +89,7 @@
   # build and install ALSA Audio support (yes / no)
     ALSA_SUPPORT="yes"
 
-  # OpenGL(X) implementation to use (no / Mesa)
+  # OpenGL(X) implementation to use (no / mesa)
     OPENGL="no"
 
   # OpenGL-ES implementation to use (no / bcm2835-driver / gpu-viv-bin-mx6q)
@@ -102,9 +104,9 @@
   # Windowmanager to use (ratpoison / fluxbox / none)
     WINDOWMANAGER="none"
 
-  # Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,nvidia,nouveau)
+  # Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,nvidia)
   # Space separated list is supported,
-  # e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeonsi nvidia nouveau"
+  # e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeonsi nvidia"
     GRAPHIC_DRIVERS=""
 
   # KODI Player implementation to use (default / bcm2835-driver / libfslvpuwrap)
@@ -113,16 +115,10 @@
   # Modules to install in initramfs for early boot
     INITRAMFS_MODULES=""
 
-# additional drivers to install:
-# for a list of additinoal drivers see packages/linux-drivers
-# Space separated list is supported,
-# e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
-  ADDITIONAL_DRIVERS="RTL8192CU RTL8192DU RTL8188EU"
-
   # additional Firmware to use (dvb-firmware, misc-firmware, wlan-firmware)
   # Space separated list is supported,
   # e.g. FIRMWARE="dvb-firmware misc-firmware wlan-firmware"
-    FIRMWARE="misc-firmware wlan-firmware"
+    FIRMWARE="misc-firmware wlan-firmware dvb-firmware"
 
   # build and install ATV IR remote support (yes / no)
     ATVCLIENT_SUPPORT="no"
@@ -156,19 +152,3 @@
 
   # kernel image name
     KERNEL_NAME="kernel.img"
-
-  # build and install CEC adapter support (yes / no)
-    CEC_SUPPORT="yes"
-
-  # LCD driver to Use - Possible drivers are ( Comma seperated:
-  # bayrad,CFontz,CFontz633,CFontzPacket,curses,CwLnx,dm140,
-  # ea65,EyeboxOne,g15,glcdlib,glk,hd44780,i2500vfd,
-  # icp_a106,imon,imonlcd,IOWarrior,irman,irtrans,
-  # joy,lb216,lcdm001,lcterm,lirc,lis,MD8800,mdm166a,
-  # ms6931,mtc_s16209x,MtxOrb,mx5000,NoritakeVFD,
-  # picolcd,pyramid,sed1330,sed1520,serialPOS,
-  # serialVFD,shuttleVFD,sli,stv5730,SureElec,svga,vlsys_m428
-  # 'all' compiles all drivers;
-  # 'all,!xxx,!yyy' de-selects previously selected drivers
-  # "none" for disable LCD support
-    LCD_DRIVER="none"

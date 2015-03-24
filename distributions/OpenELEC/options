@@ -47,9 +47,6 @@
   # does not work on RPi
   KODI_VIS_FISHBMC="no"
 
-# build and install PulseAudio support (yes / no)
-  PULSEAUDIO_SUPPORT="yes"
-
 # build and install espeak support (yes / no)
   ESPEAK_SUPPORT="no"
 
@@ -128,12 +125,6 @@
 # build and install SFTP Server (yes / no)
   SFTP_SERVER="yes"
 
-# build and install PPP support (yes / no)
-  PPTP_SUPPORT="no"
-
-# build and install OpenVPN support (yes / no)
-  OPENVPN_SUPPORT="no"
-
 # build and install diskmounter support (udevil)
 # this service provide auto mounting support for external drives in the
 # mediacenter also automount internally drives at boottime via udev (yes / no)
@@ -151,9 +142,9 @@
 # Windowmanager to use (ratpoison / fluxbox / none)
   WINDOWMANAGER="fluxbox"
 
-# Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,nvidia,nouveau)
+# Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,nvidia)
 # Space separated list is supported,
-# e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeonsi nvidia nouveau"
+# e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeonsi nvidia"
   if [ "$TARGET_ARCH" = "i386" ]; then
     # TODO: create Legacy build with OpenELEC-4.2
     # install legacy drivers to i386 ARCH
@@ -220,9 +211,6 @@
 
 # cron support (yes / no)
   CRON_SUPPORT="yes"
-
-# Perf support in development builds (yes / no)
-  PERF_SUPPORT="yes"
 
 # Distribution Specific source location
   DISTRO_MIRROR="http://sources.openelec.tv/mirror"

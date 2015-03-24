@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="sqlite"
-PKG_VERSION="autoconf-3080801"
+PKG_VERSION="autoconf-3080803"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="PublicDomain"
@@ -65,7 +65,7 @@ PKG_AUTORECONF="yes"
 
 
 PKG_CONFIGURE_OPTS_TARGET="--enable-static \
-                           --enable-shared \
+                           --disable-shared \
                            --disable-readline \
                            --enable-threadsafe \
                            --enable-dynamic-extensions \
