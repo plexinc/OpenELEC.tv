@@ -62,7 +62,7 @@ case $PROJECT in
 							-system-xkbcommon \
 							-qt-xcb \
 							-no-sql-sqlite2
-							-arch $TARGET_ARCH
+							-arch $TARGET_ARCH \
 							-platform linux-g++ \
 							-xplatform linux-g++-openelec \
                                                         -skip qtandroidextras \
