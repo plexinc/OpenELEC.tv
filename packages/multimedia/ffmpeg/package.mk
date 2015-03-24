@@ -110,8 +110,6 @@ pre_configure_target() {
   cd $ROOT/$PKG_BUILD
   rm -rf .$TARGET_NAME
 
-  export pkg_config="$ROOT/$TOOLCHAIN/bin/pkg-config"
-
 # ffmpeg fails building with LTO support
   strip_lto
 
@@ -152,6 +150,7 @@ configure_target() {
               --disable-doc \
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
+              --pkg-config="$ROOT/$TOOLCHAIN/bin/pkg-config" \
               --enable-optimizations \
               --disable-armv5te --disable-armv6t2 \
               --disable-extra-warnings \
