@@ -97,6 +97,7 @@ configure_target() {
                         -DUSE_QTQUICK=on \
                         -DENABLE_MPV=on \
                         -DCMAKE_VERBOSE_MAKEFILE=on \
+                        -DOPENELEC=on \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
 
@@ -113,6 +114,8 @@ configure_target() {
 			-DENABLE_MPV=on \
 			-DBUILD_TARGET="RPI" \
 			-DCMAKE_VERBOSE_MAKEFILE=on \
+			-DOPENELEC=on \
+			-DBUILD_TARGET="RPI" \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
 	esac
