@@ -61,7 +61,7 @@ case $PROJECT in
 							-no-pch \
 							-system-xkbcommon \
 							-qt-xcb \
-							-no-sql-sqlite2
+							-no-sql-sqlite2 \
 							-arch $TARGET_ARCH \
 							-platform linux-g++ \
 							-xplatform linux-g++-openelec \
