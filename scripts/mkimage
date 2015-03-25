@@ -130,6 +130,9 @@ fi
   elif [ "$BOOTLOADER" = "bcm2835-bootloader" -o "$BOOTLOADER" = "u-boot" ]; then
     mkfs.vfat "$LOOP"
   fi
+
+# give it an awesome name ! 
+  mlabel -i "$LOOP" ::konvergo
   sync
 
 # mount partition
