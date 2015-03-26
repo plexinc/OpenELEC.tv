@@ -41,7 +41,7 @@ if [ "$OPENELEC_VERSION" = devel ]; then
 fi
 
 KONVERGO_VERSION="`git clone --no-checkout --depth 1 git@github.com:plexinc/konvergo.git && cd konvergo && git show HEAD:CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g' && cd .. && rm -rf konvergo`"
-KONVERGO_GITSHA=`git ls-remote git@github.com:plexinc/konvergo.git HEAD|awk '{print substr($0,0,7)}'`
+KONVERGO_GITSHA=`git ls-remote git@github.com:plexinc/konvergo.git HEAD|awk '{print substr($0,0,8)}'`
 
 TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
 IMAGE_NAME="$DISTRONAME-$TARGET_VERSION-Konvergo-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA"
