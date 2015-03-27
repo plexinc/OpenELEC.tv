@@ -46,6 +46,8 @@ configure_target() {
 }
 
 makeinstall_target() {
+	cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+	make install
 	mkdir -p $INSTALL/usr/lib
 	cp ${SYSROOT_PREFIX}/usr/lib/libconnman-qt5.so* $INSTALL/usr/lib
 }
