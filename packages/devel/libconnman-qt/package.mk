@@ -32,7 +32,7 @@ PKG_LONGDESC="
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-PKG_CONFIGURE_OPTS_TARGET="CONFIG+=notests PREFIX=${SYSROOT_PREFIX}/usr"
+PKG_CONFIGURE_OPTS_TARGET="CONFIG+=notests VERSION=5.4.1 PREFIX=${SYSROOT_PREFIX}/usr"
 
 unpack() {
 
@@ -50,4 +50,5 @@ makeinstall_target() {
 	make install
 	mkdir -p $INSTALL/usr/lib
 	cp ${SYSROOT_PREFIX}/usr/lib/libconnman-qt5.so* $INSTALL/usr/lib
+	make install DESTDIR=$INSTALL/usr
 }
