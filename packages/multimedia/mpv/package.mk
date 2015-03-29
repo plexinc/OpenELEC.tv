@@ -42,7 +42,7 @@ unpack() {
                 git clone -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
                 ;;
                 RPi|RPi2)
-                git clone -b rpi git@github.com:wm4/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
+                git clone -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
                 ;;
         esac
 }
