@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="2.6.1"
+PKG_VERSION="2.6"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
 PKG_SITE="http://ffmpeg.org"
 PKG_URL="https://www.ffmpeg.org/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis openssl"
+PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis libressl"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video."
@@ -31,19 +31,6 @@ PKG_LONGDESC="FFmpeg is a complete, cross-platform solution to record, convert a
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
-
-unpack() {
-
-case $PROJECT in
-	Generic)
-        tar -xzf $SOURCES/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.gz -C $BUILD
-	;;
-	RPi|RPi2)
-        git clone -b master git@github.com:wm4/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
-	;;
-esac
-
-}
 
 # configure GPU drivers and dependencies:
   get_graphicdrivers
@@ -96,14 +83,6 @@ case "$TARGET_FPU" in
   *)
       FFMPEG_FPU=""
   ;;
-esac
-
-case $PROJECT in
-      Generic)
-      ;;
-      RPi|RPi2)
-      FFMPEG_MMAL="--enable-mmal"
-      ;;
 esac
 
 pre_configure_target() {
@@ -169,7 +148,7 @@ configure_target() {
               --disable-w32threads \
               --disable-x11grab \
               --enable-network \
-              --disable-gnutls --enable-openssl --enable-nonfree \
+              --disable-gnutls --enable-libressl \
               --disable-gray \
               --enable-swscale-alpha \
               --disable-small \
@@ -233,8 +212,7 @@ configure_target() {
               $FFMPEG_CPU \
               $FFMPEG_FPU \
               --enable-yasm \
-              --disable-symver \
-              $FFMPEG_MMAL
+              --disable-symver
 }
 
 post_makeinstall_target() {
