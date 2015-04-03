@@ -74,11 +74,6 @@ case "$TARGET_ARCH" in
       FFMPEG_TABLES="--enable-hardcoded-tables"
       FFMPEG_PIC="--enable-pic"
   ;;
-  i?86)
-      FFMPEG_CPU=""
-      FFMPEG_TABLES="--disable-hardcoded-tables"
-      FFMPEG_PIC="--disable-pic"
-  ;;
   x86_64)
       FFMPEG_CPU=""
       FFMPEG_TABLES="--disable-hardcoded-tables"
