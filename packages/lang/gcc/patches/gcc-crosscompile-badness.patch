@@ -28,3 +28,4 @@ Index: gcc-4.4+svnr145550/gcc/incpath.c
 +
    add_cpp_dir_path (p, chain);
  }
+ 

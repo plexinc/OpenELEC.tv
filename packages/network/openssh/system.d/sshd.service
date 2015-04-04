@@ -1,7 +1,7 @@
 [Unit]
 Description=OpenSSH server daemon
 ConditionKernelCommandLine=|ssh
-ConditionPathExists=|/usr/share/sshd.conf
+ConditionPathExists=|/storage/.cache/services/sshd.conf
 After=network.target
 
 [Service]
