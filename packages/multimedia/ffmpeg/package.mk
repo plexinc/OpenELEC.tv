@@ -23,7 +23,7 @@ PKG_ARCH="any"
 PKG_LICENSE="LGPL"
 PKG_SITE="http://ffmpeg.org"
 PKG_URL="https://www.ffmpeg.org/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis libressl"
+PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis openssl"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video."
@@ -31,6 +31,19 @@ PKG_LONGDESC="FFmpeg is a complete, cross-platform solution to record, convert a
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
+
+unpack() {
+
+case $PROJECT in
+	Generic)
+        tar -xzf $SOURCES/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.gz -C $BUILD
+	;;
+	RPi|RPi2)
+        git clone -b master git@github.com:wm4/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
+	;;
+esac
+
+}
 
 # configure GPU drivers and dependencies:
   get_graphicdrivers
@@ -61,6 +74,11 @@ case "$TARGET_ARCH" in
       FFMPEG_TABLES="--enable-hardcoded-tables"
       FFMPEG_PIC="--enable-pic"
   ;;
+  i?86)
+      FFMPEG_CPU=""
+      FFMPEG_TABLES="--disable-hardcoded-tables"
+      FFMPEG_PIC="--disable-pic"
+  ;;
   x86_64)
       FFMPEG_CPU=""
       FFMPEG_TABLES="--disable-hardcoded-tables"
@@ -80,9 +98,19 @@ case "$TARGET_FPU" in
   ;;
 esac
 
+case $PROJECT in
+      Generic)
+      ;;
+      RPi|RPi2)
+      FFMPEG_MMAL="--enable-mmal"
+      ;;
+esac
+
 pre_configure_target() {
   cd $ROOT/$PKG_BUILD
   rm -rf .$TARGET_NAME
+
+  export pkg_config="$ROOT/$TOOLCHAIN/bin/pkg-config"
 
 # ffmpeg fails building with LTO support
   strip_lto
@@ -124,7 +152,6 @@ configure_target() {
               --disable-doc \
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
-              --pkg-config="$ROOT/$TOOLCHAIN/bin/pkg-config" \
               --enable-optimizations \
               --disable-armv5te --disable-armv6t2 \
               --disable-extra-warnings \
@@ -143,7 +170,7 @@ configure_target() {
               --disable-w32threads \
               --disable-x11grab \
               --enable-network \
-              --disable-gnutls --enable-libressl \
+              --disable-gnutls --enable-openssl --enable-nonfree \
               --disable-gray \
               --enable-swscale-alpha \
               --disable-small \
@@ -207,7 +234,8 @@ configure_target() {
               $FFMPEG_CPU \
               $FFMPEG_FPU \
               --enable-yasm \
-              --disable-symver
+              --disable-symver \
+              $FFMPEG_MMAL
 }
 
 post_makeinstall_target() {
