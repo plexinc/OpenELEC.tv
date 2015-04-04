@@ -50,5 +50,6 @@ makeinstall_target() {
 	make install
 	mkdir -p $INSTALL/usr/lib
 	cp ${SYSROOT_PREFIX}/usr/lib/libconnman-qt5.so* $INSTALL/usr/lib
-	make install DESTDIR=$INSTALL/usr
+	mkdir -p $INSTALL/usr/local/qt5/qml
+        cp -R ${SYSROOT_PREFIX}/usr/local/qt5/qml/MeeGo  $INSTALL/usr/local/qt5/qml
 }
