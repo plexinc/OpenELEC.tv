@@ -73,8 +73,10 @@ post_install() {
   add_user sshd x 74 74 "Privilege-separated SSH" "/var/empty/sshd" "/bin/sh"
   add_group sshd 74
 
+  ### PLEX
   mkdir -p $INSTALL/usr/share
   cp $PKG_DIR/sshd.conf $INSTALL/usr/share/
+  ### END PLEX 
 
   enable_service sshd.service
 }
