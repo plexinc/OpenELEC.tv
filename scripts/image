@@ -308,9 +308,6 @@ IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$P
 
     # create image files if requested
       if [ "$1" = "mkimage" -a -n "$BOOTLOADER" ]; then
-        if [ "$2" == "efi" ] ; then
-          UEFI=yes
-        fi
         # projects can set KERNEL_NAME (kernel.img)
         if [ -z "$KERNEL_NAME" ] ; then
           KERNEL_NAME="KERNEL"
@@ -329,7 +326,6 @@ IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$P
           RELEASE_DIR="$RELEASE_DIR" \
           UUID_SYSTEM="$(uuidgen)" \
           UUID_STORAGE="$(uuidgen)" \
-          UEFI="$UEFI" \
           $SCRIPTS/mkimage
       fi
 
