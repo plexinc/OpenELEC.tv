@@ -79,7 +79,9 @@ PKG_CONFIGURE_OPTS_TARGET="--without-ada \
 
 pre_configure_target() {
   # causes some segmentation fault's (dialog) when compiled with gcc's link time optimization.
+  ### PLEX : we need -fPIC here 
   CFLAGS="$CFLAGS -fPIC"
+  ## END PLEX
   strip_lto
 }
 
