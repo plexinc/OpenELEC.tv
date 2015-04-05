@@ -277,7 +277,6 @@ IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$P
 
         cp $ROOT/README* $RELEASE_DIR
         cp $ROOT/CHANGELOG* $RELEASE_DIR
-        cp -R $CONFIG/release/openelec.ico $RELEASE_DIR
         echo "$TARGET_VERSION" > $RELEASE_DIR/RELEASE
 
         if [ -n "$MEDIACENTER" ] ; then
@@ -413,7 +412,6 @@ IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$P
         )
 
       # copy additional files
-        cp -R $CONFIG/release/openelec.ico $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
         mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/licenses
           cp $ROOT/licenses/* $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/licenses
 
