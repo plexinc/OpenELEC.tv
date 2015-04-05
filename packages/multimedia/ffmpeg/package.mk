@@ -76,13 +76,6 @@ case "$TARGET_ARCH" in
       FFMPEG_TABLES="--enable-hardcoded-tables"
       FFMPEG_PIC="--enable-pic"
   ;;
-  ### PLEX
-  i?86)
-      FFMPEG_CPU=""
-      FFMPEG_TABLES="--disable-hardcoded-tables"
-      FFMPEG_PIC="--disable-pic"
-  ;;
-  ### END PLEX
   x86_64)
       FFMPEG_CPU=""
       FFMPEG_TABLES="--disable-hardcoded-tables"
@@ -115,8 +108,6 @@ esac
 pre_configure_target() {
   cd $ROOT/$PKG_BUILD
   rm -rf .$TARGET_NAME
-
-  export pkg_config="$ROOT/$TOOLCHAIN/bin/pkg-config"
 
 # ffmpeg fails building with LTO support
   strip_lto
@@ -158,6 +149,7 @@ configure_target() {
               --disable-doc \
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
+              --pkg-config="$ROOT/$TOOLCHAIN/bin/pkg-config" \
               --enable-optimizations \
               --disable-armv5te --disable-armv6t2 \
               --disable-extra-warnings \
