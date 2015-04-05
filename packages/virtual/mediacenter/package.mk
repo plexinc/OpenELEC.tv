@@ -23,7 +23,7 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.openelec.tv"
 PKG_URL=""
-#PKG_DEPENDS_TARGET="toolchain $MEDIACENTER $MEDIACENTER-theme-$SKIN_DEFAULT"
+### PLEX : set our own mediacenter
 PKG_DEPENDS_TARGET="toolchain $MEDIACENTER"
 PKG_PRIORITY="optional"
 PKG_SECTION="virtual"
