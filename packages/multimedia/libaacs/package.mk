@@ -32,6 +32,7 @@ PKG_LONGDESC="libaacs is a research project to implement the Advanced Access Con
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
+### PLEX : we disable examples & debug
 PKG_CONFIGURE_OPTS_TARGET="--disable-werror \
                            --disable-extra-warnings \
                            --disable-optimizations \
@@ -44,6 +45,7 @@ pre_configure_target() {
   cd $ROOT/$PKG_BUILD
     rm -rf .$TARGET_NAME
 }
+### END PLEX
 
 post_makeinstall_target() {
   mkdir -p $INSTALL/usr/config/aacs
