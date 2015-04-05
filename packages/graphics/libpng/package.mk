@@ -33,9 +33,12 @@ PKG_LONGDESC="PNG (Portable Network Graphics) is an extensible file format for t
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
+### PLEX
+### We need the shared library
 PKG_CONFIGURE_OPTS_TARGET="ac_cv_lib_z_zlibVersion=yes \
                            --enable-static \
                            --enable-shared"
+### END PLEX
 
 PKG_CONFIGURE_OPTS_HOST="--enable-static --disable-shared"
 

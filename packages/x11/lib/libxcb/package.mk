@@ -32,6 +32,7 @@ PKG_LONGDESC="X C-language Bindings library."
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
+### PLEX : we need shared library
 PKG_CONFIGURE_OPTS_TARGET="--enable-static --enable-shared \
                            --disable-screensaver \
                            --disable-xprint \

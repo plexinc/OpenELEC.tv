@@ -32,6 +32,7 @@ PKG_LONGDESC="LibXi provides an X Window System client interface to the XINPUT e
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
+### PLEX : we need shared library
 PKG_CONFIGURE_OPTS_TARGET="--enable-shared \
                            --enable-malloc0returnsnull \
                            --disable-silent-rules \
@@ -43,8 +44,10 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-shared \
                            --without-asciidoc \
                            --with-gnu-ld"
 
+### PLEX
 pre_configure_target() {
   CFLAGS="$CFLAGS -fPIC"
   CXXFLAGS="$CXXFLAGS -fPIC"
   LDFLAGS="$LDFLAGS -fPIC"
 }
+### END PLEX

@@ -131,9 +131,11 @@ fi
     mkfs.vfat "$LOOP"
   fi
 
+### PLEX
 # give it an awesome name ! 
   mlabel -i "$LOOP" ::konvergo
   sync
+### END PLEX
 
 # mount partition
   echo "image: mounting part1 on $OE_TMP..."

@@ -32,6 +32,7 @@ PKG_LONGDESC="FFmpeg is a complete, cross-platform solution to record, convert a
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+### PLEX
 unpack() {
 
 case $PROJECT in
@@ -44,6 +45,7 @@ case $PROJECT in
 esac
 
 }
+### END PLEX
 
 # configure GPU drivers and dependencies:
   get_graphicdrivers
@@ -74,11 +76,13 @@ case "$TARGET_ARCH" in
       FFMPEG_TABLES="--enable-hardcoded-tables"
       FFMPEG_PIC="--enable-pic"
   ;;
+  ### PLEX
   i?86)
       FFMPEG_CPU=""
       FFMPEG_TABLES="--disable-hardcoded-tables"
       FFMPEG_PIC="--disable-pic"
   ;;
+  ### END PLEX
   x86_64)
       FFMPEG_CPU=""
       FFMPEG_TABLES="--disable-hardcoded-tables"
@@ -98,6 +102,7 @@ case "$TARGET_FPU" in
   ;;
 esac
 
+### PLEX
 case $PROJECT in
       Generic)
       ;;
@@ -105,6 +110,7 @@ case $PROJECT in
       FFMPEG_MMAL="--enable-mmal"
       ;;
 esac
+### END PLEX
 
 pre_configure_target() {
   cd $ROOT/$PKG_BUILD

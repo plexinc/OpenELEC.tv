@@ -55,7 +55,10 @@ make_target() {
     cp -PRv $FLOAT/opt/vc/lib/libmmal_core.so $SYSROOT_PREFIX/usr/lib
     cp -PRv $FLOAT/opt/vc/lib/libmmal_util.so $SYSROOT_PREFIX/usr/lib
     cp -PRv $FLOAT/opt/vc/lib/libmmal_vc_client.so $SYSROOT_PREFIX/usr/lib
+
+    ### PLEX
     cp -PRv $FLOAT/opt/vc/lib/libWFC.so $SYSROOT_PREFIX/usr/lib
+    ### END PLEX
 }
 
 makeinstall_target() {

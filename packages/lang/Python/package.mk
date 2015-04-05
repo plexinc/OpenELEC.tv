@@ -164,5 +164,7 @@ post_makeinstall_target() {
   rm -rf $INSTALL/usr/bin/smtpd.py
   rm -rf $INSTALL/usr/bin/python*-config
 
+  ### PLEX
   rm -rf $INSTALL/*
+  ### END PLEX
 }

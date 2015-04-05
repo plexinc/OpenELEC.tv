@@ -38,12 +38,14 @@ PKG_CONFIGURE_OPTS_HOST="--prefix=$ROOT/$TOOLCHAIN \
              --enable-unicode-properties \
              --with-gnu-ld"
 
+### PLEX : we need pcre16
 PKG_CONFIGURE_OPTS_TARGET="--disable-shared \
              --enable-static \
              --enable-utf8 \
              --enable-unicode-properties \
-	     --enable-pcre16 \
+             --enable-pcre16 \
              --with-gnu-ld"
+### END PLEX
 
 pre_configure_target() {
   CFLAGS="$CFLAGS -fPIC"
@@ -51,10 +53,12 @@ pre_configure_target() {
   LDFLAGS="$LDFLAGS -fPIC"
 }
 
+### PLEX
 makeinstall_target() {
   make install DESTDIR=$ROOT/$TOOLCHAIN
   make install DESTDIR=$SYSROOT_PREFIX
 }
+### END PLEX
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/bin

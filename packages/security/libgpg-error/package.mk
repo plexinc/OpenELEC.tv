@@ -34,11 +34,13 @@ PKG_AUTORECONF="yes"
 
 PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC --enable-static --disable-shared --disable-nls --disable-rpath --with-gnu-ld"
 
+### PLEX
 pre_configure_target() {
   CFLAGS="$CFLAGS -fPIC"
   CXXFLAGS="$CXXFLAGS -fPIC"
   LDFLAGS="$LDFLAGS -fPIC"
 }
+### END PLEX
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/bin

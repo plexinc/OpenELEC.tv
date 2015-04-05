@@ -3,10 +3,12 @@ if [ "$OPTIMIZATIONS" = normal ];then
   LD_OPTIM=""
 fi
 
+### PLEX
 if [ "$OPTIMIZATIONS" = size ];then
   GCC_OPTIM="-Os"
   LD_OPTIM=""
 fi
+#END PLEX
 
 if [ "$LTO_SUPPORT" = yes ];then
   GCC_OPTIM_LTO="-flto -ffat-lto-objects"
