@@ -23,7 +23,8 @@ PKG_ARCH="any"
 PKG_LICENSE="LGPL"
 PKG_SITE="http://ffmpeg.org"
 PKG_URL="https://www.ffmpeg.org/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis openssl"
+### PLEX : no need for libvorbis
+PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 openssl"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video."
@@ -142,15 +143,12 @@ configure_target() {
               --build-suffix="" \
               --disable-static \
               --enable-shared \
-              --enable-gpl \
               --disable-version3 \
-              --disable-nonfree \
               --enable-logging \
               --disable-doc \
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
               --pkg-config="$ROOT/$TOOLCHAIN/bin/pkg-config" \
-              --enable-optimizations \
               --disable-armv5te --disable-armv6t2 \
               --disable-extra-warnings \
               --disable-ffprobe \
@@ -158,21 +156,18 @@ configure_target() {
               --disable-ffserver \
               --enable-ffmpeg \
               --enable-avdevice \
-              --enable-avcodec \
               --enable-avformat \
               --enable-swscale \
               --enable-postproc \
               --enable-avfilter \
               --disable-devices \
               --enable-pthreads \
-              --disable-w32threads \
               --disable-x11grab \
               --enable-network \
               --disable-gnutls --enable-openssl --enable-nonfree \
               --disable-gray \
               --enable-swscale-alpha \
               --disable-small \
-              --enable-dct \
               --enable-fft \
               --enable-mdct \
               --enable-rdft \
