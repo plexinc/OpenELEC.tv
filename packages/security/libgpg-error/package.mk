@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="libgpg-error"
-PKG_VERSION="1.12"
+PKG_VERSION="1.18"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -34,13 +34,36 @@ PKG_AUTORECONF="yes"
 
 PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC --enable-static --disable-shared --disable-nls --disable-rpath --with-gnu-ld"
 
-### PLEX
 pre_configure_target() {
+
+  ### PLEX
   CFLAGS="$CFLAGS -fPIC"
   CXXFLAGS="$CXXFLAGS -fPIC"
   LDFLAGS="$LDFLAGS -fPIC"
+  ### END PLEX
+
+# inspired by openembedded
+  case ${TARGET_ARCH} in
+    aarch64)
+      GPGERROR_TUPLE=aarch64-unknown-linux-gnu
+      GPGERROR_TARGET=linux-gnueabi
+      ;;
+    arm)
+      GPGERROR_TUPLE=arm-unknown-linux-gnueabi
+      GPGERROR_TARGET=linux-gnueabi
+      ;;
+    i386)
+      GPGERROR_TUPLE=i486-pc-linux-gnu
+      GPGERROR_TARGET=linux-gnu
+      ;;
+    x86_64)
+      GPGERROR_TUPLE=x86_64-pc-linux-gnu
+      GPGERROR_TARGET=linux-gnu
+      ;;
+  esac
+
+  cp $ROOT/$PKG_BUILD/src/syscfg/lock-obj-pub.$GPGERROR_TUPLE.h $ROOT/$PKG_BUILD/src/syscfg/lock-obj-pub.$GPGERROR_TARGET.h
 }
-### END PLEX
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/bin
