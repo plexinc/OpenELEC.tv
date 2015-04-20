@@ -17,7 +17,8 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="2.4.6"
+#PKG_VERSION="2.4.6"
+PKG_VERSION="0.10.7"
 #if [ "$MEDIACENTER" = "rasplex" ]; then
 #  PKG_VERSION="0.10.7"
 #fi
