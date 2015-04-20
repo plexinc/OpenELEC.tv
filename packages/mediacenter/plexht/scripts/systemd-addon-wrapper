@@ -1,3 +1,4 @@
+#!/bin/sh
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2014 Stephan Raue (stephan@openelec.tv)
@@ -16,32 +17,19 @@
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-PKG_NAME="mediacenter"
-PKG_VERSION=""
-PKG_REV="1"
-PKG_ARCH="any"
-PKG_LICENSE="GPL"
-PKG_SITE="http://www.openelec.tv"
-PKG_URL=""
-PKG_DEPENDS_TARGET="toolchain $MEDIACENTER"
-PKG_PRIORITY="optional"
-PKG_SECTION="virtual"
-PKG_SHORTDESC="Mediacenter: Metapackage"
-PKG_LONGDESC=""
+if [ ! -d /storage/.config/system.d ] ; then
+  mkdir -p /storage/.config/system.d
+fi
 
-PKG_IS_ADDON="no"
-PKG_AUTORECONF="no"
-
-#for i in $SKINS; do
-#  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET $MEDIACENTER-theme-$i"
-#done
-
-if [ "$MEDIACENTER" = "kodi" ]; then
-# some python stuff needed for various addons
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET Pillow"
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET simplejson"
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET pycrypto"
-
-# other packages
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET OpenELEC-settings"
+if [ -f "/storage/.plexht/addons/$1/system.d/$1.service" ] ; then
+  if [ $2 -eq 1 ] ; then
+    # disable = true: cleanup
+    systemctl stop "$1.service"
+    systemctl disable "/storage/.plexht/addons/$1/system.d/$1.service"
+    rm -f "/storage/.config/system.d/$1.service" # just in case..
+  else
+    # disable = false: setup
+    systemctl enable "/storage/.plexht/addons/$1/system.d/$1.service"
+    systemctl start "$1.service"
+  fi
 fi

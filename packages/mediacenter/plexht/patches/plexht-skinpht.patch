@@ -1,0 +1,19 @@
+--- a/addons/skin.plex/720p/LeftSideMenu.xml	2014-11-19 10:13:22.000000000 +0100
++++ b/addons/skin.plex/720p/LeftSideMenu.xml.new	2014-11-19 10:15:29.000000000 +0100
+@@ -404,14 +404,14 @@
+ 						<description>Sleep</description>
+ 						<label>$LOCALIZE[31960]</label>
+ 						<onclick>Dialog.Close(4998)</onclick>
+-						<onclick>Plex.Suspend</onclick>
++						<onclick>System.Exec(pm-suspend)</onclick>
+ 						<visible>!System.isSystem(rasplex)</visible>
+ 					</item>
+ 					<item id="113">
+ 						<description>Shut Down</description>
+ 						<label>$LOCALIZE[31961]</label>
+ 						<onclick>Dialog.Close(4998)</onclick>
+-						<onclick>Plex.Powerdown</onclick>
++						<onclick>Powerdown</onclick>
+ 						<visible>!System.UserIsRestricted</visible>
+ 					</item>
+ 					<item id="114">

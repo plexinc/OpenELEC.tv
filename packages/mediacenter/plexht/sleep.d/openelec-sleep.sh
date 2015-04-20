@@ -1,3 +1,5 @@
+#!/bin/sh
+
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2014 Stephan Raue (stephan@openelec.tv)
@@ -16,32 +18,29 @@
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-PKG_NAME="mediacenter"
-PKG_VERSION=""
-PKG_REV="1"
-PKG_ARCH="any"
-PKG_LICENSE="GPL"
-PKG_SITE="http://www.openelec.tv"
-PKG_URL=""
-PKG_DEPENDS_TARGET="toolchain $MEDIACENTER"
-PKG_PRIORITY="optional"
-PKG_SECTION="virtual"
-PKG_SHORTDESC="Mediacenter: Metapackage"
-PKG_LONGDESC=""
+. /etc/profile
 
-PKG_IS_ADDON="no"
-PKG_AUTORECONF="no"
+run_scripts()
+{
+    list_scripts $1
+    for script in $SCRIPTS ; do
+        progress "running sleep script $script ($1)..."
+        sh /usr/lib/systemd/system-sleep.serial/$script $1
+    done
+}
 
-#for i in $SKINS; do
-#  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET $MEDIACENTER-theme-$i"
-#done
+list_scripts()
+{
+    case $1 in
+        pre)
+            SCRIPTS=$(ls /usr/lib/systemd/system-sleep.serial/ | sort)
+        ;;
+        post)
+            SCRIPTS=$(ls /usr/lib/systemd/system-sleep.serial/ | sort -r)
+        ;;
+    esac
+}
 
-if [ "$MEDIACENTER" = "kodi" ]; then
-# some python stuff needed for various addons
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET Pillow"
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET simplejson"
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET pycrypto"
+run_scripts $1
 
-# other packages
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET OpenELEC-settings"
-fi
+exit 0
