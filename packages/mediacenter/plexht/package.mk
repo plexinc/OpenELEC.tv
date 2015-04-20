@@ -1,3 +1,4 @@
+#!/bin/bash -ax
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2014 Stephan Raue (stephan@openelec.tv)
@@ -26,11 +27,11 @@ if [ $PROJECT = RPi ]; then
   PKG_SHORTDESC="Plex Home Theater with Rasplex patches"
   PKG_LONGDESC="PlexHT is based on XBMC, and is developed by Plex Inc as a desxtop client for plex media servers. This is an unofficial port of that code."
 else
-#  if [ "$PHT_HEAD" = "HEAD" ]; then
-#    PKG_VERSION=HEAD
-#  else
-#    PKG_VERSION=PUBLIC
-#  fi
+  if [ "$PHT_HEAD" = "HEAD" ]; then
+    PKG_VERSION=HEAD
+  else
+    PKG_VERSION=PUBLIC
+  fi
   PKG_VERSION="v1.3.6.441-309e72d1"
   PKG_REV=$PKG_VERSION
   PKG_SITE="http://plex.tv"
@@ -45,6 +46,11 @@ PKG_PRIORITY="optional"
 PKG_SECTION="mediacenter"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
+
+if [ "$PROJECT" = "Generic-PHT" ] || [ "$PROJECT" = "Generic-PHT-Pioneer" ] || [ "$PROJECT" = "Generic" ]; then
+  PKG_BUILD_DEPENDS_TARGET="$PKG_BUILD_DEPENDS_TARGET libva-intel-driver"
+  PKG_DEPENDS="$PKG_DEPENDS libva-intel-driver"
+fi
 
 # for dbus support
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET dbus"
@@ -183,65 +189,15 @@ export ac_python_version="$PYTHON_VERSION"
 unpack() {
         rm -rf $BUILD/${PKG_NAME}-${PKG_VERSION}
 	git clone --depth 1 --branch ${PKG_VERSION} git@github.com:plexinc/plex-home-theater-public.git $BUILD/${PKG_NAME}-${PKG_VERSION}
-        rm -f $BUILD/${PKG_NAME}-${PKG_VERSION}/xbmc/cores/dvdplayer/DVDCodecs/Audio/DVDAudioCodecPassthroughFFmpeg.h
-        rm -f $BUILD/${PKG_NAME}-${PKG_VERSION}/xbmc/cores/dvdplayer/DVDCodecs/Audio/DVDAudioCodecPassthroughFFmpeg.cpp
+        patch $BUILD/$PKG_NAME-$PKG_VERSION/CMakeLists.txt < $PKG_DIR/patches/cmakelists.patch
+        patch $BUILD/$PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigLINUX.cmake < $PKG_DIR/patches/platformconfig.patch
+        patch $BUILD/$PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/Font.xml < $PKG_DIR/patches/fontfix.patch
+        patch $BUILD/$PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/LeftSideMenu.xml < $PKG_DIR/patches/skinpht.patch
+#        rm -f $BUILD/${PKG_NAME}-${PKG_VERSION}/xbmc/cores/dvdplayer/DVDCodecs/Audio/DVDAudioCodecPassthroughFFmpeg.h
+#        rm -f $BUILD/${PKG_NAME}-${PKG_VERSION}/xbmc/cores/dvdplayer/DVDCodecs/Audio/DVDAudioCodecPassthroughFFmpeg.cpp
 }
 
 configure_target() {
-
-if [ $PROJECT = RPi ]; then
-  # xbmc fails to build with LTO optimization if build without GOLD support
-  [ ! "$GOLD_SUPPORT" = "yes" ] && strip_lto
-
-
-  export CFLAGS="$CFLAGS $XBMC_CFLAGS"
-  export CXXFLAGS="$CXXFLAGS $XBMC_CXXFLAGS"
-
-	#if [ "$RASPLEX_SPEEDYLINK" == "yes" ];then
-		strip_lto # way faster linking
-
-		unset LD_OPTIM
-		unset LDFLAGS
-		unset TARGET_LDFLAGS
-		unset GCC_OPTIM
-
-	  export LD_OPTIM="-fuse-ld=gold"
-	#  export LDFLAGS="-s"
-
-	#fi
-
-	export PKG_BUILD="$ROOT/$BUILD/$PKG_NAME-$PKG_VERSION"
-
-	BUILD_DIR="$PKG_BUILD/build"
-	TOOLCHAIN_DIR="$ROOT/$BUILD/toolchain"
-
-	[ -d $BUILD_DIR ] && rm -rf $BUILD_DIR
-	[ ! -d $BUILD_DIR ] && mkdir $BUILD_DIR 
-	echo $TOOLCHAIN_DIR
-	echo $BUILD_DIR
-
-	cd $BUILD_DIR
-	export PYTHON_EXEC="$TOOLCHAIN_DIR/armv6zk-openelec-linux-gnueabi/sysroot/usr/bin/python2.7"
-	cmake -G Ninja -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF \
-				-DCMAKE_INSTALL_PREFIX=$INSTALL/usr \
-				-DENABLE_PYTHON=on \
-				-DSWIG_EXECUTABLE=`which swig` \
-				-DSWIG_DIR=$TOOLCHAIN_DIR \
-				-DLIBUSBDIR=$SYSROOT_PREFIX/usr \
-				-DENABLE_DUMP_SYMBOLS=on \
-				-DOPTIONAL_INCLUDE_DIR=$SYSROOT_PREFIX/usr/include \
-				-DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include/interface/vmcs_host/linux;$SYSROOT_PREFIX/usr/include/interface/vcos/pthreads;$SYSROOT_PREFIX/usr/include/python2.7/" \
-				-DPYTHON_EXEC="$PYTHON_EXEC" \
-				-DEXTERNAL_PYTHON_HOME="$SYSROOT_PREFIX/usr" \
-				-DHOST_BREAKPAD_HOME="$ROOT/tools/breakpad" \
-				-DIMAGE_BREAKPAD_HOME="$SYSROOT_PREFIX/usr" \
-				-DTARGET_PLATFORM=RPI \
-				-DTARGET_RPI=1 \
-				-DTARGET_PREFIX=$TARGET_PREFIX \
-				-DSYSROOT_PREFIX=$SYSROOT_PREFIX \
-				-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
-				$PKG_BUILD
-else
   # Configure Plex
   # dont use some optimizations because of build problems
   LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
@@ -253,127 +209,141 @@ else
 
   # configure the build
   export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
+  export PKG_BUILD="$ROOT/$BUILD/$PKG_NAME-$PKG_VERSION"
 
   cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
-  [ ! -d build ] && mkdir build
-  cd build
-  cmake -DUSE_INTERNAL_FFMPEG=off -DOPENELEC=on -DENABLE_PYTHON=on -DEXTERNAL_PYTHON_HOME="$SYSROOT_PREFIX/usr" -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include" -DFREETYPE_LIBRARY="$SYSROOT_PREFIX/usr/lib/libfreetype.so" -DFREETYPE_INCLUDE_DIRS="$SYSROOT_PREFIX/usr/include/freetype2" -DCOMPRESS_TEXTURES=on -DENABLE_AUTOUPDATE=off -DTEXTUREPACKERPATH=$PKG_DIR/config/TexturePacker -DCMAKE_INSTALL_PREFIX=/usr $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
-fi
+  [ ! -d config ] && mkdir config
+  cd config
 
+  export PYTHON_EXEC="$SYSROOT_PREFIX/usr/bin/python2.7"
+  cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF \
+        -DENABLE_PYTHON=ON \
+        -DEXTERNAL_PYTHON_HOME="$SYSROOT_PREFIX/usr" \
+        -DPYTHON_EXEC="$PYTHON_EXEC" \
+        -DSWIG_EXECUTABLE=`which swig` \
+        -DSWIG_DIR="$ROOT/$BUILD/toolchain" \
+        -DCMAKE_PREFIX_PATH="$SYSROOT_PREFIX" \
+        -DCMAKE_LIBRARY_PATH="$SYSROOT_PREFIX/usr/lib" \
+        -DCMAKE_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include;$SYSROOT_PREFIX/usr/include/python2.7;$SYSROOT_PREFIX/usr/lib/dbus-1.0/include" \
+        -DFREETYPE_LIBRARY="$SYSROOT_PREFIX/usr/lib/libfreetype.so" -DFREETYPE_INCLUDE_DIRS="$SYSROOT_PREFIX/usr/include/freetype2" \
+        -DCOMPRESS_TEXTURES=ON \
+        -DTEXTUREPACKERPATH=$PKG_DIR/config/TexturePacker \
+        -DENABLE_DUMP_SYMBOLS=OFF \
+        -DENABLE_AUTOUPDATE=OFF \
+        -DUSE_INTERNAL_FFMPEG=OFF \
+        -DOPENELEC=ON \
+        -DCMAKE_INSTALL_PREFIX=/usr/lib/plexht \
+        -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
+        $PKG_BUILD
 }
 
 make_target() {
-if [ $PROJECT = RPi ]; then
-	ninja -j `nproc`
-
-	# generate breakpad symbols
-	ninja plex/CMakeFiles/PlexHomeTheater_symbols 
-
-	# Strip the executable now that we have our breakpad symbols
-	$TOOLCHAIN_DIR/bin/armv6zk-openelec-linux-gnueabi-strip plex/plexhometheater
-else
-
-# Build Plex
-# dont use some optimizations because of build problems
+  # Build Plex
+  # dont use some optimizations because of build problems
   LDFLAGS=`echo $LDFLAGS | sed -e "s|-Wl,--as-needed||"`
-# strip compiler optimization
+  # strip compiler optimization
   strip_lto
 
-# Make the build
+  # set python variables
+  export PYTHON_VERSION="2.7"
+  export PYTHON_CPPFLAGS="-I$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
+  export PYTHON_LDFLAGS="-L$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION -lpython$PYTHON_VERSION"
+  export PYTHON_SITE_PKG="$SYSROOT_PREFIX/usr/lib/python$PYTHON_VERSION/site-packages"
+  export ac_python_version="$PYTHON_VERSION"
+
+  # Make the build
   export PKG_CONFIG_PATH=$SYSROOT_PREFIX/usr/lib/pkgconfig
-  cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build
+  cd $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/config
   export CPLUS_INCLUDE_PATH="$SYSROOT_PREFIX/usr/include/python$PYTHON_VERSION"
   export PYTHON_LIBDIR=`ls -d $SYSROOT_PREFIX/usr/lib/python*`
-#  export TOOLCHAIN_DIR="$ROOT/$BUILD/toolchain"
-  make -j1 VERBOSE=2
-fi
+  make -j1
+
 
 }
 
-makeinstall_target() {
+post_makeinstall_target() {
 
+  rm -rf $INSTALL/usr/lib/plexht/bin/lib
+  rm -rf $INSTALL/usr/lib/plexht/bin/include
+  rm -rf $INSTALL/usr/lib/plexht/bin/*.so
+  mv -f $INSTALL/usr/lib/plexht/bin/* $INSTALL/usr/lib/plexht/
+  rm -rf $INSTALL/usr/lib/plexht/bin
+  mkdir -p $INSTALL/usr/share/XBMC
+  mv -f $INSTALL/usr/lib/plexht/share/XBMC/* $INSTALL/usr/share/XBMC/
+  mkdir -p $INSTALL/usr/lib/plexht/addons
 
-	PKG_BUILD=$ROOT/$BUILD/$PKG_NAME-$PKG_VERSION
+  mkdir -p $INSTALL/usr/lib/plexht
+    cp $PKG_DIR/scripts/plexht-config $INSTALL/usr/lib/plexht
+    cp $PKG_DIR/scripts/plexht-hacks $INSTALL/usr/lib/plexht
+    cp $PKG_DIR/scripts/plexht-sources $INSTALL/usr/lib/plexht
 
-	mkdir -p $INSTALL/usr/bin
-		cp $PKG_DIR/scripts/cputemp $INSTALL/usr/bin
-		cp $PKG_DIR/scripts/setwakeup.sh $INSTALL/usr/bin
-		cp $PKG_BUILD/tools/EventClients/Clients/XBMC\ Send/xbmc-send.py $INSTALL/usr/bin/xbmc-send
+  mkdir -p $INSTALL/usr/lib/openelec
+    cp $PKG_DIR/scripts/systemd-addon-wrapper $INSTALL/usr/lib/openelec
 
-	mkdir -p $INSTALL/usr/lib/plexhometheater/system/players/dvdplayer/
-	mkdir -p $INSTALL/usr/lib/plexhometheater/system
-		cp $PKG_BUILD/build/plex/plexhometheater $INSTALL/usr/lib/plexhometheater
+  mkdir -p $INSTALL/usr/bin
+    cp $PKG_DIR/scripts/cputemp $INSTALL/usr/bin
+      ln -sf cputemp $INSTALL/usr/bin/gputemp
+    cp $PKG_DIR/scripts/setwakeup.sh $INSTALL/usr/bin
+    cp ../tools/EventClients/Clients/XBMC\ Send/xbmc-send.py $INSTALL/usr/bin/xbmc-send
 
-	cd $PKG_BUILD
-	find build/lib -not \( -name CMakeFiles -prune \) \
-			-regextype posix-extended -type f \
-			-not -iregex ".*svn.*|.*win32(dx)?\.vis|.*osx\.vis" \
-			-iregex ".*-linux.*|.*-arm.*|.*\.vis|.*\.xbs" \
-			-exec cp "{}" $INSTALL/usr/lib/plexhometheater/system/ ";"
+  if [ ! "$KODI_SCR_RSXS" = yes ]; then
+    rm -rf $INSTALL/usr/share/XBMC/addons/screensaver.rsxs.*
+  fi
 
+  if [ ! "$KODI_VIS_PROJECTM" = yes ]; then
+    rm -rf $INSTALL/usr/share/XBMC/addons/visualization.projectm
+  fi
 
+  rm -rf $INSTALL/usr/share/applications
+  rm -rf $INSTALL/usr/share/icons
+  rm -rf $INSTALL/usr/share/XBMC/addons/service.xbmc.versioncheck
+  rm -rf $INSTALL/usr/share/xsessions
 
-	#need to copy over ffmpeg libs
-	for i in `find build/lib/ffmpeg/ffmpeg/lib/ \
-			-regextype posix-extended -type f \
-			-iregex '.*so.*'` ;  do
-			cp $i $INSTALL/usr/lib/plexhometheater/system/players/dvdplayer/`basename $(echo $i | sed  -r 's:lib([a-zA-Z]+)\\.so\\.([0-9]*).*:\1-\2-arm.so:')`
-	done
-
-  mkdir -p $INSTALL/usr/share/XBMC/
-
-	cd $PKG_BUILD
-	echo "pkg build: $PKG_BUILD"
-	echo $INSTALL
- find system addons \
-			-regextype posix-extended -type f \
-			-not -iregex ".*svn.*|.*win32(dx)?\.vis|.*osx\.vis" \
-			-iregex ".*-linux.*|.*-arm.*|.*\.vis|.*\.xbs" \
-			-exec install -D "{}" $INSTALL/usr/lib/plexhometheater/"{}" ";"
-		
-	find addons language media sounds userdata system \
-			-regextype posix-extended -type f \
-			-not -iregex ".*-linux.*|.*-arm.*|.*\.vis|.*\.xbs|.*svn.*|.*\.orig|.*\.so|.*\.dll|.*\.pyd|.*python|.*\.zlib|.*\.conf" \
-			-exec install -D -m 0644 "{}" $INSTALL/usr/share/XBMC/"{}" ";"
-	cd -
-
-	if [ ! "$XBMC_SCR_RSXS" = yes ]; then
-		rm -rf $INSTALL/usr/share/XBMC/addons/screensaver.rsxs.*
-	fi
-
-	if [ ! "$XBMC_VIS_PROJECTM" = yes ]; then
-		rm -rf $INSTALL/usr/share/XBMC/addons/visualization.projectm
-	fi
-
-
-
-	rm -rf $INSTALL/usr/share/XBMC/addons/visualization.dxspectrum
-	rm -rf $INSTALL/usr/share/XBMC/addons/visualization.itunes
-	rm -rf $INSTALL/usr/share/XBMC/addons/visualization.milkdrop
-	rm -rf $INSTALL/usr/share/XBMC/addons/script.module.pysqlite
-	rm -rf $INSTALL/usr/share/XBMC/addons/script.module.simplejson
-
-	mkdir -p $INSTALL/usr/share/XBMC/addons
-			cp -R $PKG_DIR/config/os.openelec.tv $INSTALL/usr/share/XBMC/addons
-			$SED "s|@OS_VERSION@|$OS_VERSION|g" -i $INSTALL/usr/share/XBMC/addons/os.openelec.tv/addon.xml
-			cp -R $PKG_DIR/config/repository.openelec.tv $INSTALL/usr/share/XBMC/addons
-			$SED "s|@ADDON_URL@|$ADDON_URL|g" -i $INSTALL/usr/share/XBMC/addons/repository.openelec.tv/addon.xml
-
-
+  mkdir -p $INSTALL/usr/share/XBMC/addons
+    cp -R $PKG_DIR/config/os.openelec.tv $INSTALL/usr/share/XBMC/addons
+    $SED "s|@OS_VERSION@|$OS_VERSION|g" -i $INSTALL/usr/share/XBMC/addons/os.openelec.tv/addon.xml
+	
   mkdir -p $INSTALL/usr/lib/python"$PYTHON_VERSION"/site-packages/xbmc
-    cp -R $PKG_BUILD/tools/EventClients/lib/python/* $INSTALL/usr/lib/python"$PYTHON_VERSION"/site-packages/xbmc
+    cp -R ../tools/EventClients/lib/python/* $INSTALL/usr/lib/python"$PYTHON_VERSION"/site-packages/xbmc
 
+# install powermanagement hooks
+  mkdir -p $INSTALL/etc/pm/sleep.d
+    cp $PKG_DIR/sleep.d/* $INSTALL/etc/pm/sleep.d
 
-	mkdir -p $INSTALL/usr/share/XBMC/system/
-	mkdir -p $INSTALL/usr/bin/
-	mkdir -p $INSTALL/usr/share/XBMC/tools/
+# install xorg configs
+    if [ -f $PKG_DIR/config/xorg/intel-xorg.conf ]; then
+      cp -R $PKG_DIR/config/xorg/intel-xorg.conf $INSTALL/usr/share/XBMC/config
+    fi
+    if [ -f $PKG_DIR/config/xorg/nvidia-xorg.conf ]; then
+      cp -R $PKG_DIR/config/xorg/nvidia-xorg.conf $INSTALL/usr/share/XBMC/config
+    fi
 
-	cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/XBMC/system/
-	cp $PKG_DIR/config/guisettings.xml $INSTALL/usr/share/XBMC/
-	cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/XBMC/system/
-	cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/XBMC/
+# Install autostart.sh script
+    if [ -f $PKG_DIR/scripts/autostart.sh ]; then
+      cp -R $PKG_DIR/scripts/autostart.sh $INSTALL/usr/share/XBMC/config ; chmod -x $INSTALL/usr/share/XBMC/config/autostart.sh
+    fi
 
+# install project specific configs
+  mkdir -p $INSTALL/usr/share/XBMC/config
+    if [ -f $PROJECT_DIR/$PROJECT/plexht/guisettings.xml ]; then
+      cp -R $PROJECT_DIR/$PROJECT/plexht/guisettings.xml $INSTALL/usr/share/XBMC/config
+    fi
 
+    if [ -f $PROJECT_DIR/$PROJECT/plexht/sources.xml ]; then
+      cp -R $PROJECT_DIR/$PROJECT/plexht/sources.xml $INSTALL/usr/share/XBMC/config
+    fi
+
+  mkdir -p $INSTALL/usr/share/XBMC/system/
+    if [ -f $PROJECT_DIR/$PROJECT/plexht/advancedsettings.xml ]; then
+      cp $PROJECT_DIR/$PROJECT/plexht/advancedsettings.xml $INSTALL/usr/share/XBMC/system/
+    else
+      cp $PKG_DIR/config/advancedsettings.xml $INSTALL/usr/share/XBMC/system/
+    fi
+
+  if [ "$KODI_EXTRA_FONTS" = yes ]; then
+    mkdir -p $INSTALL/usr/share/XBMC/media/Fonts
+      cp $PKG_DIR/fonts/*.ttf $INSTALL/usr/share/XBMC/media/Fonts
+  fi
 }
 
 post_install() {

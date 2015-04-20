@@ -17,12 +17,12 @@
 ################################################################################
 
 PKG_NAME="libcec"
-PKG_VERSION="2.2.0"
+PKG_VERSION="2.1.3"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://libcec.pulse-eight.com/"
-PKG_URL="http://mirrors.xbmc.org/build-deps/sources/$PKG_NAME-$PKG_VERSION-3.tar.gz"
+PKG_URL="http://mirrors.xbmc.org/build-deps/sources/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain systemd lockdev"
 PKG_PRIORITY="optional"
 PKG_SECTION="system"
@@ -48,7 +48,7 @@ if [ "$KODIPLAYER_DRIVER" = "bcm2835-driver" ]; then
                              --with-rpi-include-path=$SYSROOT_PREFIX/usr/include \
                              --with-rpi-lib-path=$SYSROOT_PREFIX/usr/lib"
 else
-  PKG_CONFIGURE_OPTS_TARGET="$PKG_CONFIGURE_OPTS_TARGET --disable-rpi"
+  PKG_CONFIGURE_OPTS_TARGET="$PKG_CONFIGURE_OPTS_TARGET --disable-rpi --host=$TARGET_NAME --build=$HOST_NAME --prefix=/usr --sysconfdir=/etc --disable-static --enable-shared $LIBCEC_RPI $LIBCEC_TDA995X"
 fi
 
 if [ "$KODIPLAYER_DRIVER" = "libfslvpuwrap" ]; then

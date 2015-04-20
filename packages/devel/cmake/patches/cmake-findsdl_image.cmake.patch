@@ -1,0 +1,11 @@
+--- cmake-2.8.11.2/Modules/FindSDL_image.cmake	2013-08-11 12:53:28.659125687 +0200
++++ cmake-2.8.11.2/Modules/FindSDL_image.cmake.new	2013-08-11 12:53:18.731119216 +0200
+@@ -40,7 +40,7 @@ find_path(SDL_IMAGE_INCLUDE_DIR SDL_imag
+   HINTS
+     ENV SDLIMAGEDIR
+     ENV SDLDIR
+-  PATH_SUFFIXES include/SDL include/SDL12 include/SDL11 include
++  PATH_SUFFIXES include/SDL include/SDL12 include/SDL11 include SDL SDL11 SDL12
+ )
+ 
+ if(NOT SDL_IMAGE_LIBRARY AND SDLIMAGE_LIBRARY)

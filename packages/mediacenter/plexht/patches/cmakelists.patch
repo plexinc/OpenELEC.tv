@@ -1,5 +1,5 @@
---- a/CMakeLists.txt	2013-11-23 21:22:42.000000000 +0100
-+++ b/CMakeLists.txt.new	2013-11-25 23:18:58.132208000 +0100
+--- CMakeLists.txt	2013-11-23 21:22:42.000000000 +0100
++++ CMakeLists.txt.new	2013-11-25 23:18:58.132208000 +0100
 @@ -123,6 +123,39 @@
    ${root}/lib/libUPnP/Neptune/Source/System/Posix
  )

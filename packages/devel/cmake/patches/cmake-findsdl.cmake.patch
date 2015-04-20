@@ -1,0 +1,11 @@
+--- cmake-3.0.2/Modules/FindSDL.cmake	2014-09-11 15:24:00.000000000 +0200
++++ cmake-3.0.2/Modules/FindSDL.cmake.new	2015-04-20 15:28:31.079677700 +0200
+@@ -87,7 +87,7 @@
+     ENV SDLDIR
+   PATH_SUFFIXES SDL SDL12 SDL11
+                 # path suffixes to search inside ENV{SDLDIR}
+-                include/SDL include/SDL12 include/SDL11 include
++                include/SDL include/SDL12 include/SDL11 include SDL SDL12 SDL11
+ )
+ 
+ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
