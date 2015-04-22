@@ -1,0 +1,11 @@
+--- a/CMakeModules/WebClientResources.cmake	2015-04-23 00:17:24.000000000 +0200
++++ b/CMakeModules/WebClientResources.cmake.new	2015-04-23 00:17:40.000000000 +0200
+@@ -10,7 +10,7 @@
+ 	EXPECTED_HASH SHA1=${WEB_CLIENT_HASH}
+ 	TIMEOUT 10
+ 	SHOW_PROGRESS
+-	TLS_VERIFY ON
++	TLS_VERIFY OFF
+ )
+ 
+ find_program(BUNZIP2 bunzip2)

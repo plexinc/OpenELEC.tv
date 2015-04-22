@@ -69,10 +69,10 @@ unpack() {
 	fi
 
 	# Grab a prebuilt archive for web stuff using WEB_CLIENT_VERSION from knovergo cmake file
-        WEB_CLIENT_VERSION=`cat $BUILD/${PKG_NAME}-${PKG_VERSION}/CMakeModules/WebClientVariables.cmake|awk '/WEB_CLIENT_VERSION/ {gsub(")$","") ; print $2}'`
-        mkdir -p cd $BUILD/${PKG_NAME}-${PKG_VERSION}/build/src
-	cd $BUILD/${PKG_NAME}-${PKG_VERSION}/build/src
-        wget https://nightlies.plex.tv/directdl/plex-web-client-konvergo/master/plex-web-client-konvergo-${WEB_CLIENT_VERSION}.cpp.bz2 -O web-client-${WEB_CLIENT_VERSION}.cpp.bz2
+#        WEB_CLIENT_VERSION=`cat $BUILD/${PKG_NAME}-${PKG_VERSION}/CMakeModules/WebClientVariables.cmake|awk '/WEB_CLIENT_VERSION/ {gsub(")$","") ; print $2}'`
+#        mkdir -p cd $BUILD/${PKG_NAME}-${PKG_VERSION}/build/src
+#	cd $BUILD/${PKG_NAME}-${PKG_VERSION}/build/src
+#        wget https://nightlies.plex.tv/directdl/plex-web-client-konvergo/master/plex-web-client-konvergo-${WEB_CLIENT_VERSION}.cpp.bz2 -O web-client-${WEB_CLIENT_VERSION}.cpp.bz2
 	cd ${ROOT}	
 }
 
@@ -98,6 +98,7 @@ configure_target() {
                         -DENABLE_MPV=on \
                         -DCMAKE_VERBOSE_MAKEFILE=on \
                         -DOPENELEC=on \
+			-DCMAKE_USE_OPENSSL=ON \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
 
@@ -115,6 +116,7 @@ configure_target() {
 			-DBUILD_TARGET="RPI" \
 			-DCMAKE_VERBOSE_MAKEFILE=on \
 			-DOPENELEC=on \
+			-DCMAKE_USE_OPENSSL=ON \
 			-DBUILD_TARGET="RPI" \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
