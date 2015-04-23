@@ -36,6 +36,7 @@ configure_host() {
   ../configure --prefix=$ROOT/$TOOLCHAIN \
                --no-qt-gui --no-system-libs \
                -- \
+	       -DCMAKE_USE_OPENSSL=ON \
                -DBUILD_CursesDialog=0
 }
 

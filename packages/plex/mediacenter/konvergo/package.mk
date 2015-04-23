@@ -98,7 +98,6 @@ configure_target() {
                         -DENABLE_MPV=on \
                         -DCMAKE_VERBOSE_MAKEFILE=on \
                         -DOPENELEC=on \
-			-DCMAKE_USE_OPENSSL=ON \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
 
@@ -116,7 +115,6 @@ configure_target() {
 			-DBUILD_TARGET="RPI" \
 			-DCMAKE_VERBOSE_MAKEFILE=on \
 			-DOPENELEC=on \
-			-DCMAKE_USE_OPENSSL=ON \
 			-DBUILD_TARGET="RPI" \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
