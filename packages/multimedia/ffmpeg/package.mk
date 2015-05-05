@@ -37,7 +37,7 @@ unpack() {
 
 case $PROJECT in
 	Generic)
-        tar -xzf $SOURCES/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.gz -C $BUILD
+        git clone -b master git@github.com:FFmpeg/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
 	;;
 	RPi|RPi2)
         git clone -b master git@github.com:FFmpeg/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
