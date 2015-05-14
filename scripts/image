@@ -37,6 +37,7 @@ if [ "$OPENELEC_VERSION" = devel ]; then
   fi
   GIT_HASH=$(git rev-parse HEAD)
   GIT_ABBREV=$(git log -1 --pretty=format:%h)
+  DEVEL_VERSION=$OPENELEC_VERSION
   OPENELEC_VERSION=$OPENELEC_VERSION-$BUILD_DATE-r$GIT_BUILD-g$GIT_ABBREV
 fi
 
@@ -414,9 +415,6 @@ IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$P
           -e "s%@PROJECT@%$PROJECT%g" \
           -i $RELEASE_DIR/${DISTRONAME}_${PROJECT}/partitions.json
 
-      sed -e "s%@DISTRONAME@%$DISTRONAME%g" \
-          -i $RELEASE_DIR/partitions.json
-
     # create System dir
       mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
 
@@ -447,15 +445,6 @@ IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$P
             cp -PR $overlay $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/overlays
           fi
         done
-
-        if [ -f $INSTALL/usr/share/bootloader/*.dtb ]; then
-          cp -PR $INSTALL/usr/share/bootloader/*.dtb $RELEASE_DIR/System
-        fi
-
-        if [ -f $INSTALL/usr/share/bootloader/overlays/* ]; then
-          mkdir -p $RELEASE_DIR/System/overlays
-          cp -PR $INSTALL/usr/share/bootloader/overlays/* $RELEASE_DIR/System/overlays
-        fi
 
       # create md5sum's
         ( cd $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System;
