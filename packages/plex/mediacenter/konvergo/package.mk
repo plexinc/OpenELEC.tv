@@ -149,6 +149,8 @@ post_install() {
   enable_service konvergo.target
   enable_service konvergo-waitonnetwork.service
 
+# install plex splash screen
+  cp $PKG_DIR/oemsplash.png $INSTALL/flash
 }
 
 post_install() {
