@@ -133,7 +133,7 @@ fi
 
 ### PLEX
 # give it an awesome name ! 
-  mlabel -i "$LOOP" ::konvergo
+  mlabel -i "$LOOP" ::KonvergoEmbedded
   sync
 ### END PLEX
 
