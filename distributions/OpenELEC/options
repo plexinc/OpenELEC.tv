@@ -6,7 +6,7 @@
 
 # Welcome Message for e.g. SSH Server (up to 5 Lines)
   GREETING0="##############################################"
-  GREETING1="#          KonvergoEmbedded - Plex           #"
+  GREETING1="#.......... KonvergoEmbedded - Plex .........#"
   GREETING2="# ........... visit http://plex.tv ......... #"
   GREETING3="##############################################"
   GREETING4=""
