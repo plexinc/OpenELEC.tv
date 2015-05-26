@@ -41,7 +41,7 @@ else
 fi
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
-PKG_DEPENDS_TARGET="libplist libshairplay libshairport lame libcec libva-intel-driver faad2 libusb boost pcre Python zlib bzip2 systemd libass curl libssh rtmpdump fontconfig tinyxml freetype libmad libogg libmodplug flac libmpeg2 taglib yajl sqlite OpenELEC-settings libmicrohttpd ffmpeg libjpeg-turbo libsamplerate tiff libcdio libvorbis gnutls swig:host debug SDL_mixer SDL_image lzo"
+PKG_DEPENDS_TARGET="libplist libshairplay libshairport lame libcec libva-intel-driver faad2 libusb boost pcre Python zlib bzip2 systemd libass curl libssh rtmpdump fontconfig tinyxml freetype libmad libogg libmodplug flac libmpeg2 taglib yajl sqlite service.openelec.settings libmicrohttpd ffmpeg libjpeg-turbo libsamplerate tiff libcdio libvorbis gnutls swig:host debug SDL_mixer SDL_image lzo"
 PKG_PRIORITY="optional"
 PKG_SECTION="mediacenter"
 PKG_IS_ADDON="no"
@@ -192,7 +192,7 @@ unpack() {
         patch $BUILD/$PKG_NAME-$PKG_VERSION/CMakeLists.txt < $PKG_DIR/patches/cmakelists.patch
         patch $BUILD/$PKG_NAME-$PKG_VERSION/plex/CMakeModules/PlatformConfigLINUX.cmake < $PKG_DIR/patches/platformconfig.patch
         patch $BUILD/$PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/Font.xml < $PKG_DIR/patches/fontfix.patch
-        patch $BUILD/$PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/LeftSideMenu.xml < $PKG_DIR/patches/skinpht.patch
+        #patch $BUILD/$PKG_NAME-$PKG_VERSION/addons/skin.plex/720p/LeftSideMenu.xml < $PKG_DIR/patches/skinpht.patch
 #        rm -f $BUILD/${PKG_NAME}-${PKG_VERSION}/xbmc/cores/dvdplayer/DVDCodecs/Audio/DVDAudioCodecPassthroughFFmpeg.h
 #        rm -f $BUILD/${PKG_NAME}-${PKG_VERSION}/xbmc/cores/dvdplayer/DVDCodecs/Audio/DVDAudioCodecPassthroughFFmpeg.cpp
 }

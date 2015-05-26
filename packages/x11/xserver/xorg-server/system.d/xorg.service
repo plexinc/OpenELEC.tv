@@ -6,6 +6,7 @@ ConditionKernelCommandLine=!installer
 
 [Service]
 Type=notify
+Environment=SDL_MOUSE_RELATIVE=0
 EnvironmentFile=-/run/openelec/debug/xorg.conf
 ExecStart=/usr/bin/xorg-launch vt01 $XORG_DEBUG
 Restart=always

@@ -85,4 +85,4 @@ logger -t Xorg "### creating needed directories and symlinks ###"
 
 logger -t Xorg "### starting Xorg with '$DISPLAY vt01 $XORG_ARGS' ###"
   mkdir -p /run/openelec
-  echo "XORG_ARGS=\"$XORG_ARGS\"" > /run/openelec/xorg-settings.conf
+  echo "XORG_ARGS=\"$XORG_ARGS -nocursor\"" > /run/openelec/xorg-settings.conf

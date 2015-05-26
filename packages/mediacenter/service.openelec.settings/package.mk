@@ -16,23 +16,21 @@
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-PKG_NAME="OpenELEC-settings"
-PKG_VERSION="0.6.5"
+PKG_NAME="service.openelec.settings"
+PKG_VERSION="5.0"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="prop."
-PKG_SITE="http://www.openelec.tv"
-PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_SITE="http://plexrpms.markwalker.dk"
+PKG_URL="http://plexrpms.markwalker.dk/OpenELEC/packages/plex-dummy.tar.gz"
 PKG_DEPENDS_TARGET="toolchain Python connman pygobject dbus-python"
 PKG_PRIORITY="optional"
 PKG_SECTION=""
-PKG_SHORTDESC="OpenELEC-settings: Settings dialog for OpenELEC"
-PKG_LONGDESC="OpenELEC-settings: is a settings dialog for OpenELEC"
+PKG_SHORTDESC="RasPlex-settings: Settings dialog for RasPlex"
+PKG_LONGDESC="RasPlex-settings: is a settings dialog for RasPlex"
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
-
-PKG_MAKE_OPTS_TARGET="DISTRONAME=$DISTRONAME ROOT_PASSWORD=$ROOT_PASSWORD"
 
 if [ "$DISPLAYSERVER" = "x11" ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET setxkbmap"
@@ -40,7 +38,20 @@ else
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bkeymaps"
 fi
 
-post_makeinstall_target() {
+
+unpack() {
+        rm -rf $BUILD/${PKG_NAME}-${PKG_VERSION}
+        git clone -b settings-openelec-$PKG_VERSION git@github.com:ziggimon/service.openelec.settings.git $BUILD/${PKG_NAME}-${PKG_VERSION}
+}
+
+make_target() {
+ : # nothing todo
+}
+
+makeinstall_target() {
+  mkdir -p $INSTALL/usr/share/XBMC/addons/service.openelec.settings
+    cp -R * $INSTALL/usr/share/XBMC/addons/service.openelec.settings
+
   mkdir -p $INSTALL/usr/lib/openelec
     cp $PKG_DIR/scripts/* $INSTALL/usr/lib/openelec
 
@@ -49,11 +60,14 @@ post_makeinstall_target() {
 #      rm -f resources/lib/modules/bluetooth.py
 #    fi
 
-  python -Wi -t -B $ROOT/$TOOLCHAIN/lib/python2.7/compileall.py $INSTALL/usr/share/kodi/addons/service.openelec.settings/resources/lib/ -f
-  rm -rf `find $INSTALL/usr/share/kodi/addons/service.openelec.settings/resources/lib/ -name "*.py"`
+  python -Wi -t -B $ROOT/$TOOLCHAIN/lib/python2.7/compileall.py $INSTALL/usr/share/XBMC/addons/service.openelec.settings/resources/lib/ -f
+  rm -rf `find $INSTALL/usr/share/XBMC/addons/service.openelec.settings/resources/lib/ -name "*.py"`
 
-  python -Wi -t -B $ROOT/$TOOLCHAIN/lib/python2.7/compileall.py $INSTALL/usr/share/kodi/addons/service.openelec.settings/oe.py -f
-  rm -rf $INSTALL/usr/share/kodi/addons/service.openelec.settings/oe.py
+  python -Wi -t -B $ROOT/$TOOLCHAIN/lib/python2.7/compileall.py $INSTALL/usr/share/XBMC/addons/service.openelec.settings/oe.py -f
+  rm -rf $INSTALL/usr/share/XBMC/addons/service.openelec.settings/oe.py
+
+#  mv $INSTALL/usr/share/XBMC/addons/service.openelec.settings $INSTALL/usr/share/XBMC/service.openelec.settings
+#  ln -s /storage/.plexht/addons/service.openelec.settings $INSTALL/usr/share/XBMC/addons/service.openelec.settings
 }
 
 post_install() {
