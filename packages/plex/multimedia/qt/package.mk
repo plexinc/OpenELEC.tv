@@ -45,6 +45,17 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 case $PROJECT in
+        RPi)
+	ARM_COMPILER_PREFIX="armv6zk-openelec-linux-gnueabi-"
+	;;
+
+	RPi2)
+	ARM_COMPILER_PREFIX="armv7ve-openelec-linux-gnueabi-"
+	;;
+esac
+
+
+case $PROJECT in
 	Generic)
                 PKG_CONFIGURE_OPTS="\
 							-sysroot ${SYSROOT_PREFIX} \
@@ -101,7 +112,7 @@ case $PROJECT in
                                                         -system-xkbcommon \
                                                         -shared \
                                                         -device linux-rasp-pi-g++ \
-                                                        -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/armv7ve-openelec-linux-gnueabi- \
+                                                        -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/${ARM_COMPILER_PREFIX} \
                                                         -opengl es2 \
                                                         -make libs \
                                                         -nomake examples \
