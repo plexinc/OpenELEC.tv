@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="openssl"
-PKG_VERSION="1.0.1l"
+PKG_VERSION="1.0.2a"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -75,6 +75,7 @@ configure_target() {
               no-rc5 \
               no-ec2m \
               no-srp \
+	      no-ssl2 \
               $OPENSSL_TARGET
 }
 

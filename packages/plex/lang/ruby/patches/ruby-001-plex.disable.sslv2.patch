@@ -1,0 +1,34 @@
+--- a/ext/openssl/extconf.rb	2013-10-28 07:32:24.000000000 +0100
++++ b/ext/openssl/extconf.rb.new	2015-05-27 15:25:21.544542199 +0200
+@@ -31,6 +31,14 @@
+   $defs.push("-DOSSL_DEBUG") unless $defs.include? "-DOSSL_DEBUG"
+ end
+ 
++## 
++## From openssl 1.0, SSLv2 becomes disable by default.
++## If you want to use SSLv2 in ruby, you need config with --enable-opensslv2.
++##
++if enable_config("opensslv2")
++  $defs << "-DENABLE_OPENSSLV2"
++end
++
+ Logging::message "=== Checking for system dependent stuff... ===\n"
+ have_library("nsl", "t_open")
+ have_library("socket", "socket")
+--- a/ext/openssl/ossl_ssl.c	2014-12-12 22:58:34.000000000 +0100
++++ b/ext/openssl/ossl_ssl.c.new	2015-05-27 15:28:03.756542199 +0200
+@@ -132,11 +132,13 @@
+     OSSL_SSL_METHOD_ENTRY(TLSv1_1_server),
+     OSSL_SSL_METHOD_ENTRY(TLSv1_1_client),
+ #endif
+-#if defined(HAVE_SSLV2_METHOD) && defined(HAVE_SSLV2_SERVER_METHOD) && \
++#if defined(ENABLE_OPENSSLV2)
++  #if defined(HAVE_SSLV2_METHOD) && defined(HAVE_SSLV2_SERVER_METHOD) && \
+         defined(HAVE_SSLV2_CLIENT_METHOD)
+     OSSL_SSL_METHOD_ENTRY(SSLv2),
+     OSSL_SSL_METHOD_ENTRY(SSLv2_server),
+     OSSL_SSL_METHOD_ENTRY(SSLv2_client),
++  #endif
+ #endif
+     OSSL_SSL_METHOD_ENTRY(SSLv3),
+     OSSL_SSL_METHOD_ENTRY(SSLv3_server),
