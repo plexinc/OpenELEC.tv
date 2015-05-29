@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="llvm"
-PKG_VERSION="3.6.0"
+PKG_VERSION="3.6.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -102,10 +102,18 @@ pre_configure_host() {
     mkdir -p BuildTools && cd BuildTools
 }
 
+### PLEX
 pre_configure_target() {
-  export CFLAGS="$CFLAGS -fPIC"
-  export CXXFLAGS="$CXXFLAGS -fPIC"
+  # llvm fails to build with LTO support
+    strip_lto
+
+  # llvm 3.3+ fails to build with -Os
+  # see https://bugs.gentoo.org/show_bug.cgi?id=489708
+  # please test without this on llvm upgrade
+    export CFLAGS=`echo $CFLAGS | sed -e "s|-Os|-O2|"`
+    export CXXFLAGS=`echo $CFLAGS | sed -e "s|-Os|-O2|"`
 }
+#END PLEX
 
 makeinstall_host() {
 # nothing to install here

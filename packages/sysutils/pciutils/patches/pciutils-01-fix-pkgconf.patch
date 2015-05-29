@@ -11,11 +11,12 @@ diff --git a/lib/libpci.pc.in b/lib/libpci.pc.in
 index 9d7e8a0..38827ba 100644
 --- a/lib/libpci.pc.in
 +++ b/lib/libpci.pc.in
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,8 @@
  prefix=@PREFIX@
 -includedir=@INCDIR@
 -libdir=@LIBDIR@
 -idsdir=@IDSDIR@
++exec_prefix=@exec_prefix@
 +includedir=${prefix}/include
 +libdir=${exec_prefix}/lib
 +idsdir=${prefix}/share

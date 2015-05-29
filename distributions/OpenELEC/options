@@ -1,21 +1,21 @@
 # Name of the Distro to build (full name, without special characters)
-  DISTRONAME="OpenELEC"
+  DISTRONAME="PlexMediaPlayer"
 
 # short project description
-  DESCRIPTION="OpenELEC is a fast and userfriendly Kodi Entertainment Center distribution."
+  DESCRIPTION="Plex - Enjoy your videos, photos and music anytime, anywhere"
 
 # Welcome Message for e.g. SSH Server (up to 5 Lines)
   GREETING0="##############################################"
-  GREETING1="# OpenELEC - The living room PC for everyone #"
-  GREETING2="# ...... visit http://www.openelec.tv ...... #"
+  GREETING1="#.......... ${DISTRONAME} - Plex .........#"
+  GREETING2="# ........... visit http://plex.tv ......... #"
   GREETING3="##############################################"
   GREETING4=""
 
 # Root password to integrate in the target system
-  ROOT_PASSWORD="openelec"
+  ROOT_PASSWORD="plex"
 
-# Mediacenter to use (kodi / no)
-  MEDIACENTER="kodi"
+# Mediacenter to use (kodi / Plex Client / no)
+  MEDIACENTER="PlexMediaPlayer"
 
 # Skins to install (Confluence)
 # Space separated list is supported,
@@ -29,22 +29,22 @@
   KODI_EXTRA_FONTS="yes"
 
 # build and install espeak support (yes / no)
-  ESPEAK_SUPPORT="yes"
+  ESPEAK_SUPPORT="no"
 
 # build and install with non-free support
 # (RAR compression support in KODI) (yes / no)
-  KODI_NONFREE_SUPPORT="yes"
+  KODI_NONFREE_SUPPORT="no"
 
 # build and install with BluRay support (yes / no)
-  KODI_BLURAY_SUPPORT="yes"
+  KODI_BLURAY_SUPPORT="no"
 
 # build and install with BD+ support
 # (BD+ decryption support in KODI) (yes / no)
-  BLURAY_BDPLUS_SUPPORT="yes"
+  BLURAY_BDPLUS_SUPPORT="no"
 
 # build and install with AACS support
 # (BD decryption support in KODI) (yes / no)
-  BLURAY_AACS_SUPPORT="yes"
+  BLURAY_AACS_SUPPORT="no"
 
 # build and install with DVDCSS support
 # (DVD decryption support in KODI) (yes / no)
@@ -54,28 +54,28 @@
 # for a list of additinoal drivers see packages/linux-drivers
 # Space separated list is supported,
 # e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
-  ADDITIONAL_DRIVERS="RTL8192CU RTL8192DU RTL8188EU RTL8812AU dvbhdhomerun"
+  ADDITIONAL_DRIVERS="RTL8192CU RTL8192DU RTL8188EU RTL8812AU"
 
 # build and install bluetooth support (yes / no)
   BLUETOOTH_SUPPORT="yes"
 
 # build and install with KODI webfrontend (yes / no)
-  KODI_WEBSERVER_SUPPORT="yes"
+  KODI_WEBSERVER_SUPPORT="no"
 
 # build and install Avahi (Zeroconf) daemon (yes / no)
-  AVAHI_DAEMON="yes"
+  AVAHI_DAEMON="no"
 
 # build with UPnP support (yes / no)
   KODI_UPNP_SUPPORT="yes"
 
 # build with MySQL support (yes / no)
-  KODI_MYSQL_SUPPORT="yes"
+  KODI_MYSQL_SUPPORT="no"
 
 # build xbmc with sshlib support (yes / no)
   KODI_SSHLIB_SUPPORT="yes"
 
 # build xbmc with optical drive support (yes / no)
-  KODI_OPTICAL_SUPPORT="yes"
+  KODI_OPTICAL_SUPPORT="no"
 
 # build with AirPlay support (stream videos from iDevices to KODI) (yes / no)
   KODI_AIRPLAY_SUPPORT="yes"
@@ -133,13 +133,13 @@
   IRSERVER_SUPPORT="yes"
 
 # build and install Joystick support (yes / no)
-  JOYSTICK_SUPPORT="yes"
+  JOYSTICK_SUPPORT="no"
 
 # build and install CEC adapter support (yes / no)
   CEC_SUPPORT="yes"
 
 # build and install iSCSI support - iscsistart (yes / no)
-  ISCSI_SUPPORT="yes"
+  ISCSI_SUPPORT="no"
 
 # LCD driver to Use - Possible drivers are ( Comma seperated:
 # bayrad,CFontz,CFontz633,CFontzPacket,curses,CwLnx,dm140,
@@ -152,20 +152,20 @@
 # 'all' compiles all drivers;
 # 'all,!xxx,!yyy' de-selects previously selected drivers
 # "none" for disable LCD support
-  LCD_DRIVER="irtrans,imon,imonlcd,mdm166a,MtxOrb,lis,dm140,hd44780,CFontz,SureElec,vlsys_m428,serialVFD,shuttleVFD"
+  LCD_DRIVER="irtrans,imon,imonlcd,mdm166a,MtxOrb,lis,dm140,hd44780,CFontz,SureElec,vlsys_m428,serialVFD,shuttleVFD,IOWarrior"
 
 # Support for partitioning and formating disks in initramfs (yes / no)
 # This adds support for parted and mkfs.ext3/4 to initramfs for OEM usage
   INITRAMFS_PARTED_SUPPORT="no"
 
 # build with swap support (yes / no)
-  SWAP_SUPPORT="no"
+  SWAP_SUPPORT="yes"
 
 # swap support enabled per default (yes / no)
-  SWAP_ENABLED_DEFAULT="no"
+  SWAP_ENABLED_DEFAULT="yes"
 
 # swapfile size if SWAP_SUPPORT=yes in MB
-  SWAPFILESIZE="256"
+  SWAPFILESIZE="512"
 
 # build with installer (yes / no)
   INSTALLER_SUPPORT="yes"

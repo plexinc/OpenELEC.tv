@@ -17,12 +17,13 @@
 ################################################################################
 
 PKG_NAME="mesa"
-PKG_VERSION="10.5.5"
+PKG_VERSION="10.6.0-rc1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://www.mesa3d.org/"
 PKG_URL="ftp://freedesktop.org/pub/mesa/$PKG_VERSION/$PKG_NAME-$PKG_VERSION.tar.xz"
+PKG_URL="ftp://freedesktop.org/pub/mesa/10.6.0/$PKG_NAME-$PKG_VERSION.tar.xz"
 PKG_DEPENDS_TARGET="toolchain Python:host expat glproto dri2proto presentproto libdrm libXext libXdamage libXfixes libXxf86vm libxcb libX11 systemd dri3proto libxshmfence"
 PKG_PRIORITY="optional"
 PKG_SECTION="graphics"
@@ -50,6 +51,8 @@ else
   MESA_VDPAU="--disable-vdpau"
 fi
 
+### PLEX
+### We need to enable gles2 and disable gallium-osmesa
 PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            CXX_FOR_BUILD=$HOST_CXX \
                            CFLAGS_FOR_BUILD= \
@@ -65,7 +68,7 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --disable-selinux \
                            --enable-opengl \
                            --disable-gles1 \
-                           --disable-gles2 \
+                           --enable-gles2 \
                            --disable-openvg \
                            --enable-dri \
                            --disable-dri3 \
@@ -85,6 +88,7 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --disable-xlib-glx \
                            --disable-r600-llvm-compiler \
                            --disable-gallium-tests \
+                           --disable-gallium-osmesa \
                            --enable-shared-glapi \
                            --enable-shader-cache \
                            --enable-sysfs \
@@ -97,6 +101,7 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --with-gallium-drivers=$GALLIUM_DRIVERS \
                            --with-dri-drivers=$DRI_DRIVERS \
                            --with-sysroot=$SYSROOT_PREFIX"
+### END PLEX
 
 post_makeinstall_target() {
   # rename and relink for cooperate with nvidia drivers

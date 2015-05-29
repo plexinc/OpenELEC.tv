@@ -51,7 +51,7 @@
     PROJECT_CFLAGS="-mmmx -msse -msse2 -mfpmath=sse"
 
   # LTO (Link Time Optimization) support
-    LTO_SUPPORT="yes"
+    LTO_SUPPORT="no"
 
   # GOLD (Google Linker) support
     GOLD_SUPPORT="yes"
@@ -83,7 +83,7 @@
     KODIPLAYER_DRIVER="default"
 
   # KODI DCADEC support (yes / no)
-    DCADEC_SUPPORT="no"
+    DCADEC_SUPPORT="yes"
 
   # Modules to install in initramfs for early boot
     INITRAMFS_MODULES=""

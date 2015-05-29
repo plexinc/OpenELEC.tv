@@ -1,0 +1,1 @@
+rm -rf build*/$1* ; rm -rf build*/.stamps/$1* : rm -rf sources/$1*

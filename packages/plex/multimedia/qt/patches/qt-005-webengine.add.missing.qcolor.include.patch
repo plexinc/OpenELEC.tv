@@ -1,0 +1,10 @@
+--- a/qtwebengine/src/webengine/api/qquickwebengineview_p_p.h	2015-09-04 14:41:04.000000000 +0200
++++ b/qtwebengine/src/webengine/api/qquickwebengineview_p_p.h	2015-09-23 06:43:52.648000000 +0200
+@@ -56,6 +56,7 @@
+ #include <QString>
+ #include <QtCore/qcompilerdetection.h>
+ #include <QtGui/qaccessibleobject.h>
++#include <QColor>
+ 
+ namespace QtWebEngineCore {
+ class WebContentsAdapter;

@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="gdb"
-PKG_VERSION="7.9"
+PKG_VERSION="7.9.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -53,7 +53,45 @@ PKG_CONFIGURE_OPTS_TARGET="bash_cv_have_mbstate_t=set \
                            --disable-libquadmath-support \
                            --enable-libada \
                            --enable-libssp \
+                           --without-python \
                            --disable-werror"
+
+### PLEX : install gdb and gdbserver
+case $PROJECT in
+        Generic|Nvidia_Legacy)
+        ;;
+        RPi|RPi2)
+                PKG_CONFIGURE_OPTS_TARGET="${PKG_CONFIGURE_OPTS_TARGET} --host=arm-none-linux-gnueabi"
+        ;;
+esac
+
+configure_target() {
+
+			cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+			./configure ${PKG_CONFIGURE_OPTS_TARGET}
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdb/gdbserver
+                        ./configure ${PKG_CONFIGURE_OPTS_TARGET}
+
+}
+
+make_target() {
+
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+                        make 
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdb/gdbserver
+                        make
+
+}
+
+makeinstall_target() {
+
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+                        make install prefix=$INSTALL/usr
+
+                        cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/gdb/gdbserver
+                        make install prefix=$INSTALL/usr
+}
+### END PLEX
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/share/gdb/python

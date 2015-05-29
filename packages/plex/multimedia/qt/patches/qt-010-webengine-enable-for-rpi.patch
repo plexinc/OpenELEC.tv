@@ -1,0 +1,9 @@
+--- a/qtwebengine/tools/qmake/mkspecs/features/functions.prf.orig	2015-12-11 20:05:12.967314717 +0000
++++ b/qtwebengine/tools/qmake/mkspecs/features/functions.prf	2015-12-11 21:17:22.128618053 +0000
+@@ -1,5 +1,5 @@
+ defineTest(isPlatformSupported) {
+-  !linux-g++*:!linux-clang:!win32-msvc2013*:!win32-msvc2015*:!macx-clang*:!boot2qt {
++  !linux-g++*:!linux-rasp-pi2-g++:!linux-clang:!win32-msvc2013*:!win32-msvc2015*:!macx-clang*:!boot2qt {
+     skipBuild("Qt WebEngine can currently only be built for Linux (GCC/clang), Windows (MSVC 2013 or 2015), OS X (10.9/XCode 5.1+) or Qt for Device Creation.")
+     return(false)
+   }

@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="bcm2835-driver"
-PKG_VERSION="b7bbd3d"
+PKG_VERSION="70b0598"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="nonfree"
@@ -56,6 +56,10 @@ make_target() {
     cp -PRv $FLOAT/opt/vc/lib/libmmal_util.so $SYSROOT_PREFIX/usr/lib
     cp -PRv $FLOAT/opt/vc/lib/libmmal_vc_client.so $SYSROOT_PREFIX/usr/lib
     cp -PRv $FLOAT/opt/vc/lib/libvcsm.so $SYSROOT_PREFIX/usr/lib
+
+    ### PLEX
+    cp -PRv $FLOAT/opt/vc/lib/libWFC.so $SYSROOT_PREFIX/usr/lib
+    ### END PLEX
 }
 
 makeinstall_target() {
@@ -75,6 +79,7 @@ makeinstall_target() {
     cp -PRv $FLOAT/opt/vc/lib/libmmal_core.so $INSTALL/usr/lib
     cp -PRv $FLOAT/opt/vc/lib/libmmal_util.so $INSTALL/usr/lib
     cp -PRv $FLOAT/opt/vc/lib/libmmal_vc_client.so $INSTALL/usr/lib
+    cp -PRv $FLOAT/opt/vc/lib/libWFC.so $INSTALL/usr/lib
     cp -PRv $FLOAT/opt/vc/lib/libvcsm.so $INSTALL/usr/lib
 
 # some usefull debug tools

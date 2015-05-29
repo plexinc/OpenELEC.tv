@@ -23,7 +23,7 @@ PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://www.openssh.com/"
 PKG_URL="ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$PKG_NAME-$PKG_VERSION.tar.gz"
-PKG_DEPENDS_TARGET="toolchain zlib libressl"
+PKG_DEPENDS_TARGET="toolchain zlib openssl"
 PKG_PRIORITY="optional"
 PKG_SECTION="network"
 PKG_SHORTDESC="openssh: An open re-implementation of the SSH package"
@@ -50,8 +50,12 @@ PKG_CONFIGURE_OPTS_TARGET="--sysconfdir=/etc/ssh \
                            --without-pam"
 
 pre_configure_target() {
+  strip_lto
   export LD="$TARGET_CC"
   export LDFLAGS="$TARGET_CFLAGS $TARGET_LDFLAGS"
+  export CFLAGS="$CFLAGS -fPIC"
+  export CXXFLAGS="$CXXFLAGS -fPIC"
+  export LDFLAGS="$LDFLAGS -fPIC"
 }
 
 post_makeinstall_target() {
@@ -68,6 +72,11 @@ post_makeinstall_target() {
 post_install() {
   add_user sshd x 74 74 "Privilege-separated SSH" "/var/empty/sshd" "/bin/sh"
   add_group sshd 74
+
+  ### PLEX
+  mkdir -p $INSTALL/usr/share
+  cp $PKG_DIR/sshd.conf $INSTALL/usr/share/
+  ### END PLEX 
 
   enable_service sshd.service
 }

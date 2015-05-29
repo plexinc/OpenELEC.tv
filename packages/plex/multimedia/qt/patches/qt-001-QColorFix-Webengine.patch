@@ -1,0 +1,10 @@
+--- a/qtwebengine/src/webengine/api/qquickwebengineview_p.h.orig	2015-12-15 14:55:12.645048973 +0000
++++ b/qtwebengine/src/webengine/api/qquickwebengineview_p.h	2015-12-15 14:55:36.140094985 +0000
+@@ -51,6 +51,7 @@
+ #include <private/qtwebengineglobal_p.h>
+ #include "qquickwebenginescript_p.h"
+ #include <QQuickItem>
++#include <QColor>
+ 
+ QT_BEGIN_NAMESPACE
+ 
