@@ -2,9 +2,7 @@
   DISTRONAME="PlexMediaPlayer"
 
 # short project description
-### Plex ###
   DESCRIPTION="Plex - Enjoy your videos, photos and music anytime, anywhere"
-### End Plex ###
 
 # Welcome Message for e.g. SSH Server (up to 5 Lines)
   GREETING0="##############################################"
