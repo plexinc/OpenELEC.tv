@@ -117,6 +117,12 @@ configure_target() {
 			-DOPENELEC=on \
 			-DBUILD_TARGET="RPI" \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
+
+		#make the Qt JPEG hardware decoding plugin
+		cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/src/plugins/RPI_jpeg
+		${ROOT}/${BUILD}/bin/qmake
+		make
+		cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/build		
         	;;
 	esac
 }
@@ -137,6 +143,16 @@ makeinstall_target() {
                 mkdir -p ${INSTALL}/etc
 		cp $PKG_DIR/ld.so.conf $INSTALL/etc/		
 	fi
+
+	case $PROJECT in
+	  RPi|RPi2)
+	    #install RPI HW image decoding plugin and remove default qt plugin
+	    cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/src/plugins/RPI_jpeg
+	    mkdir -p $INSTALL/usr/local/qt5/plugins/imageformats
+	    cp libRPI_jpeg.so $INSTALL/usr/local/qt5/plugins/imageformats
+	    cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+	  ;;
+	esac	 	
 }
 
 post_install() {
