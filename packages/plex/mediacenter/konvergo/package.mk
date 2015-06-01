@@ -83,12 +83,18 @@ configure_target() {
         [ ! -d build ] && mkdir build
         cd build
 
+ 	if [ "$DEBUG" = yes ]; then
+          BUILD_TYPE="debug"
+        else
+          BUILD_TYPE="release"
+        fi
+
         # Configure the build
 	case $PROJECT in
         	Generic)
 		cmake \
 			-DCMAKE_INSTALL_PREFIX=/usr \
-                        -DCMAKE_BUILD_TYPE=Release \
+                        -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                         -DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
                         -DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
                         -DCMAKE_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include" \
@@ -104,7 +110,7 @@ configure_target() {
         	RPi|RPi2)
 		cmake \
 			-DCMAKE_INSTALL_PREFIX=/usr \
-			-DCMAKE_BUILD_TYPE=Debug \
+			-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
 			-DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
 			-DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
 			-DCMAKE_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include" \
@@ -120,7 +126,7 @@ configure_target() {
 
 		#make the Qt JPEG hardware decoding plugin
 		cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/src/plugins/RPI_jpeg
-		${ROOT}/${BUILD}/bin/qmake
+		${ROOT}/${BUILD}/bin/qmake CONFIG+=${BUILD_TYPE}
 		make
 		cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/build		
         	;;
