@@ -109,6 +109,7 @@ case $PROJECT in
                                                         -optimized-qmake \
                                                         -qt-xcb \
                                                         -no-sql-sqlite2 \
+                                                        -no-libjpeg \
                                                         -system-xkbcommon \
                                                         -shared \
                                                         -device linux-rasp-pi-g++ \
@@ -277,6 +278,13 @@ makeinstall_target() {
 
         mkdir -p $INSTALL/usr/local/qt5/plugins
         cp -R ${SYSROOT_PREFIX}/usr/local/qt5/plugins/* ${INSTALL}/usr/local/qt5/plugins
+
+	# Remove the jpeg plugin on RPI, we use our own HW accelerated plugin	
+	case $PROJECT in
+	  RPi|RPi2)
+	    rm ${INSTALL}/usr/local/qt5/plugins/imageformats/libqjpeg*	
+	  ;;
+	esac
 
         mkdir -p $INSTALL/usr/local/qt5/qml
         cp -R ${SYSROOT_PREFIX}/usr/local/qt5/qml/* ${INSTALL}/usr/local/qt5/qml
