@@ -609,9 +609,9 @@ menu_main() {
 
   dialog --colors --backtitle "$BACKTITLE" --cancel-label "$MSG_CANCEL" \
     --title "$MSG_TITLE" --menu "$MSG_MENU" 20 70 5 \
-      1 "Quick Install of OpenELEC" \
+      1 "Quick Install of KonvergoEmbedded" \
       2 "Repair / Upgrade" \
-      3 "Setup OpenELEC" \
+      3 "Setup KonvergoEmbedded" \
       4 "Show logfile" 2> $TMPDIR/mainmenu
 
   case $? in
