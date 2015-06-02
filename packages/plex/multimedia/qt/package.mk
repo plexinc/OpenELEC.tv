@@ -282,7 +282,7 @@ makeinstall_target() {
 	# Remove the jpeg plugin on RPI, we use our own HW accelerated plugin	
 	case $PROJECT in
 	  RPi|RPi2)
-	    rm ${INSTALL}/usr/local/qt5/plugins/imageformats/libqjpeg*	
+	    rm -f ${INSTALL}/usr/local/qt5/plugins/imageformats/libqjpeg*	
 	  ;;
 	esac
 
