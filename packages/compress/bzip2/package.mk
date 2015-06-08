@@ -53,3 +53,21 @@ makeinstall_target() {
   mkdir -p $INSTALL/usr/lib
     cp -P libbz2.so* $INSTALL/usr/lib
 }
+
+### PLEX
+pre_make_host() {
+  make clean
+}
+
+make_host() {
+  make -f Makefile-libbz2_so CC=$HOST_CC CFLAGS="$CFLAGS -fPIC -DPIC"
+}
+
+makeinstall_host() {
+  make install PREFIX=$ROOT/$TOOLCHAIN
+}
+
+post_make_host() {
+ ln -snf libbz2.so.1.0 libbz2.so
+}
+### END PLEX
