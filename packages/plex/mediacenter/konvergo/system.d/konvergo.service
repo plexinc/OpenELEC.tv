@@ -7,6 +7,7 @@ Requires=graphical.target
 Environment=DISPLAY=:0.0
 Environment=SDL_MOUSE_RELATIVE=0
 Environment=HOME=/storage
+ExecStartPre=rm -f /storage/.local/share/Konvergo/konvergo.conf.*
 ExecStart=/bin/sh -c ". /etc/profile; exec /usr/bin/Konvergo"
 # keep KillMode=process unless there is no good reason to switch to cgroup
 #KillMode=process
