@@ -44,6 +44,13 @@ PKG_LONGDESC="Qt GUI toolkit"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+if [ "$USE_WEBENGINE" = 1 ]; then
+  PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} libdrm libXi"
+  QT_SKIP="-skip qtwebkit"
+else
+  QT_SKIP="-skip qtwebengine"
+fi
+
 case $PROJECT in
         RPi)
 	ARM_COMPILER_PREFIX="armv6zk-openelec-linux-gnueabi-"
@@ -88,12 +95,12 @@ case $PROJECT in
                                                         -skip qtsensors \
                                                         -skip qtserialport \
                                                         -skip qtwayland \
-                                                        -skip qtwebengine \
                                                         -skip qtwebkit-examples \
                                                         -skip qtwinextras \
                                                         -skip qtxmlpatterns \
                                                         -skip qttranslations \
                                                         -skip qtmultimedia \
+                                                        ${QT_SKIP} \
                                                         -nomake examples \
                                                         -nomake tests"
 	;;
@@ -131,13 +138,13 @@ case $PROJECT in
                                                         -skip qtsensors \
                                                         -skip qtserialport \
                                                         -skip qtwayland \
-                                                        -skip qtwebengine \
                                                         -skip qtwebkit-examples \
                                                         -skip qtwinextras \
                                                         -skip qtx11extras \
                                                         -skip qtxmlpatterns \
                                                         -skip qttranslations \
                                                         -skip qtmultimedia \
+                                                        ${QT_SKIP} \
 							"
         ;;
 esac
