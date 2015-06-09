@@ -43,7 +43,7 @@ fi
 
 ### PLEX
 # Use set GIT_TOKEN variable to ?token=<git_token> before running.
-if [ "`wget -q --spider https://raw.githubusercontent.com/plexinc/konvergo/master/CMakeModules/VersionConfiguration.cmake$GIT_TOKEN; echo $?`" = "0" ]; then
+if [ "`curl -sfO -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/konvergo/master/CMakeModules/VersionConfiguration.cmake; echo $?`" = "0" ]; then
   KONVERGO_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/konvergo/master/CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g'`"
 else
   KONVERGO_VERSION="dev"
