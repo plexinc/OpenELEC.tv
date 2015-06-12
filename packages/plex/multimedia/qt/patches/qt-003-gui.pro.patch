@@ -1,10 +1,19 @@
---- a/qtbase/src/gui/gui.pro	2014-12-05 08:24:35.000000000 -0800
-+++ b/qtbase/src/gui/gui.pro	2015-02-09 22:19:40.483398963 -0800
+--- a/qtbase/src/gui/gui.pro	2015-06-12 11:26:48.595561000 +0200
++++ b/qtbase/src/gui/gui.pro	2015-06-12 11:27:22.107561000 +0200
 @@ -72,6 +72,7 @@
  
      contains(QT_CONFIG, opengles2) {
          !isEmpty(QMAKE_INCDIR_OPENGL_ES2): CMAKE_GL_INCDIRS = $$cmakeTargetPaths($$QMAKE_INCDIR_OPENGL_ES2)
-+	CMAKE_GL_INCDIRS+=" ##SYSROOT_PREFIX##"
++        CMAKE_GL_INCDIRS+=" ##SYSROOT_PREFIX##"
          CMAKE_OPENGL_INCDIRS = $$cmakePortablePaths($$QMAKE_INCDIR_OPENGL_ES2)
          CMAKE_OPENGL_LIBS = $$cmakeProcessLibs($$QMAKE_LIBS_OPENGL_ES2)
          !isEmpty(QMAKE_LIBDIR_OPENGL_ES2): CMAKE_OPENGL_LIBDIR = $$cmakePortablePaths($$QMAKE_LIBDIR_OPENGL_ES2)
+@@ -80,6 +81,7 @@
+     } else:contains(QT_CONFIG, opengl) {
+         !isEmpty(QMAKE_INCDIR_OPENGL): CMAKE_GL_INCDIRS = $$cmakeTargetPaths($$QMAKE_INCDIR_OPENGL)
++        CMAKE_GL_INCDIRS+=" ##SYSROOT_PREFIX##"
+         CMAKE_OPENGL_INCDIRS = $$cmakePortablePaths($$QMAKE_INCDIR_OPENGL)
+         !contains(QT_CONFIG, dynamicgl): CMAKE_OPENGL_LIBS = $$cmakeProcessLibs($$QMAKE_LIBS_OPENGL)
+         !isEmpty(QMAKE_LIBDIR_OPENGL): CMAKE_OPENGL_LIBDIR = $$cmakePortablePaths($$QMAKE_LIBDIR_OPENGL)
+         CMAKE_GL_HEADER_NAME = GL/gl.h
+

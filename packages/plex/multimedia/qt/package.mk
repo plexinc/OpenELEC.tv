@@ -74,7 +74,7 @@ case $PROJECT in
                                                         -confirm-license \
                                                         -optimized-qmake \
                                                         -shared \
-                                                        -opengl es2\
+                                                        -opengl desktop\
                                                         -make libs \
 							-no-pch \
 							-system-xkbcommon \
