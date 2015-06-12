@@ -286,10 +286,34 @@ makeinstall_target() {
         mkdir -p $INSTALL/usr/local/qt5/plugins
         cp -R ${SYSROOT_PREFIX}/usr/local/qt5/plugins/* ${INSTALL}/usr/local/qt5/plugins
 
-	# Remove the jpeg plugin on RPI, we use our own HW accelerated plugin	
+	#cleanup the plugins
 	case $PROJECT in
+          Generic)
+	  ;;
 	  RPi|RPi2)
-	    rm -f ${INSTALL}/usr/local/qt5/plugins/imageformats/libqjpeg*	
+	    rm -rf ${INSTALL}/usr/local/qt5/plugins/sqldrivers
+	
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/generic/libqevdevtabletplugin.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/generic/llibqevdevtouchplugin.so
+		
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqdds.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqgif.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqicns.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqico.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqjp2.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqmng.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqtga.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqtiff.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqwbmp.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/imageformats/libqwebp.so
+            rm -f ${INSTALL}/usr/local/qt5/plugins/imageformats/libqjpeg*
+
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/platforms/libqlinuxfb.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/platforms/libqminimal.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/platforms/libqminimalegl.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/platforms/libqoffscreen.so
+	    rm -f  ${INSTALL}/usr/local/qt5/plugins/platforms/libqxcb.so
+	    rm -f ${INSTALL}/usr/local/qt5/plugins/imageformats/libqjpeg*
 	  ;;
 	esac
 
