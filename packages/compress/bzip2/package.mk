@@ -59,6 +59,10 @@ pre_make_host() {
   make clean
 }
 
+pre_make_target() {
+  make clean
+}
+
 make_host() {
   make -f Makefile-libbz2_so CC=$HOST_CC CFLAGS="$CFLAGS -fPIC -DPIC"
 }
