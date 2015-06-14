@@ -57,7 +57,9 @@
 
   # Kernel to use. values can be:
   # default:  default mainline kernel
-    LINUX="default"
+  ### PLEX : We use the raspbian kernel for better passthru support
+    LINUX="raspbian"
+  ### END PLEX
 
   # NOOBS supported hex versions
     NOOBS_HEX="1040,1041"
@@ -148,4 +150,4 @@
   # for a list of additinoal drivers see packages/linux-drivers
   # Space separated list is supported,
   # e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
-    ADDITIONAL_DRIVERS="$ADDITIONAL_DRIVERS mt7601u"
+  #  ADDITIONAL_DRIVERS="$ADDITIONAL_DRIVERS mt7601u"
