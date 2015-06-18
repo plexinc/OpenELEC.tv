@@ -664,6 +664,9 @@ LOGFILE="$TMPDIR/install.log"
 rm -rf $TMPDIR
 mkdir -p $TMPDIR
 
+#create log file
+touch "$LOGFILE"
+
 # main
 
 while true; do
