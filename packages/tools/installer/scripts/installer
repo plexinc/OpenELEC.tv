@@ -583,11 +583,7 @@ menu_main() {
     --title "$MSG_TITLE" --menu "$MSG_MENU" 20 70 5 \
       1 "Quick Install of Plex Media Player" \
       2 "Repair / Upgrade" \
-<<<<<<< HEAD
-      4 "Show logfile" 2> $TMPDIR/mainmenu
-=======
       3 "Show logfile" 2> $TMPDIR/mainmenu
->>>>>>> installer: fix menu display, log file function
 
   case $? in
     0)
