@@ -291,8 +291,6 @@ makeinstall_target() {
           Generic)
 	  ;;
 	  RPi|RPi2)
-	    rm -rf ${INSTALL}/usr/local/qt5/plugins/sqldrivers
-	
 	    rm -f  ${INSTALL}/usr/local/qt5/plugins/generic/libqevdevtabletplugin.so
 	    rm -f  ${INSTALL}/usr/local/qt5/plugins/generic/llibqevdevtouchplugin.so
 		
