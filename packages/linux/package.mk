@@ -39,13 +39,6 @@ case "$LINUX" in
     PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
     PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET imx6-status-led imx6-soc-fan"
     ;;
-  ### PLEX : we need upstream raspbian version for passthru support
-  raspbian)
-    PKG_VERSION="rpi-3.18.y"
-    PKG_SITE="https://nightlies.plex.tv"
-    PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-$PKG_VERSION.tar.gz"
-    ;;
-  ### END PLEX
   *)
     PKG_VERSION="4.0.4"
     PKG_URL="http://www.kernel.org/pub/linux/kernel/v4.x/$PKG_NAME-$PKG_VERSION.tar.xz"
