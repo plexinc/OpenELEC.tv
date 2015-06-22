@@ -17,12 +17,12 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="2.6.3"
+PKG_VERSION="master"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
-PKG_SITE="http://ffmpeg.org"
-PKG_URL="https://www.ffmpeg.org/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"
+PKG_SITE="http://nightlies.plex.tv"
+PKG_URL="$PKG_SITE/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
 PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis openssl libdcadec gnutls"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
@@ -37,10 +37,10 @@ unpack() {
 
 case $PROJECT in
 	Generic)
-        git clone -b master git@github.com:FFmpeg/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
+        git clone -b $PKG_VERSION git@github.com:FFmpeg/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
 	;;
 	RPi|RPi2)
-        git clone -b master git@github.com:FFmpeg/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
+        git clone -b $PKG_VERSION git@github.com:FFmpeg/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
 	;;
 esac
 
