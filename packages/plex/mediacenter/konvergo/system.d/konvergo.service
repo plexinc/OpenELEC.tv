@@ -8,7 +8,7 @@ Environment=DISPLAY=:0.0
 Environment=SDL_MOUSE_RELATIVE=0
 Environment=HOME=/storage
 ExecStartPre=rm -f /storage/.local/share/Konvergo/konvergo.conf.*
-ExecStartPre=if [ -d /storage/bin ]; then mkdir /storage/bin
+ExecStartPre=if [ ! -d /storage/bin ]; then mkdir /storage/bin ; fi
 ExecStart=if [ -f /storage/bin/Konvergo ]; then /bin/sh -c ". /etc/profile; exec /storage/bin/Konvergo" ; else /bin/sh -c ". /etc/profile; exec /usr/bin/Konvergo" ; fi
 # keep KillMode=process unless there is no good reason to switch to cgroup
 #KillMode=process
