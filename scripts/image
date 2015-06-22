@@ -54,454 +54,454 @@ TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
 IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$PROJECT-$TARGET_ARCH"
 #END PLEX
 
+# setup fakeroot
+  rm -rf $FAKEROOT_SCRIPT   # remove $FAKEROOT_SCRIPT if it exist
+  touch $FAKEROOT_SCRIPT    # create an empty $FAKEROOT_SCRIPT
+  chmod +x $FAKEROOT_SCRIPT # make $FAKEROOT_SCRIPT executable
+  echo "chown -R 0:0 $INSTALL" >> $FAKEROOT_SCRIPT
+
+# clean old install dirs
+  rm -rf $INSTALL
+  rm -rf $STAMPS_INSTALL
+  mkdir -p $INSTALL
+
+# create baselayout
+  mkdir -p $INSTALL/bin
+  mkdir -p $INSTALL/etc
+  mkdir -p $INSTALL/lib
+  mkdir -p $INSTALL/sbin
+  mkdir -p $INSTALL/dev
+  mkdir -p $INSTALL/proc
+  mkdir -p $INSTALL/run
+  mkdir -p $INSTALL/sys
+  mkdir -p $INSTALL/tmp
+  mkdir -p $INSTALL/usr
+  mkdir -p $INSTALL/var
+  mkdir -p $INSTALL/flash
+  mkdir -p $INSTALL/storage
+  ln -sf /var $INSTALL/usr/var
+  ln -sf /var/media $INSTALL/media
+
+  if [ "$TARGET_ARCH" = "x86_64" -o "$TARGET_ARCH" = "powerpc64" ]; then
+    ln -s /lib $INSTALL/lib64
+    ln -s lib $INSTALL/usr/lib64
+  fi
+
+  echo "$DISTRONAME" > $INSTALL/etc/distribution
+  echo "$PROJECT.$TARGET_ARCH" > $INSTALL/etc/arch
+  echo "$OPENELEC_VERSION" > $INSTALL/etc/version
+  echo "$TARGET_VERSION" > $INSTALL/etc/release
+  echo "$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) - Version: $OPENELEC_VERSION" > $INSTALL/etc/openelec-release
+  if [ -n "$GIT_HASH" ]; then
+    echo "$GIT_HASH" >> $INSTALL/etc/gitrev
+  fi
+  
+# create /etc/os-release
+  echo -e "NAME=\"$DISTRONAME\"" > $INSTALL/etc/os-release
+  echo -e "VERSION=\"$OPENELEC_VERSION\"" >> $INSTALL/etc/os-release
+  echo -e "ID=\"openelec\"" >> $INSTALL/etc/os-release
+  echo -e "VERSION_ID=\"$OS_VERSION\"" >> $INSTALL/etc/os-release
+  echo -e "PRETTY_NAME=\"$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) - Version: $OPENELEC_VERSION\"" >> $INSTALL/etc/os-release
+  echo -e "HOME_URL=\"http://www.openelec.tv\"" >> $INSTALL/etc/os-release
+  echo -e "BUG_REPORT_URL=\"https://github.com/OpenELEC/OpenELEC.tv\"" >> $INSTALL/etc/os-release
+  if [ -n "$GIT_HASH" ]; then
+	echo -e "BUILD_ID=\"$GIT_HASH\"" >> $INSTALL/etc/os-release
+  fi
+  echo -e "OPENELEC_ARCH=\"$PROJECT.$TARGET_ARCH\"" >> $INSTALL/etc/os-release
+  if [ "$OFFICIAL" = "yes" ]; then
+    echo -e "OPENELEC_BUILD=\"official\"" >> $INSTALL/etc/os-release
+  else
+    echo -e "OPENELEC_BUILD=\"unofficial\"" >> $INSTALL/etc/os-release
+  fi
+
+  if [ "$OFFICIAL" = "yes" ]; then
+    echo "official" > $INSTALL/etc/build
+  else
+    echo "unofficial" > $INSTALL/etc/build
+  fi
+
+# create /etc/issue
+  echo $GREETING0 >  $INSTALL/etc/issue
+  echo $GREETING1 >> $INSTALL/etc/issue
+  echo $GREETING2 >> $INSTALL/etc/issue
+  echo $GREETING3 >> $INSTALL/etc/issue
+  echo $GREETING4 >> $INSTALL/etc/issue
+  echo "$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) Version: $OPENELEC_VERSION" >> $INSTALL/etc/issue
+  if [ -n "$GIT_HASH" ]; then
+    echo "$DISTRONAME git: $GIT_HASH" >> $INSTALL/etc/issue
+  fi
+
+  ln -sf /etc/issue $INSTALL/etc/motd
+
+# Basissystem...
+  $SCRIPTS/install libc
+  $SCRIPTS/install gcc
+  $SCRIPTS/install linux
+  $SCRIPTS/install linux-drivers
+  $SCRIPTS/install linux-firmware
+  $SCRIPTS/install $BOOTLOADER
+  $SCRIPTS/install busybox
+  $SCRIPTS/install util-linux
+  $SCRIPTS/install network
+
+# Graphic support
+  [ ! "$DISPLAYSERVER" = "no" ] && $SCRIPTS/install $DISPLAYSERVER
+
+# Multimedia support
+  [ ! "$MEDIACENTER" = "no" ] && $SCRIPTS/install mediacenter
+
+# Sound support
+  [ "$ALSA_SUPPORT" = "yes" ] && $SCRIPTS/install alsa
+
+# Automounter support
+  [ "$UDEVIL" = "yes" ] && $SCRIPTS/install udevil
+
+# NTFS 3G support
+  [ "$EXFAT" = "yes" ] && $SCRIPTS/install fuse-exfat
+
+# NTFS 3G support
+  [ "$NTFS3G" = "yes" ] && $SCRIPTS/install ntfs-3g_ntfsprogs
+
+# Remote support
+  [ "$REMOTE_SUPPORT" = "yes" ] && $SCRIPTS/install remote
+
+# LCD support
+  [ ! "$LCD_DRIVER" = "none" ] && $SCRIPTS/install lcdproc
+
+# Installer support
+  [ "$INSTALLER_SUPPORT" = "yes" ] && $SCRIPTS/install installer
+
+# Devtools... (not for Release)
+  [ "$TESTING" = "yes" ] && $SCRIPTS/install testing
+  [ "$DEVTOOLS" = "yes" ] && $SCRIPTS/install debug
+
+# OEM packages
+  [ "$OEM_SUPPORT" = "yes" ] && $SCRIPTS/install oem
+
+# copy project related files to filesystem
+  if [ -d "$PROJECT_DIR/$PROJECT/filesystem" ]; then
+    cp -PR $PROJECT_DIR/$PROJECT/filesystem/* $INSTALL
+    # install project specific systemd services
+    for service in $PROJECT_DIR/$PROJECT/filesystem/usr/lib/systemd/system/*.service ; do
+      if [ -f "$service" ] ; then
+        enable_service $(basename $service)
+      fi
+    done
+  fi
+
+# run depmod
+  MODVER=$(basename $(ls -d $INSTALL/lib/modules/*))
+  find $INSTALL/lib/modules/$MODVER/ -name *.ko | \
+    sed -e "s,$INSTALL/lib/modules/$MODVER/,," > $INSTALL/lib/modules/$MODVER/modules.order
+  $ROOT/$TOOLCHAIN/bin/depmod -b $INSTALL $MODVER > /dev/null
+
+# strip kernel modules
+  for MOD in `find $INSTALL/lib/modules/ -name *.ko`; do
+    $STRIP --strip-debug $MOD
+  done
+
+# make target dir
+  mkdir -p $TARGET_IMG
+    rm -rf $TARGET_IMG/$IMAGE_NAME.kernel
+
+# copy kernel to target dir
+  if [ "$BOOTLOADER" = "u-boot" ]; then
+    KERNEL_IMAGE="$KERNEL_UBOOT_TARGET"
+  elif [ "$BOOTLOADER" = "bcm2835-bootloader" ]; then
+    KERNEL_IMAGE="zImage"
+  else
+    KERNEL_IMAGE="bzImage"
+  fi
+
+  if [ "$TARGET_ARCH" = x86_64 ]; then
+    KERNEL_ARCH="x86"
+  elif [ "$TARGET_ARCH" = arm ]; then
+    KERNEL_ARCH="arm"
+  fi
+
+  if [ "$BOOTLOADER" = "bcm2835-bootloader" ]; then
+    echo "injecting DeviceTreeBlobs to kernel..."
+    perl scripts/mkknlimg $BUILD/linux-*/arch/$KERNEL_ARCH/boot/$KERNEL_IMAGE $TARGET_IMG/$IMAGE_NAME.kernel
+    echo "...done"
+  else
+    cp -PR $BUILD/linux-*/arch/$KERNEL_ARCH/boot/$KERNEL_IMAGE $TARGET_IMG/$IMAGE_NAME.kernel
+  fi
+  chmod 0644 $TARGET_IMG/$IMAGE_NAME.kernel
+
+# create squashfs file
+  if [ -z "$SQUASHFS_COMPRESSION" ]; then
+    SQUASHFS_COMPRESSION="gzip"
+  fi
+
+  echo "rm -rf $TARGET_IMG/$IMAGE_NAME.system" >> $FAKEROOT_SCRIPT
+  echo "$ROOT/$TOOLCHAIN/bin/mksquashfs $BUILD/image/system $TARGET_IMG/$IMAGE_NAME.system -noappend -comp $SQUASHFS_COMPRESSION" >> $FAKEROOT_SCRIPT
+
+# run fakeroot
+  $ROOT/$TOOLCHAIN/bin/fakeroot -- $FAKEROOT_SCRIPT
+  rm -rf $FAKEROOT_SCRIPT
+
+# set permissions
+  chmod 0644 $TARGET_IMG/$IMAGE_NAME.system
+
 ### PLEX
 if [ "$FULL_BUILD" = "true" ]; then
+  if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" ]; then
 
-  # setup fakeroot
-    rm -rf $FAKEROOT_SCRIPT   # remove $FAKEROOT_SCRIPT if it exist
-    touch $FAKEROOT_SCRIPT    # create an empty $FAKEROOT_SCRIPT
-    chmod +x $FAKEROOT_SCRIPT # make $FAKEROOT_SCRIPT executable
-    echo "chown -R 0:0 $INSTALL" >> $FAKEROOT_SCRIPT
+    RELEASE_DIR="target/$IMAGE_NAME"
 
-  # clean old install dirs
-    rm -rf $INSTALL
-    rm -rf $STAMPS_INSTALL
-    mkdir -p $INSTALL
+    # cleanup
+      rm -rf $RELEASE_DIR
 
-  # create baselayout
-    mkdir -p $INSTALL/bin
-    mkdir -p $INSTALL/etc
-    mkdir -p $INSTALL/lib
-    mkdir -p $INSTALL/sbin
-    mkdir -p $INSTALL/dev
-    mkdir -p $INSTALL/proc
-    mkdir -p $INSTALL/run
-    mkdir -p $INSTALL/sys
-    mkdir -p $INSTALL/tmp
-    mkdir -p $INSTALL/usr
-    mkdir -p $INSTALL/var
-    mkdir -p $INSTALL/flash
-    mkdir -p $INSTALL/storage
-    ln -sf /var $INSTALL/usr/var
-    ln -sf /var/media $INSTALL/media
+    # create release dir
+      mkdir -p $RELEASE_DIR
+      # remove n previous created release image
+        rm -rf $TARGET_IMG/$IMAGE_NAME.img.gz
+        if [ -n "$BOOTLOADER" ]; then
+          if [ -d $ROOT/projects/$PROJECT/packages ]; then
+          	BOOTLOADER_DIR=`find $ROOT/projects/$PROJECT/packages -type d -name $BOOTLOADER 2>/dev/null`
+          else
+          	BOOTLOADER_DIR=""
+          fi
 
-    if [ "$TARGET_ARCH" = "x86_64" -o "$TARGET_ARCH" = "powerpc64" ]; then
-      ln -s /lib $INSTALL/lib64
-      ln -s lib $INSTALL/usr/lib64
-    fi
+          if [ -z "$BOOTLOADER_DIR" -o ! -d "$BOOTLOADER_DIR" ]; then
+          	BOOTLOADER_DIR=`find $PACKAGES -type d -name $BOOTLOADER 2>/dev/null`
+          fi
 
-    echo "$DISTRONAME" > $INSTALL/etc/distribution
-    echo "$PROJECT.$TARGET_ARCH" > $INSTALL/etc/arch
-    echo "$OPENELEC_VERSION" > $INSTALL/etc/version
-    echo "$TARGET_VERSION" > $INSTALL/etc/release
-    echo "$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) - Version: $OPENELEC_VERSION" > $INSTALL/etc/openelec-release
-    if [ -n "$GIT_HASH" ]; then
-      echo "$GIT_HASH" >> $INSTALL/etc/gitrev
-    fi
-  
-  # create /etc/os-release
-    echo -e "NAME=\"$DISTRONAME\"" > $INSTALL/etc/os-release
-    echo -e "VERSION=\"$OPENELEC_VERSION\"" >> $INSTALL/etc/os-release
-    echo -e "ID=\"openelec\"" >> $INSTALL/etc/os-release
-    echo -e "VERSION_ID=\"$OS_VERSION\"" >> $INSTALL/etc/os-release
-    echo -e "PRETTY_NAME=\"$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) - Version: $OPENELEC_VERSION\"" >> $INSTALL/etc/os-release
-    echo -e "HOME_URL=\"http://www.openelec.tv\"" >> $INSTALL/etc/os-release
-    echo -e "BUG_REPORT_URL=\"https://github.com/OpenELEC/OpenELEC.tv\"" >> $INSTALL/etc/os-release
-    if [ -n "$GIT_HASH" ]; then
-  	echo -e "BUILD_ID=\"$GIT_HASH\"" >> $INSTALL/etc/os-release
-    fi
-    echo -e "OPENELEC_ARCH=\"$PROJECT.$TARGET_ARCH\"" >> $INSTALL/etc/os-release
-    if [ "$OFFICIAL" = "yes" ]; then
-      echo -e "OPENELEC_BUILD=\"official\"" >> $INSTALL/etc/os-release
-    else
-      echo -e "OPENELEC_BUILD=\"unofficial\"" >> $INSTALL/etc/os-release
-    fi
+          if [ -d "$BOOTLOADER_DIR"/files ]; then
+            cp -R $BOOTLOADER_DIR/files/* $RELEASE_DIR
+          fi
 
-    if [ "$OFFICIAL" = "yes" ]; then
-      echo "official" > $INSTALL/etc/build
-    else
-      echo "unofficial" > $INSTALL/etc/build
-    fi
-
-  # create /etc/issue
-    echo $GREETING0 >  $INSTALL/etc/issue
-    echo $GREETING1 >> $INSTALL/etc/issue
-    echo $GREETING2 >> $INSTALL/etc/issue
-    echo $GREETING3 >> $INSTALL/etc/issue
-    echo $GREETING4 >> $INSTALL/etc/issue
-    echo "$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) Version: $OPENELEC_VERSION" >> $INSTALL/etc/issue
-    if [ -n "$GIT_HASH" ]; then
-      echo "$DISTRONAME git: $GIT_HASH" >> $INSTALL/etc/issue
-    fi
-
-    ln -sf /etc/issue $INSTALL/etc/motd
-
-  # Basissystem...
-    $SCRIPTS/install libc
-    $SCRIPTS/install gcc
-    $SCRIPTS/install linux
-    $SCRIPTS/install linux-drivers
-    $SCRIPTS/install linux-firmware
-    $SCRIPTS/install $BOOTLOADER
-    $SCRIPTS/install busybox
-    $SCRIPTS/install util-linux
-    $SCRIPTS/install network
-
-  # Graphic support
-    [ ! "$DISPLAYSERVER" = "no" ] && $SCRIPTS/install $DISPLAYSERVER
-  
-  # Multimedia support
-    [ ! "$MEDIACENTER" = "no" ] && $SCRIPTS/install mediacenter
-  
-  # Sound support
-    [ "$ALSA_SUPPORT" = "yes" ] && $SCRIPTS/install alsa
-  
-  # Automounter support
-    [ "$UDEVIL" = "yes" ] && $SCRIPTS/install udevil
-  
-  # NTFS 3G support
-    [ "$EXFAT" = "yes" ] && $SCRIPTS/install fuse-exfat
-  
-  # NTFS 3G support
-    [ "$NTFS3G" = "yes" ] && $SCRIPTS/install ntfs-3g_ntfsprogs
-  
-  # Remote support
-    [ "$REMOTE_SUPPORT" = "yes" ] && $SCRIPTS/install remote
-  
-  # LCD support
-    [ ! "$LCD_DRIVER" = "none" ] && $SCRIPTS/install lcdproc
-  
-  # Installer support
-    [ "$INSTALLER_SUPPORT" = "yes" ] && $SCRIPTS/install installer
-  
-  # Devtools... (not for Release)
-    [ "$TESTING" = "yes" ] && $SCRIPTS/install testing
-    [ "$DEVTOOLS" = "yes" ] && $SCRIPTS/install debug
-  
-  # OEM packages
-    [ "$OEM_SUPPORT" = "yes" ] && $SCRIPTS/install oem
-  
-  # copy project related files to filesystem
-    if [ -d "$PROJECT_DIR/$PROJECT/filesystem" ]; then
-      cp -PR $PROJECT_DIR/$PROJECT/filesystem/* $INSTALL
-      # install project specific systemd services
-      for service in $PROJECT_DIR/$PROJECT/filesystem/usr/lib/systemd/system/*.service ; do
-        if [ -f "$service" ] ; then
-          enable_service $(basename $service)
+          if [ -f $PROJECT_DIR/$PROJECT/bootloader/release ]; then
+            . $PROJECT_DIR/$PROJECT/bootloader/release
+          elif [ -f "$BOOTLOADER_DIR"/release ]; then
+            . $BOOTLOADER_DIR/release
+          fi
         fi
-      done
-    fi
-  
-  # run depmod
-    MODVER=$(basename $(ls -d $INSTALL/lib/modules/*))
-    find $INSTALL/lib/modules/$MODVER/ -name *.ko | \
-      sed -e "s,$INSTALL/lib/modules/$MODVER/,," > $INSTALL/lib/modules/$MODVER/modules.order
-    $ROOT/$TOOLCHAIN/bin/depmod -b $INSTALL $MODVER > /dev/null
-  
-  # strip kernel modules
-    for MOD in `find $INSTALL/lib/modules/ -name *.ko`; do
-      $STRIP --strip-debug $MOD
-    done
-  
-  # make target dir
-    mkdir -p $TARGET_IMG
-      rm -rf $TARGET_IMG/$IMAGE_NAME.kernel
-  
-  # copy kernel to target dir
-    if [ "$BOOTLOADER" = "u-boot" ]; then
-      KERNEL_IMAGE="$KERNEL_UBOOT_TARGET"
-    elif [ "$BOOTLOADER" = "bcm2835-bootloader" ]; then
-      KERNEL_IMAGE="zImage"
-    else
-      KERNEL_IMAGE="bzImage"
-    fi
-  
-    if [ "$TARGET_ARCH" = x86_64 ]; then
-      KERNEL_ARCH="x86"
-    elif [ "$TARGET_ARCH" = arm ]; then
-      KERNEL_ARCH="arm"
-    fi
-  
-    if [ "$BOOTLOADER" = "bcm2835-bootloader" ]; then
-      echo "injecting DeviceTreeBlobs to kernel..."
-      perl scripts/mkknlimg $BUILD/linux-*/arch/$KERNEL_ARCH/boot/$KERNEL_IMAGE $TARGET_IMG/$IMAGE_NAME.kernel
-      echo "...done"
-    else
-      cp -PR $BUILD/linux-*/arch/$KERNEL_ARCH/boot/$KERNEL_IMAGE $TARGET_IMG/$IMAGE_NAME.kernel
-    fi
-    chmod 0644 $TARGET_IMG/$IMAGE_NAME.kernel
-  
-  # create squashfs file
-    if [ -z "$SQUASHFS_COMPRESSION" ]; then
-      SQUASHFS_COMPRESSION="gzip"
-    fi
-  
-    echo "rm -rf $TARGET_IMG/$IMAGE_NAME.system" >> $FAKEROOT_SCRIPT
-    echo "$ROOT/$TOOLCHAIN/bin/mksquashfs $BUILD/image/system $TARGET_IMG/$IMAGE_NAME.system -noappend -comp $SQUASHFS_COMPRESSION" >> $FAKEROOT_SCRIPT
-  
-  # run fakeroot
-    $ROOT/$TOOLCHAIN/bin/fakeroot -- $FAKEROOT_SCRIPT
-    rm -rf $FAKEROOT_SCRIPT
-  
-  # set permissions
-    chmod 0644 $TARGET_IMG/$IMAGE_NAME.system
-  
-    if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" ]; then
-  
-      RELEASE_DIR="target/$IMAGE_NAME"
-  
-      # cleanup
-        rm -rf $RELEASE_DIR
-  
-      # create release dir
-        mkdir -p $RELEASE_DIR
-        # remove n previous created release image
-          rm -rf $TARGET_IMG/$IMAGE_NAME.img.gz
-          if [ -n "$BOOTLOADER" ]; then
-            if [ -d $ROOT/projects/$PROJECT/packages ]; then
-            	BOOTLOADER_DIR=`find $ROOT/projects/$PROJECT/packages -type d -name $BOOTLOADER 2>/dev/null`
-            else
-            	BOOTLOADER_DIR=""
-            fi
-  
-            if [ -z "$BOOTLOADER_DIR" -o ! -d "$BOOTLOADER_DIR" ]; then
-            	BOOTLOADER_DIR=`find $PACKAGES -type d -name $BOOTLOADER 2>/dev/null`
-            fi
-  
-            if [ -d "$BOOTLOADER_DIR"/files ]; then
-              cp -R $BOOTLOADER_DIR/files/* $RELEASE_DIR
-            fi
-  
-            if [ -f $PROJECT_DIR/$PROJECT/bootloader/release ]; then
-              . $PROJECT_DIR/$PROJECT/bootloader/release
-            elif [ -f "$BOOTLOADER_DIR"/release ]; then
-              . $BOOTLOADER_DIR/release
-            fi
-          fi
-  
-        # MfgTool2 for TBS Matrix support (add it to .tar)
-        # only for matrix system or all? (one tar for all updates?)
-          if [ "$PROJECT" == "imx6" -a "$SYSTEM" == "matrix" ]; then
-            $SCRIPTS/unpack imx6-mfgtool2-tbs-matrix
-            
-            mkdir -p $RELEASE_DIR/MfgTool2-TBS-Matrix
-            cp -PR $BUILD/imx6-mfgtool2-tbs-matrix-*/imx6-mfgtool2-tbs-matrix-*/* $RELEASE_DIR/MfgTool2-TBS-Matrix
-          fi
-  
-          cp $ROOT/README* $RELEASE_DIR
-          cp $ROOT/CHANGELOG* $RELEASE_DIR
-          echo "$TARGET_VERSION" > $RELEASE_DIR/RELEASE
-  
-          if [ -n "$MEDIACENTER" ] ; then
-            echo "Kodi commit: `scripts/git_version $MEDIACENTER`" >> $RELEASE_DIR/RELEASE
-          fi
-  
-        mkdir -p $RELEASE_DIR/licenses
-          cp $ROOT/licenses/* $RELEASE_DIR/licenses
-  
-        mkdir -p $RELEASE_DIR/target
-          cp $TARGET_IMG/$IMAGE_NAME.system $RELEASE_DIR/target/SYSTEM
-          cp $TARGET_IMG/$IMAGE_NAME.kernel $RELEASE_DIR/target/KERNEL
-      # create md5sum's
-        ( cd $RELEASE_DIR;
-          md5sum -t target/SYSTEM > target/SYSTEM.md5;
-          md5sum -t target/KERNEL > target/KERNEL.md5;
-        )
-  
-      # create target directory
-        mkdir -p $TARGET_IMG
-  
-      # remove an previous created release tarball
-        rm -rf $TARGET_IMG/$IMAGE_NAME.tar
-  
-      # create release tarball
-        tar cf $TARGET_IMG/$IMAGE_NAME.tar -C target $IMAGE_NAME
-  
-      # create image files if requested
-        if [ "$1" = "mkimage" -a -n "$BOOTLOADER" ]; then
-          # projects can set KERNEL_NAME (kernel.img)
-          if [ -z "$KERNEL_NAME" ] ; then
-            KERNEL_NAME="KERNEL"
-          fi
-  
-          UBOOT_SYSTEM=""
-          if [ "$PROJECT" == "imx6" ]; then
-            if [ -n "$SYSTEM" ]; then
-              UBOOT_SYSTEM="$SYSTEM"
-            else
-              UBOOT_SYSTEM="cuboxi"
-            fi
-          fi
-  
-          echo "mkimage: boo. now root access (sudo) is required..."
-          echo "mkimage: see scripts/image and scripts/mkimage if you dont trust us :)"
-          # variables used in image script must be passed
-          sudo env \
-            PATH="$PATH:/sbin" \
-            ROOT="$ROOT" \
-            TOOLCHAIN="$TOOLCHAIN" \
-            TARGET_IMG="$TARGET_IMG" \
-            IMAGE_NAME="$IMAGE_NAME" \
-            BOOTLOADER="$BOOTLOADER" \
-            KERNEL_NAME="$KERNEL_NAME" \
-            RELEASE_DIR="$RELEASE_DIR" \
-            UUID_SYSTEM="$(uuidgen)" \
-            UUID_STORAGE="$(uuidgen)" \
-            UBOOT_SYSTEM="$UBOOT_SYSTEM" \
-            $SCRIPTS/mkimage
+
+      # MfgTool2 for TBS Matrix support (add it to .tar)
+      # only for matrix system or all? (one tar for all updates?)
+        if [ "$PROJECT" == "imx6" -a "$SYSTEM" == "matrix" ]; then
+          $SCRIPTS/unpack imx6-mfgtool2-tbs-matrix
+          
+          mkdir -p $RELEASE_DIR/MfgTool2-TBS-Matrix
+          cp -PR $BUILD/imx6-mfgtool2-tbs-matrix-*/imx6-mfgtool2-tbs-matrix-*/* $RELEASE_DIR/MfgTool2-TBS-Matrix
         fi
-  
-      # create WeTek Play (Amlogic) ZIP update and auto-install packages if requested
-        if [ "$1" = "amlpkg" ]; then
-          echo "Creating Amlogic ZIP update package"
-  
-          INSTALL_SRC_DIR="$PROJECT_DIR/$PROJECT/install"
-          AML_PKG_DIR="$RELEASE_DIR/ampl-pkg"
-  
-          # create package directory
-          mkdir -p "$AML_PKG_DIR"
-  
-          # copy system and kernel images
-          mkdir -p "$AML_PKG_DIR/system"
-          cp $TARGET_IMG/$IMAGE_NAME.system $AML_PKG_DIR/system/SYSTEM
-          cp $TARGET_IMG/$IMAGE_NAME.kernel $AML_PKG_DIR/KERNEL
-  
-          # copy update-binary and updater-script
-          META_INF_DIR="$AML_PKG_DIR/META-INF/com/google/android"
-          mkdir -p "$META_INF_DIR"
-          cp $INSTALL_SRC_DIR/update-binary $META_INF_DIR
-          cp $INSTALL_SRC_DIR/updater-script $META_INF_DIR
-  
-          # copy other files if any
-          if [ -d "$INSTALL_SRC_DIR/files" ]; then
-            cp -PR $INSTALL_SRC_DIR/files/* $AML_PKG_DIR
+
+        cp $ROOT/README* $RELEASE_DIR
+        cp $ROOT/CHANGELOG* $RELEASE_DIR
+        echo "$TARGET_VERSION" > $RELEASE_DIR/RELEASE
+
+        if [ -n "$MEDIACENTER" ] ; then
+          echo "Kodi commit: `scripts/git_version $MEDIACENTER`" >> $RELEASE_DIR/RELEASE
+        fi
+
+      mkdir -p $RELEASE_DIR/licenses
+        cp $ROOT/licenses/* $RELEASE_DIR/licenses
+
+      mkdir -p $RELEASE_DIR/target
+        cp $TARGET_IMG/$IMAGE_NAME.system $RELEASE_DIR/target/SYSTEM
+        cp $TARGET_IMG/$IMAGE_NAME.kernel $RELEASE_DIR/target/KERNEL
+    # create md5sum's
+      ( cd $RELEASE_DIR;
+        md5sum -t target/SYSTEM > target/SYSTEM.md5;
+        md5sum -t target/KERNEL > target/KERNEL.md5;
+      )
+
+    # create target directory
+      mkdir -p $TARGET_IMG
+
+    # remove an previous created release tarball
+      rm -rf $TARGET_IMG/$IMAGE_NAME.tar
+
+    # create release tarball
+      tar cf $TARGET_IMG/$IMAGE_NAME.tar -C target $IMAGE_NAME
+
+    # create image files if requested
+      if [ "$1" = "mkimage" -a -n "$BOOTLOADER" ]; then
+        # projects can set KERNEL_NAME (kernel.img)
+        if [ -z "$KERNEL_NAME" ] ; then
+          KERNEL_NAME="KERNEL"
+        fi
+
+        UBOOT_SYSTEM=""
+        if [ "$PROJECT" == "imx6" ]; then
+          if [ -n "$SYSTEM" ]; then
+            UBOOT_SYSTEM="$SYSTEM"
+          else
+            UBOOT_SYSTEM="cuboxi"
           fi
-  
-          # create the update package
-          pushd "$AML_PKG_DIR" > /dev/null
-          zip -rq update.zip *
-  
-          # sign the update package
-          echo "Signing the update package"
-          mkdir -p sign
-          SIGNAPK_DIR="$ROOT/tools/signapk"
-          java -Xmx1024m -jar $SIGNAPK_DIR/signapk.jar -w $SIGNAPK_DIR/testkey.x509.pem $SIGNAPK_DIR/testkey.pk8 update.zip sign/$IMAGE_NAME-update.zip
-  
-          # create the auto-install package
-          if [ -f "$INSTALL_SRC_DIR/files/recovery.img" ]; then
-            echo "Creating Amlogic ZIP auto-install package"
-            pushd sign > /dev/null
-            echo --update_package=/sdcard/$IMAGE_NAME-update.zip > factory_update_param.aml
-            cp $INSTALL_SRC_DIR/files/recovery.img .
-            cp $INSTALL_SRC_DIR/files/aml_autoscript .
-            zip -q $TARGET_IMG/$IMAGE_NAME.zip *
-            popd > /dev/null
-          fi
-  
-          # copy update package to target directory
-          cp sign/$IMAGE_NAME-update.zip $TARGET_IMG
+        fi
+
+        echo "mkimage: boo. now root access (sudo) is required..."
+        echo "mkimage: see scripts/image and scripts/mkimage if you dont trust us :)"
+        # variables used in image script must be passed
+        sudo env \
+          PATH="$PATH:/sbin" \
+          ROOT="$ROOT" \
+          TOOLCHAIN="$TOOLCHAIN" \
+          TARGET_IMG="$TARGET_IMG" \
+          IMAGE_NAME="$IMAGE_NAME" \
+          BOOTLOADER="$BOOTLOADER" \
+          KERNEL_NAME="$KERNEL_NAME" \
+          RELEASE_DIR="$RELEASE_DIR" \
+          UUID_SYSTEM="$(uuidgen)" \
+          UUID_STORAGE="$(uuidgen)" \
+          UBOOT_SYSTEM="$UBOOT_SYSTEM" \
+          $SCRIPTS/mkimage
+      fi
+
+    # create WeTek Play (Amlogic) ZIP update and auto-install packages if requested
+      if [ "$1" = "amlpkg" ]; then
+        echo "Creating Amlogic ZIP update package"
+
+        INSTALL_SRC_DIR="$PROJECT_DIR/$PROJECT/install"
+        AML_PKG_DIR="$RELEASE_DIR/ampl-pkg"
+
+        # create package directory
+        mkdir -p "$AML_PKG_DIR"
+
+        # copy system and kernel images
+        mkdir -p "$AML_PKG_DIR/system"
+        cp $TARGET_IMG/$IMAGE_NAME.system $AML_PKG_DIR/system/SYSTEM
+        cp $TARGET_IMG/$IMAGE_NAME.kernel $AML_PKG_DIR/KERNEL
+
+        # copy update-binary and updater-script
+        META_INF_DIR="$AML_PKG_DIR/META-INF/com/google/android"
+        mkdir -p "$META_INF_DIR"
+        cp $INSTALL_SRC_DIR/update-binary $META_INF_DIR
+        cp $INSTALL_SRC_DIR/updater-script $META_INF_DIR
+
+        # copy other files if any
+        if [ -d "$INSTALL_SRC_DIR/files" ]; then
+          cp -PR $INSTALL_SRC_DIR/files/* $AML_PKG_DIR
+        fi
+
+        # create the update package
+        pushd "$AML_PKG_DIR" > /dev/null
+        zip -rq update.zip *
+
+        # sign the update package
+        echo "Signing the update package"
+        mkdir -p sign
+        SIGNAPK_DIR="$ROOT/tools/signapk"
+        java -Xmx1024m -jar $SIGNAPK_DIR/signapk.jar -w $SIGNAPK_DIR/testkey.x509.pem $SIGNAPK_DIR/testkey.pk8 update.zip sign/$IMAGE_NAME-update.zip
+
+        # create the auto-install package
+        if [ -f "$INSTALL_SRC_DIR/files/recovery.img" ]; then
+          echo "Creating Amlogic ZIP auto-install package"
+          pushd sign > /dev/null
+          echo --update_package=/sdcard/$IMAGE_NAME-update.zip > factory_update_param.aml
+          cp $INSTALL_SRC_DIR/files/recovery.img .
+          cp $INSTALL_SRC_DIR/files/aml_autoscript .
+          zip -q $TARGET_IMG/$IMAGE_NAME.zip *
           popd > /dev/null
         fi
-  
-      # cleanup release dir
-        rm -rf $RELEASE_DIR
-  
-    elif [ "$1" = "noobs" ]; then
-  
-      RELEASE_DIR="$TARGET_IMG/${IMAGE_NAME}-$1"
-  
-      # cleanup
-        rm -rf $RELEASE_DIR
-  
-      # create release dir
-        mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}
-  
-        cp -PR $ROOT/config/$1/* $RELEASE_DIR/${DISTRONAME}_${PROJECT}
-        cp -PR $DISTRO_DIR/$DISTRO/${DISTRONAME}.png $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}.png
-  
-        cp $ROOT/README* $RELEASE_DIR/${DISTRONAME}_${PROJECT}
-        cp $ROOT/CHANGELOG $RELEASE_DIR/${DISTRONAME}_${PROJECT}/release_notes.txt
-  
-  
-        sed -e "s%@DISTRONAME@%$DISTRONAME%g" \
-            -e "s%@PROJECT@%$PROJECT%g" \
-            -e "s%@OPENELEC_VERSION@%$OPENELEC_VERSION%g" \
-            -e "s%@RELEASE_DATE@%$(date +%F)%g" \
-            -e "s%@KERNEL_VERSION@%$(kernel_version)%g" \
-            -e "s%@DESCRIPTION@%$DESCRIPTION%g" \
-            -e "s%@ROOT_PASSWORD@%$ROOT_PASSWORD%g" \
-            -e "s%@NOOBS_HEX@%$NOOBS_HEX%g" \
-            -i $RELEASE_DIR/${DISTRONAME}_${PROJECT}/os.json
-  
-        sed -e "s%@DISTRONAME@%$DISTRONAME%g" \
-            -e "s%@PROJECT@%$PROJECT%g" \
-            -i $RELEASE_DIR/${DISTRONAME}_${PROJECT}/partitions.json
-  
-      # create System dir
-        mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
-  
-          BOOTLOADER_DIR=`find $PACKAGES -type d -name $BOOTLOADER 2>/dev/null`
-          if [ -d "$BOOTLOADER_DIR"/files/3rdparty/bootloader/ ]; then
-            cp -PR $BOOTLOADER_DIR/files/3rdparty/bootloader/* $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
+
+        # copy update package to target directory
+        cp sign/$IMAGE_NAME-update.zip $TARGET_IMG
+        popd > /dev/null
+      fi
+
+    # cleanup release dir
+      rm -rf $RELEASE_DIR
+
+  elif [ "$1" = "noobs" ]; then
+
+    RELEASE_DIR="$TARGET_IMG/${IMAGE_NAME}-$1"
+
+    # cleanup
+      rm -rf $RELEASE_DIR
+
+    # create release dir
+      mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}
+
+      cp -PR $ROOT/config/$1/* $RELEASE_DIR/${DISTRONAME}_${PROJECT}
+      cp -PR $DISTRO_DIR/$DISTRO/${DISTRONAME}.png $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}.png
+
+      cp $ROOT/README* $RELEASE_DIR/${DISTRONAME}_${PROJECT}
+      cp $ROOT/CHANGELOG $RELEASE_DIR/${DISTRONAME}_${PROJECT}/release_notes.txt
+
+
+      sed -e "s%@DISTRONAME@%$DISTRONAME%g" \
+          -e "s%@PROJECT@%$PROJECT%g" \
+          -e "s%@OPENELEC_VERSION@%$OPENELEC_VERSION%g" \
+          -e "s%@RELEASE_DATE@%$(date +%F)%g" \
+          -e "s%@KERNEL_VERSION@%$(kernel_version)%g" \
+          -e "s%@DESCRIPTION@%$DESCRIPTION%g" \
+          -e "s%@ROOT_PASSWORD@%$ROOT_PASSWORD%g" \
+          -e "s%@NOOBS_HEX@%$NOOBS_HEX%g" \
+          -i $RELEASE_DIR/${DISTRONAME}_${PROJECT}/os.json
+
+      sed -e "s%@DISTRONAME@%$DISTRONAME%g" \
+          -e "s%@PROJECT@%$PROJECT%g" \
+          -i $RELEASE_DIR/${DISTRONAME}_${PROJECT}/partitions.json
+
+    # create System dir
+      mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
+
+        BOOTLOADER_DIR=`find $PACKAGES -type d -name $BOOTLOADER 2>/dev/null`
+        if [ -d "$BOOTLOADER_DIR"/files/3rdparty/bootloader/ ]; then
+          cp -PR $BOOTLOADER_DIR/files/3rdparty/bootloader/* $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
+        fi
+
+      # copy Bootloader
+        cp -PR $BUILD/bcm2835-bootloader-*/LICENCE* $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/
+        cp -PR $BUILD/bcm2835-bootloader-*/bootcode.bin $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/
+        cp -PR $BUILD/bcm2835-bootloader-*/fixup_x.dat $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/fixup.dat
+        cp -PR $BUILD/bcm2835-bootloader-*/start_x.elf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/start.elf
+
+      # copy system files
+        cp $TARGET_IMG/$IMAGE_NAME.system $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/SYSTEM
+        cp $TARGET_IMG/$IMAGE_NAME.kernel $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/kernel.img
+
+        for dtb in $INSTALL/usr/share/bootloader/*.dtb ; do
+          if [ -f $dtb ]; then
+            cp -PR $dtb $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
           fi
-  
-        # copy Bootloader
-          cp -PR $BUILD/bcm2835-bootloader-*/LICENCE* $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/
-          cp -PR $BUILD/bcm2835-bootloader-*/bootcode.bin $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/
-          cp -PR $BUILD/bcm2835-bootloader-*/fixup_x.dat $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/fixup.dat
-          cp -PR $BUILD/bcm2835-bootloader-*/start_x.elf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/start.elf
-  
-        # copy system files
-          cp $TARGET_IMG/$IMAGE_NAME.system $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/SYSTEM
-          cp $TARGET_IMG/$IMAGE_NAME.kernel $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/kernel.img
-  
-          for dtb in $INSTALL/usr/share/bootloader/*.dtb ; do
-            if [ -f $dtb ]; then
-              cp -PR $dtb $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
-            fi
-          done
-  
-          for overlay in $INSTALL/usr/share/bootloader/overlays/* ; do
-            if [ -f $overlay ]; then
-              mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/overlays
-              cp -PR $overlay $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/overlays
-            fi
-          done
-  
-        # create md5sum's
-          ( cd $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System;
-            md5sum -t SYSTEM > SYSTEM.md5;
-            md5sum -t kernel.img > kernel.img.md5;
-          )
-  
-        # copy additional files
-          mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/licenses
-            cp $ROOT/licenses/* $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/licenses
-  
-      # create Storage dir
-        mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/Storage
-  
-      # remove an previous created release tarball
-        rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}_System.tar.xz
-        rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}_Storage.tar.xz
-  
-      # create filesystem tarballs
-        tar cJf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}_System.tar.xz -C $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/ .
-        tar cJf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}_Storage.tar.xz -C $RELEASE_DIR/${DISTRONAME}_${PROJECT}/Storage/ .
-  
-      # remove an filesystem dirs
-        rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
-        rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/Storage
-  
-      # remove an previous created release tarball
-        rm -rf $TARGET_IMG/${IMAGE_NAME}-$1.tar
-  
-      # create release tarball
-        tar cf $TARGET_IMG/${IMAGE_NAME}-$1.tar -C $TARGET ${IMAGE_NAME}-$1
-  
-      # cleanup release dir
-        rm -rf $RELEASE_DIR
-  fi
+        done
+
+        for overlay in $INSTALL/usr/share/bootloader/overlays/* ; do
+          if [ -f $overlay ]; then
+            mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/overlays
+            cp -PR $overlay $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/overlays
+          fi
+        done
+
+      # create md5sum's
+        ( cd $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System;
+          md5sum -t SYSTEM > SYSTEM.md5;
+          md5sum -t kernel.img > kernel.img.md5;
+        )
+
+      # copy additional files
+        mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/licenses
+          cp $ROOT/licenses/* $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/licenses
+
+    # create Storage dir
+      mkdir -p $RELEASE_DIR/${DISTRONAME}_${PROJECT}/Storage
+
+    # remove an previous created release tarball
+      rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}_System.tar.xz
+      rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}_Storage.tar.xz
+
+    # create filesystem tarballs
+      tar cJf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}_System.tar.xz -C $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/ .
+      tar cJf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/${DISTRONAME}_${PROJECT}_Storage.tar.xz -C $RELEASE_DIR/${DISTRONAME}_${PROJECT}/Storage/ .
+
+    # remove an filesystem dirs
+      rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
+      rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/Storage
+
+    # remove an previous created release tarball
+      rm -rf $TARGET_IMG/${IMAGE_NAME}-$1.tar
+
+    # create release tarball
+      tar cf $TARGET_IMG/${IMAGE_NAME}-$1.tar -C $TARGET ${IMAGE_NAME}-$1
+
+    # cleanup release dir
+      rm -rf $RELEASE_DIR
+  fi  
 else
-  tar cf $TARGET_IMG/${IMAGE_NAME}-$1.tar -C $BUILD/konvergo-master/.install_pkg/usr/bin Konvergo 
+  tar cf $TARGET_IMG/${IMAGE_NAME}.tar -C $BUILD/konvergo-master/.install_pkg/usr/bin Konvergo 
 fi
+#END PLEX
