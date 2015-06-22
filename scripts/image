@@ -502,6 +502,13 @@ if [ "$FULL_BUILD" = "true" ]; then
       rm -rf $RELEASE_DIR
   fi  
 else
-  tar cf $TARGET_IMG/${IMAGE_NAME}.tar -C $BUILD/konvergo-master/.install_pkg/usr/bin Konvergo 
+  mkdir -p $BUILD/UPDATE_TEMP/bin
+  mkdir -p $BUILD/UPDATE_TEMP/lib
+  cp $BUILD/konvergo-master/.install_pkg/usr/bin/Konvergo $BUILD/UPDATE_TEMP/bin
+  cp $BUILD/ffmpeg-master/.install_pkg/usr/bin/ffmpeg $BUILD/UPDATE_TEMP/bin
+  cp $BUILD/ffmpeg-master/.install_pkg/usr/lib/* $BUILD/UPDATE_TEMP/lib
+  cp $BUILD/mpv-master/.install_pkg/usr/lib/libmpv.so $BUILD/UPDATE_TEMP/lib
+  tar cf $TARGET_IMG/${IMAGE_NAME}.tar -C $BUILD/UPDATE_TEMP .
+  rm -rf $BUILD/UPDATE_TEMP
 fi
 #END PLEX
