@@ -543,7 +543,7 @@
 # PLEX
     UPDATE_TAR=`ls -1 "$UPDATE_DIR"/*.tar 2>/dev/null | head -n 1`
     if [ -f "$UPDATE_DIR/$UPDATE_KERNEL" -a -f "$UPDATE_DIR/$UPDATE_SYSTEM" -o -f "$UPDATE_TAR" ] ; then
-      if [ "`tar tf ${UPDATE_TAR} | grep Konvergo | wc -l`" -gt 0 ]; then
+      if [ "`tar tf ${UPDATE_TAR} | grep -c Konvergo`" -gt 0 ]; then
         echo "Found new Konvergo archive. extracting..." 
         mkdir -p $UPDATE_DIR/.tmp &>/dev/null
         tar -xf "$UPDATE_TAR" -C $UPDATE_DIR/.tmp &>/dev/null
@@ -553,14 +553,12 @@
           if [ "$sum" != "$prev_sum" ]; then
             export MD5_FAILED=1
           fi
-        done < md5.txt
+        done < $UPDATE_DIR/.tmp/md5.txt
         if [ "$MD5_FAILED" -eq "0" ] ; then
           echo "Updating Konvergo to latest version.."
-          if [ -d /storage/.konvergo_update ]; then
-            rm -rf /storage/.konvergo_update
-            mkdir /storage/.konvergo_update
-            mv $UPDATE_DIR/.tmp/* /storage/.konvergo_update/.
-          fi
+          rm -rf /storage/.konvergo_update
+          mkdir /storage/.konvergo_update
+          mv $UPDATE_DIR/.tmp/* /storage/.konvergo_update/.
           rm -rf $UPDATE_DIR/[0-9a-zA-Z]* &>/dev/null
           do_reboot
         else
