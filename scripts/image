@@ -244,7 +244,7 @@ IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$P
   chmod 0644 $TARGET_IMG/$IMAGE_NAME.system
 
 ### PLEX
-if [ "$FULL_BUILD" = "true" ]; then
+if [ ! -z $MINI_BUILD ]; then
   if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" ]; then
 
     RELEASE_DIR="target/$IMAGE_NAME"
@@ -508,6 +508,7 @@ else
   cp $BUILD/ffmpeg-master/.install_pkg/usr/bin/ffmpeg $BUILD/UPDATE_TEMP/bin
   cp $BUILD/ffmpeg-master/.install_pkg/usr/lib/* $BUILD/UPDATE_TEMP/lib
   cp $BUILD/mpv-master/.install_pkg/usr/lib/libmpv.so $BUILD/UPDATE_TEMP/lib
+  find $BUILD/UPDATE_TEMP -type f|sort| xargs -n1 md5sum | sed "s|$BUILD/UPDATE_TEMP/||p" > $BUILD/UPDATE_TEMP/md5.txt
   tar cf $TARGET_IMG/${IMAGE_NAME}.tar -C $BUILD/UPDATE_TEMP .
   rm -rf $BUILD/UPDATE_TEMP
 fi
