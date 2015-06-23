@@ -543,7 +543,7 @@
 # PLEX
     UPDATE_TAR=`ls -1 "$UPDATE_DIR"/*.tar 2>/dev/null | head -n 1`
     if [ -f "$UPDATE_DIR/$UPDATE_KERNEL" -a -f "$UPDATE_DIR/$UPDATE_SYSTEM" -o -f "$UPDATE_TAR" ] ; then
-      if [ "`tar tf ${UPDATE_TAR} | grep -c Konvergo`" -gt 0 ]; then
+      if [ "`tar tf ${UPDATE_TAR} | grep -c bin/Konvergo`" -gt 0 ]; then
         echo "Found new Konvergo archive. extracting..." 
         mkdir -p $UPDATE_DIR/.tmp &>/dev/null
         tar -xf "$UPDATE_TAR" -C $UPDATE_DIR/.tmp &>/dev/null
