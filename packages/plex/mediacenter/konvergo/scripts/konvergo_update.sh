@@ -1,8 +1,13 @@
 #!/bin/sh
 
 UPDATE_DIR="/storage/.update"
+if [ "`ls -1 $UPDATE_DIR | wc -l`" = "0" ]; then
+  exit 0
+fi
+
 UPDATE_TAR="`ls -1tr /storage/.update/*.tar |tail -1`"
 MD5_FAILED=0
+
 if [ "`tar tf ${UPDATE_TAR} | grep -c konvergo_mini_update`" -gt 0 ]; then
   # Found new Konvergo archive. extracting...
   mkdir -p $UPDATE_DIR/.tmp &>/dev/null
@@ -25,7 +30,4 @@ if [ "`tar tf ${UPDATE_TAR} | grep -c konvergo_mini_update`" -gt 0 ]; then
     # md5 check failed. Resuming normal startup..
     sync
   fi
-else
-  # Remove the update file
-  rm -rf $UPDATE_DIR/[0-9a-zA-Z]* &>/dev/null
 fi
