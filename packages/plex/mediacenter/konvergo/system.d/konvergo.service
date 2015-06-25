@@ -8,8 +8,7 @@ Environment=DISPLAY=:0.0
 Environment=SDL_MOUSE_RELATIVE=0
 Environment=HOME=/storage
 ExecStartPre=rm -f /storage/.local/share/Konvergo/konvergo.conf.* /storage/.local/share/Konvergo/konvergo.pid
-ExedStartPre=/bin/sh -c "/usr/share/konvergo/scripts/konvergo_update.sh"
-ExecStart=/bin/sh -c ". /etc/profile; if [ -f /storage/.konvergo_update/bin/Konvergo ]; then exec /storage/.konvergo_update/bin/Konvergo ; else exec /usr/bin/Konvergo ; fi"
+ExecStart=/bin/sh -c ". /etc/profile; /usr/share/konvergo/scripts/konvergo_update.sh ; if [ -f /storage/.konvergo_update/bin/Konvergo ]; then exec /storage/.konvergo_update/bin/Konvergo ; else exec /usr/bin/Konvergo ; fi"
 # keep KillMode=process unless there is no good reason to switch to cgroup
 #KillMode=process
 TimeoutStopSec=5
