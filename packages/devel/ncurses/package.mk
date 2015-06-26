@@ -65,6 +65,7 @@ PKG_CONFIGURE_OPTS_TARGET="--without-ada \
                            --enable-no-padding \
                            --disable-sigwinch \
                            --disable-tcap-names \
+                           --without-develop \
                            --disable-hard-tabs \
                            --disable-xmc-glitch \
                            --disable-hashmap \
