@@ -35,7 +35,6 @@ PKG_AUTORECONF="yes"
 # package specific configure options
 PKG_CONFIGURE_OPTS_TARGET="--disable-dependency-tracking \
                            --disable-xmlto \
-                           --disable-alsamixer \
                            --disable-alsaconf \
                            --disable-alsaloop \
                            --enable-alsatest \
