@@ -312,6 +312,9 @@ makeinstall_target() {
 	    rm -f  ${INSTALL}/usr/local/qt5/plugins/platforms/libqoffscreen.so
 	    rm -f  ${INSTALL}/usr/local/qt5/plugins/platforms/libqxcb.so
 	    rm -f ${INSTALL}/usr/local/qt5/plugins/imageformats/libqjpeg*
+
+	    #override the QPlatformIntegration Header which is missing the destroy() prototype
+	    cp -f ${PKG_DIR}/qplatformintegration.h ${SYSROOT_PREFIX}/usr/local/qt5/include/QtGui/5.4.2/QtGui/qpa/qplatformintegration.h
 	  ;;
 	esac
 
