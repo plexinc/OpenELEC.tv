@@ -17,7 +17,7 @@
 #  ################################################################################
 
 PKG_NAME="qt"
-PKG_VERSION="5.4.2"
+PKG_VERSION="5.5.0"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -119,7 +119,7 @@ case $PROJECT in
                                                         -no-libjpeg \
                                                         -system-xkbcommon \
                                                         -shared \
-                                                        -device linux-rasp-pi-g++ \
+                                                        -device linux-rasp-pi2-g++ \
                                                         -device-option CROSS_COMPILE=${ROOT}/${TOOLCHAIN}/bin/${ARM_COMPILER_PREFIX} \
                                                         -opengl es2 \
                                                         -make libs \
@@ -312,9 +312,6 @@ makeinstall_target() {
 	    rm -f  ${INSTALL}/usr/local/qt5/plugins/platforms/libqoffscreen.so
 	    rm -f  ${INSTALL}/usr/local/qt5/plugins/platforms/libqxcb.so
 	    rm -f ${INSTALL}/usr/local/qt5/plugins/imageformats/libqjpeg*
-
-	    #override the QPlatformIntegration Header which is missing the destroy() prototype
-	    cp -f ${PKG_DIR}/qplatformintegration.h ${SYSROOT_PREFIX}/usr/local/qt5/include/QtGui/5.4.2/QtGui/qpa/qplatformintegration.h
 	  ;;
 	esac
 
