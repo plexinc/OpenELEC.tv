@@ -114,7 +114,10 @@ case $PROJECT in
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
-                                                        -qt-xcb \
+                                                        -qpa eglfs \
+                                                        -no-xcb \
+                                                        -no-kms \
+                                                        -no-directfb \
                                                         -no-sql-sqlite2 \
                                                         -no-libjpeg \
                                                         -system-xkbcommon \
@@ -278,13 +281,22 @@ makeinstall_target() {
 	make install DESTDIR=${SYSROOT_PREFIX}/usr/local/qt5
 
 	mkdir -p $INSTALL/usr/local/qt5/lib
-	cp -R ${SYSROOT_PREFIX}/usr/local/qt5/lib/* ${INSTALL}/usr/local/qt5/lib
+	cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/lib/* ${INSTALL}/usr/local/qt5/lib
 
 	mkdir -p $INSTALL/usr/local/qt5/libexec
-        cp -R ${SYSROOT_PREFIX}/usr/local/qt5/libexec/* ${INSTALL}/usr/local/qt5/libexec
+        cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/libexec/* ${INSTALL}/usr/local/qt5/libexec
 
         mkdir -p $INSTALL/usr/local/qt5/plugins
-        cp -R ${SYSROOT_PREFIX}/usr/local/qt5/plugins/* ${INSTALL}/usr/local/qt5/plugins
+        cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/plugins/* ${INSTALL}/usr/local/qt5/plugins
+
+if [ "$USE_WEBENGINE" = 1 ]; then
+	mkdir -p $INSTALL/usr/local/qt5/translations
+        cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/translations/* ${INSTALL}/usr/local/qt5/translations
+
+        cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/qtwebengine_resources.pak ${INSTALL}/usr/local/qt5/qtwebengine_resources.pak
+fi
+
+
 
 	#cleanup the plugins
 	case $PROJECT in
