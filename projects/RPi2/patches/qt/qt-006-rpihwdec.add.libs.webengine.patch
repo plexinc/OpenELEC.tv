@@ -1,0 +1,15 @@
+--- ./qtwebengine/src/core/qtwebengine.gypi	2015-06-29 22:10:14.000000000 +0200
++++ ./qtwebengine/src/core/qtwebengine.gypi	2015-07-12 15:45:01.028000000 +0200
+@@ -98,6 +98,12 @@
+         'dependencies': [
+           '<(chromium_src_dir)/build/linux/system.gyp:fontconfig',
+         ],
++	'ldflags': [
++          '-lmmal_core',
++          '-lmmal_util',
++          '-lmmal_vc_client',
++          '-lvcos',
++        ],
+       }],
+     ],
+ }

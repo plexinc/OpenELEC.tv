@@ -1,0 +1,15 @@
+--- a/qtwebengine/src/3rdparty/chromium/third_party/WebKit/Source/platform/blink_platform.gypi	2015-06-29 22:08:49.000000000 +0200
++++ b/qtwebengine/src/3rdparty/chromium/third_party/WebKit/Source/platform/blink_platform.gypi	2015-07-12 10:30:48.712000000 +0200
+@@ -650,8 +650,10 @@
+       'image-decoders/gif/GIFImageReader.h',
+       'image-decoders/ico/ICOImageDecoder.cpp',
+       'image-decoders/ico/ICOImageDecoder.h',
+-      'image-decoders/jpeg/JPEGImageDecoder.cpp',
+-      'image-decoders/jpeg/JPEGImageDecoder.h',
++      'image-decoders/jpeg/JPEGRPIImageDecoder.cpp',
++      'image-decoders/jpeg/JPEGRPIImageDecoder.h',
++      'image-decoders/jpeg/brcmjpeg.h',
++      'image-decoders/jpeg/brcmjpeg.cpp',
+       'image-decoders/png/PNGImageDecoder.cpp',
+       'image-decoders/png/PNGImageDecoder.h',
+       'image-decoders/webp/WEBPImageDecoder.cpp',
