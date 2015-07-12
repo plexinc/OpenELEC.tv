@@ -44,6 +44,8 @@ PKG_LONGDESC="Qt GUI toolkit"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+USE_WEBENGINE=1
+
 if [ "$USE_WEBENGINE" = 1 ]; then
   PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} libdrm libXi"
   QT_SKIP="-skip qtwebkit"
