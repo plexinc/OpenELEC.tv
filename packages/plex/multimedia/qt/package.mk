@@ -237,6 +237,9 @@ configure_target() {
 			./configure ${PKG_CONFIGURE_OPTS}
 		;;
 		RPi|RPi2)
+			# Add the RPI HW JPEG decoding files to webengine
+			cp $PKG_DIR/patches/RpiHWJpeg/* ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/qtwebengine/src/3rdparty/chromium/third_party/WebKit/Source/platform/image-decoders/jpeg/
+
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
 			export QT_FORCE_PKGCONFIG=yes
 			unset QMAKESPEC
