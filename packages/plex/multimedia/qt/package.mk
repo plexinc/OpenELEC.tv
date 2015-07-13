@@ -102,6 +102,7 @@ case $PROJECT in
                                                         -skip qtxmlpatterns \
                                                         -skip qttranslations \
                                                         -skip qtmultimedia \
+                                                        -skip qt3d \
                                                         ${QT_SKIP} \
                                                         -nomake examples \
                                                         -nomake tests"
@@ -149,6 +150,7 @@ case $PROJECT in
                                                         -skip qtxmlpatterns \
                                                         -skip qttranslations \
                                                         -skip qtmultimedia \
+                                                        -skip qt3d \
                                                         ${QT_SKIP} \
 							"
         ;;
