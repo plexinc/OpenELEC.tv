@@ -85,6 +85,7 @@ case $PROJECT in
 							-arch $TARGET_ARCH \
 							-platform linux-g++ \
 							-xplatform linux-g++-openelec \
+                                                        -skip qtactiveqt \
                                                         -skip qtandroidextras \
                                                         -skip qtconnectivity \
                                                         -skip qtdoc \
@@ -132,6 +133,7 @@ case $PROJECT in
                                                         -nomake examples \
                                                         -no-pch \
                                                         -nomake tests \
+                                                        -skip qtactiveqt \
                                                         -skip qtandroidextras \
                                                         -skip qtconnectivity \
                                                         -skip qtdoc \
