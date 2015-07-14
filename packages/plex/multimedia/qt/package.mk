@@ -95,7 +95,7 @@ case $PROJECT in
                                                         -skip qttranslations \
                                                         -skip qtmultimedia \
                                                         -skip qtwebkit \
->>>>>>> 6afe59c75395850e3ec054dc15d165313a106ee0
+                                                        -skip qt3d \
                                                         -nomake examples \
                                                         -nomake tests"
 	;;
@@ -144,6 +144,7 @@ case $PROJECT in
                                                         -skip qttranslations \
                                                         -skip qtmultimedia \
                                                         -skip qtwebkit \
+                                                        -skip qt3d \
 							"
         ;;
 esac
