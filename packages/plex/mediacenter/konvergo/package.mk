@@ -20,10 +20,10 @@ PKG_NAME="konvergo"
 
 case $PROJECT in
      Generic)
-     PKG_VERSION="long-webengine"
+     PKG_VERSION="master"
      ;;
      RPi|RPi2)
-     PKG_VERSION="long-webengine"
+     PKG_VERSION="master"
      ;;
 esac
 
