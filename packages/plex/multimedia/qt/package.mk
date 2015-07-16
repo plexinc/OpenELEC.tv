@@ -289,13 +289,10 @@ makeinstall_target() {
         mkdir -p $INSTALL/usr/local/qt5/plugins
         cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/plugins/* ${INSTALL}/usr/local/qt5/plugins
 
-if [ "$USE_WEBENGINE" = 1 ]; then
 	mkdir -p $INSTALL/usr/local/qt5/translations
         cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/translations/* ${INSTALL}/usr/local/qt5/translations
 
         cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/qtwebengine_resources.pak ${INSTALL}/usr/local/qt5/qtwebengine_resources.pak
-fi
-
 
 
 	#cleanup the plugins
