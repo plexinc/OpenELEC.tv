@@ -98,8 +98,6 @@ namespace blink
             }
 
         }
-
-        m_width = m_height = 0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,20 +207,20 @@ namespace blink
         }
 
 
-        log("JPEGImageDecoder::readJpegSize : could not find the proper size marker");
+        log("JPEGImageDecoder::readJpegSize : could not find the proper size marker in %d bytes", m_data->size());
         return false;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     void JPEGImageDecoder::decode(bool onlySize)
     {
+        unsigned int width, height;
 
         if (failed())
             return;
 
         if (onlySize)
         {
-            unsigned int width, height;
             if (readJpegSize(width, height));
             {
                 setSize(width, height);
@@ -231,7 +229,7 @@ namespace blink
         }
         else
         {
-            readJpegSize(m_width, m_height);
+            readJpegSize(width, height);
 
             clock_t start = clock();
 
@@ -246,7 +244,7 @@ namespace blink
 
             if (buffer.status() == ImageFrame::FrameEmpty)
             {
-                if (!buffer.setSize(m_width, m_height))
+                if (!buffer.setSize(width, height))
                 {
                     log("JPEGImageDecoder::decode : could not define buffer size");
                     setFailed();
@@ -263,7 +261,7 @@ namespace blink
             m_dec_request.input = (unsigned char*)m_data->data();
             m_dec_request.input_size = m_data->size();
             m_dec_request.output = (unsigned char*)buffer.getAddr(0, 0);
-            m_dec_request.output_alloc_size = m_width * m_height * 4;
+            m_dec_request.output_alloc_size = width * height * 4;
             m_dec_request.output_handle = 0;
             m_dec_request.pixel_format = PIXEL_FORMAT_RGBA;
             m_dec_request.buffer_width = 0;
@@ -296,7 +294,7 @@ namespace blink
                 unsigned long millis = (end - start) * 1000 / CLOCKS_PER_SEC;
                 unsigned long copymillis = (end - copy) * 1000 / CLOCKS_PER_SEC;
 
-                log("JPEGImageDecoder::decode : image (%d x %d) decoded successfully in %d ms (copy in %d ms), data size = %d bytes", m_width, m_height, millis, copymillis, m_data->size());
+                log("JPEGImageDecoder::decode : image (%d x %d) decoded successfully in %d ms (copy in %d ms), data size = %d bytes", width, height, millis, copymillis, m_data->size());
                 return;
 
             }
