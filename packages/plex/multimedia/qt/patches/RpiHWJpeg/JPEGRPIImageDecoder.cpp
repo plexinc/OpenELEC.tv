@@ -98,6 +98,8 @@ namespace blink
             }
 
         }
+
+        m_width = m_height = 0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +119,6 @@ namespace blink
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     bool JPEGImageDecoder::setSize(unsigned width, unsigned height)
     {
-        //log("JPEGImageDecoder::setSize to %d x %d", width, height);
         if (!ImageDecoder::setSize(width, height))
             return false;
 
@@ -230,76 +231,72 @@ namespace blink
         }
         else
         {
+            readJpegSize(m_width, m_height);
+
             clock_t start = clock();
+
+            ImageFrame& buffer = m_frameBufferCache[0];
+
+            if (m_frameBufferCache.isEmpty())
+            {
+                log("JPEGImageDecoder::decode : frameBuffercache is empty");
+                setFailed();
+                return;
+            }
+
+            if (buffer.status() == ImageFrame::FrameEmpty)
+            {
+                if (!buffer.setSize(m_width, m_height))
+                {
+                    log("JPEGImageDecoder::decode : could not define buffer size");
+                    setFailed();
+                    return;
+                }
+
+                // The buffer is transparent outside the decoded area while the image is
+                // loading. The completed image will be marked fully opaque in jpegComplete().
+                buffer.setHasAlpha(false);
+            }
 
             // setup decoder request information
             memset(&m_dec_request, 0, sizeof(m_dec_request));
-            m_dec_request.input = encodedInBuf;
-            m_dec_request.output = decodedBuf;
+            m_dec_request.input = (unsigned char*)m_data->data();
+            m_dec_request.input_size = m_data->size();
+            m_dec_request.output = (unsigned char*)buffer.getAddr(0, 0);
+            m_dec_request.output_alloc_size = m_width * m_height * 4;
             m_dec_request.output_handle = 0;
-            m_dec_request.output_alloc_size = MAX_DECODED;
             m_dec_request.pixel_format = PIXEL_FORMAT_RGBA;
             m_dec_request.buffer_width = 0;
             m_dec_request.buffer_height = 0;
-            m_dec_request.input_size = m_data->size();
-            memcpy((char*)encodedInBuf, m_data->data(), m_data->size());
-
 
             brcmjpeg_acquire(m_decoder);
             BRCMJPEG_STATUS_T status = brcmjpeg_process(m_decoder, &m_dec_request);
 
             if (status == BRCMJPEG_SUCCESS)
             {
-                if (m_frameBufferCache.isEmpty())
+                clock_t copy = clock();
+
+                unsigned char *ptr = (unsigned char *)buffer.getAddr(0, 0);
+                for (unsigned int i = 0; i < m_dec_request.height * m_dec_request.buffer_width; i++)
                 {
-                    log("JPEGImageDecoder::decode : frameBuffercache is empty");
-                    setFailed();
-                    return;
-                }
-
-
-                ImageFrame& buffer = m_frameBufferCache[0];
-
-                if (buffer.status() == ImageFrame::FrameEmpty)
-                {
-                    if (!buffer.setSize(m_dec_request.buffer_width, m_dec_request.buffer_height))
-                    {
-                        log("JPEGImageDecoder::decode : could not define buffer size");
-                        setFailed();
-                        return;
-                    }
-
-                    // The buffer is transparent outside the decoded area while the image is
-                    // loading. The completed image will be marked fully opaque in jpegComplete().
-                    buffer.setHasAlpha(false);
-
-                    // For JPEGs, the frame always fills the entire image.
-                    buffer.setOriginalFrameRect(IntRect(0, 0, m_dec_request.width, m_dec_request.height));
-                }
-
-                for (unsigned int i = 0; i < m_dec_request.height; i++)
-                {
-                    char *dst = (char*)buffer.getAddr(0, i);
-                    char *src = (char*)(decodedBuf + (m_dec_request.buffer_width * i * 4));
-
-                    for (int x = 0; x < m_dec_request.buffer_width; x++)
-                    {
-                        dst[x*4 + 0] = src[x*4 + 2];
-                        dst[x*4 + 1] = src[x*4 + 1];
-                        dst[x*4 + 2] = src[x*4 + 0];
-                        dst[x*4 + 3] = src[x*4 + 3];
-                    }
+                    // we swap RGBA -> BGRA
+                    unsigned char tmp = *ptr;
+                    *ptr = ptr[2];
+                    ptr[2] = tmp;
+                    ptr += 4;
                 }
 
                 brcmjpeg_release(m_decoder);
 
                 buffer.setPixelsChanged(true);
                 buffer.setStatus(ImageFrame::FrameComplete);
+                buffer.setHasAlpha(false);
 
                 clock_t end = clock();
                 unsigned long millis = (end - start) * 1000 / CLOCKS_PER_SEC;
+                unsigned long copymillis = (end - copy) * 1000 / CLOCKS_PER_SEC;
 
-                log("JPEGImageDecoder::decode : image (%d x %d) decoded successfully in %d ms",m_dec_request.width, m_dec_request.height, millis);
+                log("JPEGImageDecoder::decode : image (%d x %d) decoded successfully in %d ms (copy in %d ms), data size = %d bytes", m_width, m_height, millis, copymillis, m_data->size());
                 return;
 
             }
@@ -308,8 +305,6 @@ namespace blink
                 log("JPEGImageDecoder::decode : Decoding failed with status %d", status);
                 return;
             }
-
         }
-
     }
 }
