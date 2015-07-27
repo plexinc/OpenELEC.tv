@@ -219,6 +219,10 @@ namespace blink
         if (failed())
             return;
 
+        // make sure we have all the data before doing anything
+        if (!isAllDataReceived())
+            return;
+
         if (onlySize)
         {
             if (readJpegSize(width, height));
