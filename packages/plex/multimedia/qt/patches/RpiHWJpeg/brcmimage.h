@@ -39,23 +39,23 @@ extern "C" {
 /** Status return codes from the API */
 typedef enum
 {
-   BRCMJPEG_SUCCESS = 0,
-   BRCMJPEG_ERROR_NOMEM,
-   BRCMJPEG_ERROR_INIT,
-   BRCMJPEG_ERROR_INPUT_FORMAT,
-   BRCMJPEG_ERROR_OUTPUT_FORMAT,
-   BRCMJPEG_ERROR_INPUT_BUFFER,
-   BRCMJPEG_ERROR_OUTPUT_BUFFER,
-   BRCMJPEG_ERROR_EXECUTE,
-   BRCMJPEG_ERROR_REQUEST,
-} BRCMJPEG_STATUS_T;
+   BRCMIMAGE_SUCCESS = 0,
+   BRCMIMAGE_ERROR_NOMEM,
+   BRCMIMAGE_ERROR_INIT,
+   BRCMIMAGE_ERROR_INPUT_FORMAT,
+   BRCMIMAGE_ERROR_OUTPUT_FORMAT,
+   BRCMIMAGE_ERROR_INPUT_BUFFER,
+   BRCMIMAGE_ERROR_OUTPUT_BUFFER,
+   BRCMIMAGE_ERROR_EXECUTE,
+   BRCMIMAGE_ERROR_REQUEST,
+} BRCMIMAGE_STATUS_T;
 
 /** Type of the codec instance to create */
 typedef enum
 {
-   BRCMJPEG_TYPE_ENCODER = 0,
-   BRCMJPEG_TYPE_DECODER
-} BRCMJPEG_TYPE_T;
+   BRCMIMAGE_TYPE_ENCODER = 0,
+   BRCMIMAGE_TYPE_DECODER
+} BRCMIMAGE_TYPE_T;
 
 /** Pixel formats supported by the codec */
 typedef enum
@@ -67,7 +67,7 @@ typedef enum
    PIXEL_FORMAT_YV16, /* planar YVU 4:2:2 */
    PIXEL_FORMAT_YUYV, /* interleaved YUV 4:2:2 */
    PIXEL_FORMAT_RGBA, /* interleaved RGBA */
-} BRCMJPEG_PIXEL_FORMAT_T;
+} BRCMIMAGE_PIXEL_FORMAT_T;
 
 /** Definition of a codec request  */
 typedef struct
@@ -95,7 +95,7 @@ typedef struct
    /** Height of the raw frame (this is an input parameter for encode) */
    unsigned int height;
    /** Pixel format of the raw frame (this is an input parameter) */
-   BRCMJPEG_PIXEL_FORMAT_T pixel_format;
+   BRCMIMAGE_PIXEL_FORMAT_T pixel_format;
 
    /** Width of the buffer containing the raw frame (input parameter).
      * This is optional but if set, is used to specify the actual width
@@ -108,10 +108,10 @@ typedef struct
 
    /** Encode quality - 0 to 100 */
    unsigned int quality;
-} BRCMJPEG_REQUEST_T;
+} BRCMIMAGE_REQUEST_T;
 
 /** Type of the codec instance */
-typedef struct BRCMJPEG_T BRCMJPEG_T;
+typedef struct BRCMIMAGE_T BRCMIMAGE_T;
 
 /** Create an instance of the jpeg codec
  * This will actually re-use an existing instance if one is
@@ -119,15 +119,15 @@ typedef struct BRCMJPEG_T BRCMJPEG_T;
  *
  * @param type type of codec instance required
  * @param ctx will point to the newly created instance
- * @return BRCMJPEG_SUCCESS on success
+ * @return BRCMIMAGE_SUCCESS on success
  */
-BRCMJPEG_STATUS_T brcmjpeg_create(BRCMJPEG_TYPE_T type, BRCMJPEG_T **ctx);
+BRCMIMAGE_STATUS_T brcmimage_create(BRCMIMAGE_TYPE_T type, unsigned int encoding, BRCMIMAGE_T **ctx);
 
 /** Acquire a new reference on a codec instance
  *
  * @param ctx instance to acquire a reference on
  */
-void brcmjpeg_acquire(BRCMJPEG_T *ctx);
+void brcmimage_acquire(BRCMIMAGE_T *ctx);
 
 /** Release an instance of the jpeg codec
  * This will only trigger the destruction of the codec instance when
@@ -135,15 +135,15 @@ void brcmjpeg_acquire(BRCMJPEG_T *ctx);
  *
  * @param ctx instance to release
  */
-void brcmjpeg_release(BRCMJPEG_T *ctx);
+void brcmimage_release(BRCMIMAGE_T *ctx);
 
 /** Process a jpeg codec request
  *
  * @param ctx instance of codec to use
  * @param request codec request to execute
- * @return BRCMJPEG_SUCCESS on success
+ * @return BRCMIMAGE_SUCCESS on success
  */
-BRCMJPEG_STATUS_T brcmjpeg_process(BRCMJPEG_T *ctx, BRCMJPEG_REQUEST_T *request);
+BRCMIMAGE_STATUS_T brcmimage_process(BRCMIMAGE_T *ctx, BRCMIMAGE_REQUEST_T *request);
 
 #ifdef __cplusplus
 }

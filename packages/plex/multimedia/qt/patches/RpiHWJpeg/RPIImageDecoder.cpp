@@ -38,28 +38,8 @@
  */
 
 #include "config.h"
-#include "platform/image-decoders/jpeg/JPEGRPIImageDecoder.h"
+#include "RPIImageDecoder.h"
 #include "platform/PlatformInstrumentation.h"
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-FILE *logFile=NULL;
-
-void log(const char * format, ...)
-{
-    if (!logFile)
-    {
-        logFile = fopen("/storage/webengine.log", "w");
-    }
-
-    va_list args;
-    va_start (args, format);
-    vfprintf (logFile, format, args);
-    fprintf(logFile, "\r\n");
-    va_end (args);
-    fflush(logFile);
-}
-
 
 #if CPU(BIG_ENDIAN) || CPU(MIDDLE_ENDIAN)
 #error Blink assumes a little-endian target.
@@ -70,43 +50,29 @@ namespace
     // JPEG only supports a denominator of 8.
     const unsigned scaleDenominator = 8;
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    FILE *logFile=NULL;
+
 } // namespace
 
 namespace blink
 {
-    BRCMJPEG_T* JPEGImageDecoder::m_decoder=NULL;
-    BRCMJPEG_REQUEST_T JPEGImageDecoder::m_dec_request;
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    JPEGImageDecoder::JPEGImageDecoder(ImageSource::AlphaOption alphaOption,
+    RPIImageDecoder::RPIImageDecoder(ImageSource::AlphaOption alphaOption,
                                        ImageSource::GammaAndColorProfileOption gammaAndColorProfileOption,
                                        size_t maxDecodedBytes)
-        : ImageDecoder(alphaOption, gammaAndColorProfileOption, maxDecodedBytes)
+        : ImageDecoder(alphaOption, gammaAndColorProfileOption, maxDecodedBytes), m_hasAlpha(false)
     {
-        if (!m_decoder)
-        {
-            BRCMJPEG_STATUS_T status = brcmjpeg_create(BRCMJPEG_TYPE_DECODER, &m_decoder);
-            if (status != BRCMJPEG_SUCCESS)
-            {
-                log("JPEGImageDecoder : could not create HW JPEG decoder");
-                brcmjpeg_release(m_decoder);
-                m_decoder = NULL;
-            }
-            else
-            {
-                log("JPEGImageDecoder : HW JPEG decoder created");
-            }
 
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    JPEGImageDecoder::~JPEGImageDecoder()
+    RPIImageDecoder::~RPIImageDecoder()
     {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    bool JPEGImageDecoder::isSizeAvailable()
+    bool RPIImageDecoder::isSizeAvailable()
     {
         if (!ImageDecoder::isSizeAvailable())
             decode(true);
@@ -115,7 +81,7 @@ namespace blink
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    bool JPEGImageDecoder::setSize(unsigned width, unsigned height)
+    bool RPIImageDecoder::setSize(unsigned width, unsigned height)
     {
         if (!ImageDecoder::setSize(width, height))
             return false;
@@ -127,7 +93,7 @@ namespace blink
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    unsigned JPEGImageDecoder::desiredScaleNumerator() const
+    unsigned RPIImageDecoder::desiredScaleNumerator() const
     {
         size_t originalBytes = size().width() * size().height() * 4;
         if (originalBytes <= m_maxDecodedBytes) {
@@ -143,7 +109,7 @@ namespace blink
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ImageFrame* JPEGImageDecoder::frameBufferAtIndex(size_t index)
+    ImageFrame* RPIImageDecoder::frameBufferAtIndex(size_t index)
     {
         if (index)
             return 0;
@@ -155,7 +121,7 @@ namespace blink
 
         ImageFrame& frame = m_frameBufferCache[0];
         if (frame.status() != ImageFrame::FrameComplete) {
-            PlatformInstrumentation::willDecodeImage("JPEG");
+            PlatformInstrumentation::willDecodeImage(platformDecode());
             decode(false);
             PlatformInstrumentation::didDecodeImage();
         }
@@ -165,54 +131,14 @@ namespace blink
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    bool JPEGImageDecoder::setFailed()
+    bool RPIImageDecoder::setFailed()
     {
-        log("JPEGImageDecoder::setFailed");
+        log("setFailed");
         return ImageDecoder::setFailed();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    bool JPEGImageDecoder::readJpegSize(unsigned int &width, unsigned int &height)
-    {
-        JFIFHEAD *header = (JFIFHEAD *)m_data->data();
-        width = height = 0;
-
-        if (m_data->size() >= (sizeof(*header) - JFIF_DATA_SIZE))
-        {
-            BYTE* dataptr = header->data;
-
-            while (dataptr < ((BYTE*)header + m_data->size()))
-            {
-                if (dataptr[0] != 0xFF)
-                {
-                    log("JPEGImageDecoder::readJpegSize : got wrong marker %d", dataptr[0]);
-                    return false;
-                }
-
-                // we look for size block marker
-                if (dataptr[1] == 0xC0 && dataptr[2] == 0x0)
-                {
-                    width = (dataptr[8] + dataptr[7] * 256);
-                    height = (dataptr[6] + dataptr[5] * 256);
-                    return true;
-                }
-
-                dataptr += dataptr[3] + (dataptr[2] * 256) + 2;
-            }
-        }
-        else
-        {
-            log("JPEGImageDecoder::readJpegSize : could not read %d bytes, read %d",sizeof(*header), m_data->size());
-            return false;
-        }
-
-
-        log("JPEGImageDecoder::readJpegSize : could not find the proper size marker in %d bytes", m_data->size());
-        return false;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    void JPEGImageDecoder::decode(bool onlySize)
+    void RPIImageDecoder::decode(bool onlySize)
     {
         unsigned int width, height;
 
@@ -225,7 +151,7 @@ namespace blink
 
         if (onlySize)
         {
-            if (readJpegSize(width, height));
+            if (readSize(width, height));
             {
                 setSize(width, height);
             }
@@ -233,7 +159,7 @@ namespace blink
         }
         else
         {
-            readJpegSize(width, height);
+            readSize(width, height);
 
             clock_t start = clock();
 
@@ -241,7 +167,7 @@ namespace blink
 
             if (m_frameBufferCache.isEmpty())
             {
-                log("JPEGImageDecoder::decode : frameBuffercache is empty");
+                log("decode : frameBuffercache is empty");
                 setFailed();
                 return;
             }
@@ -250,7 +176,7 @@ namespace blink
             {
                 if (!buffer.setSize(width, height))
                 {
-                    log("JPEGImageDecoder::decode : could not define buffer size");
+                    log("decode : could not define buffer size");
                     setFailed();
                     return;
                 }
@@ -261,25 +187,28 @@ namespace blink
             }
 
             // setup decoder request information
-            memset(&m_dec_request, 0, sizeof(m_dec_request));
-            m_dec_request.input = (unsigned char*)m_data->data();
-            m_dec_request.input_size = m_data->size();
-            m_dec_request.output = (unsigned char*)buffer.getAddr(0, 0);
-            m_dec_request.output_alloc_size = width * height * 4;
-            m_dec_request.output_handle = 0;
-            m_dec_request.pixel_format = PIXEL_FORMAT_RGBA;
-            m_dec_request.buffer_width = 0;
-            m_dec_request.buffer_height = 0;
+            BRCMIMAGE_REQUEST_T* dec_request = getDecoderRequest();
+            BRCMIMAGE_T *decoder = getDecoder();
 
-            brcmjpeg_acquire(m_decoder);
-            BRCMJPEG_STATUS_T status = brcmjpeg_process(m_decoder, &m_dec_request);
+            memset(dec_request, 0, sizeof(BRCMIMAGE_REQUEST_T));
+            dec_request->input = (unsigned char*)m_data->data();
+            dec_request->input_size = m_data->size();
+            dec_request->output = (unsigned char*)buffer.getAddr(0, 0);
+            dec_request->output_alloc_size = width * height * 4;
+            dec_request->output_handle = 0;
+            dec_request->pixel_format = PIXEL_FORMAT_RGBA;
+            dec_request->buffer_width = 0;
+            dec_request->buffer_height = 0;
 
-            if (status == BRCMJPEG_SUCCESS)
+            brcmimage_acquire(decoder);
+            BRCMIMAGE_STATUS_T status = brcmimage_process(decoder, dec_request);
+
+            if (status == BRCMIMAGE_SUCCESS)
             {
                 clock_t copy = clock();
 
                 unsigned char *ptr = (unsigned char *)buffer.getAddr(0, 0);
-                for (unsigned int i = 0; i < m_dec_request.height * m_dec_request.buffer_width; i++)
+                for (unsigned int i = 0; i < dec_request->height * dec_request->width; i++)
                 {
                     // we swap RGBA -> BGRA
                     unsigned char tmp = *ptr;
@@ -288,25 +217,42 @@ namespace blink
                     ptr += 4;
                 }
 
-                brcmjpeg_release(m_decoder);
+                brcmimage_release(decoder);
 
                 buffer.setPixelsChanged(true);
                 buffer.setStatus(ImageFrame::FrameComplete);
-                buffer.setHasAlpha(false);
+                buffer.setHasAlpha(m_hasAlpha);
 
                 clock_t end = clock();
                 unsigned long millis = (end - start) * 1000 / CLOCKS_PER_SEC;
                 unsigned long copymillis = (end - copy) * 1000 / CLOCKS_PER_SEC;
 
-                log("JPEGImageDecoder::decode : image (%d x %d) decoded successfully in %d ms (copy in %d ms), data size = %d bytes", width, height, millis, copymillis, m_data->size());
+                log("decode : image (%d x %d)(Alpha=%d) decoded in %d ms (copy in %d ms), source size = %d bytes", width, height, m_hasAlpha, millis, copymillis, m_data->size());
                 return;
 
             }
             else
             {
-                log("JPEGImageDecoder::decode : Decoding failed with status %d", status);
+                log("decode : Decoding failed with status %d", status);
                 return;
             }
         }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    void RPIImageDecoder::log(const char * format, ...)
+    {
+        if (!logFile)
+        {
+            logFile = fopen("/storage/webengine.log", "w");
+        }
+
+        va_list args;
+        va_start (args, format);
+        fprintf(logFile, "RPIImageDecoder(%s):", filenameExtension().ascii().data());
+        vfprintf (logFile, format, args);
+        fprintf(logFile, "\r\n");
+        va_end (args);
+        fflush(logFile);
     }
 }

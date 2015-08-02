@@ -27,8 +27,9 @@
 #ifndef JPEGImageDecoder_h
 #define JPEGImageDecoder_h
 
-#include "platform/image-decoders/ImageDecoder.h"
-#include "brcmjpeg.h"
+#include "platform/image-decoders/RPIImageDecoder.h"
+#include "platform/image-decoders/brcmimage.h"
+#include "interface/mmal/mmal.h"
 
 namespace blink
 {
@@ -54,19 +55,10 @@ namespace blink
         BYTE data[JFIF_DATA_SIZE];
     } JFIFHEAD;
 
-    // Hardware decoder buffers
-    #define MAX_WIDTH   2500
-    #define MAX_HEIGHT  2500
-    #define MAX_ENCODED (15*1024*1024)
-    #define MAX_DECODED (MAX_WIDTH*MAX_HEIGHT*4)
-
-    BYTE encodedInBuf[MAX_ENCODED];
-    BYTE decodedBuf[MAX_DECODED];
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // This class decodes the JPEG image format.
-    class PLATFORM_EXPORT JPEGImageDecoder : public ImageDecoder
+    class PLATFORM_EXPORT JPEGImageDecoder : public RPIImageDecoder
     {
         WTF_MAKE_NONCOPYABLE(JPEGImageDecoder);
     public:
@@ -75,23 +67,17 @@ namespace blink
 
         // ImageDecoder
         virtual String filenameExtension() const override { return "jpg"; }
-        virtual bool isSizeAvailable() override;
-        virtual bool setSize(unsigned width, unsigned height) override;
-        virtual ImageFrame* frameBufferAtIndex(size_t) override;
-        virtual bool setFailed() override;
+        virtual char* platformDecode() { return (char*)"JPEG"; }
+        virtual bool readSize(unsigned int &width, unsigned int &height);
+        virtual unsigned int getMMALImageType() { return MMAL_ENCODING_JPEG; }
 
-        bool readJpegSize(unsigned int &width, unsigned int &height);
-        unsigned desiredScaleNumerator() const;
-
+        virtual BRCMIMAGE_T* getDecoder() { return m_decoder; }
+        virtual BRCMIMAGE_REQUEST_T *getDecoderRequest() { return &m_dec_request; }
 
     private:
-        // Decodes the image.  If |onlySize| is true, stops decoding after
-        // calculating the image size.  If decoding fails but there is no more
-        // data coming, sets the "decode failure" flag.
-        void decode(bool onlySize);
 
-        static BRCMJPEG_REQUEST_T m_dec_request;
-        static BRCMJPEG_T *m_decoder;
+        static BRCMIMAGE_REQUEST_T m_dec_request;
+        static BRCMIMAGE_T *m_decoder;
     };
 
 } // namespace blink

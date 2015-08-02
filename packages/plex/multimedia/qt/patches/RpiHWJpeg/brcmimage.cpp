@@ -33,7 +33,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "interface/mmal/util/mmal_component_wrapper.h"
 #include "interface/mmal/util/mmal_util_params.h"
 #include "interface/mmal/mmal_logging.h"
-#include "brcmjpeg.h"
+#include "brcmimage.h"
+#include "stdio.h"
 
 /*******************************************************************************
 * Defines
@@ -45,14 +46,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define CHECK_MMAL_STATUS(status, jerr, msg, ...) \
    if (status != MMAL_SUCCESS) {LOG_ERROR(msg, ## __VA_ARGS__); \
-   err = BRCMJPEG_ERROR_##jerr; goto error;}
+   err = BRCMIMAGE_ERROR_##jerr; goto error;}
 
 /*******************************************************************************
 * Type definitions
 *******************************************************************************/
-struct BRCMJPEG_T
+struct BRCMIMAGE_T
 {
-   BRCMJPEG_TYPE_T type;
+   BRCMIMAGE_TYPE_T type;
+   unsigned int encoding;
    unsigned int ref_count;
    unsigned int init;
 
@@ -67,37 +69,45 @@ struct BRCMJPEG_T
 /*******************************************************************************
 * Local prototypes
 *******************************************************************************/
-static BRCMJPEG_STATUS_T brcmjpeg_init_encoder(BRCMJPEG_T *);
-static BRCMJPEG_STATUS_T brcmjpeg_init_decoder(BRCMJPEG_T *);
-static BRCMJPEG_STATUS_T brcmjpeg_configure_encoder(BRCMJPEG_T *, BRCMJPEG_REQUEST_T *);
-static BRCMJPEG_STATUS_T brcmjpeg_configure_decoder(BRCMJPEG_T *, BRCMJPEG_REQUEST_T *);
-static BRCMJPEG_STATUS_T brcmjpeg_encode(BRCMJPEG_T *, BRCMJPEG_REQUEST_T *);
-static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *, BRCMJPEG_REQUEST_T *);
-static void brcmjpeg_destroy(BRCMJPEG_T *);
+static BRCMIMAGE_STATUS_T brcmimage_init_encoder(BRCMIMAGE_T *);
+static BRCMIMAGE_STATUS_T brcmimage_init_decoder(BRCMIMAGE_T *);
+static BRCMIMAGE_STATUS_T brcmimage_configure_encoder(BRCMIMAGE_T *, BRCMIMAGE_REQUEST_T *);
+static BRCMIMAGE_STATUS_T brcmimage_configure_decoder(BRCMIMAGE_T *, BRCMIMAGE_REQUEST_T *);
+static BRCMIMAGE_STATUS_T brcmimage_encode(BRCMIMAGE_T *, BRCMIMAGE_REQUEST_T *);
+static BRCMIMAGE_STATUS_T brcmimage_decode(BRCMIMAGE_T *, BRCMIMAGE_REQUEST_T *);
+static void brcmimage_destroy(BRCMIMAGE_T *);
 
-static MMAL_FOURCC_T brcmjpeg_pixfmt_to_encoding(BRCMJPEG_PIXEL_FORMAT_T);
-static unsigned int brcmjpeg_copy_pixels(uint8_t *out, unsigned int out_size,
-   const uint8_t *in, unsigned int in_size, BRCMJPEG_PIXEL_FORMAT_T fmt,
+static MMAL_FOURCC_T brcmimage_pixfmt_to_encoding(BRCMIMAGE_PIXEL_FORMAT_T);
+static unsigned int brcmimage_copy_pixels(uint8_t *out, unsigned int out_size,
+   const uint8_t *in, unsigned int in_size, BRCMIMAGE_PIXEL_FORMAT_T fmt,
    unsigned int out_width, unsigned int out_height,
    unsigned int in_width, unsigned int in_height,
    unsigned int line_offset, unsigned int convert_from);
 
-static BRCMJPEG_T *brcmjpeg_encoder = NULL;
-static BRCMJPEG_T *brcmjpeg_decoder = NULL;
+#define MAX_ENCODER_TYPES 10
+static BRCMIMAGE_T *brcmimage_encoder[MAX_ENCODER_TYPES];
+static BRCMIMAGE_T *brcmimage_decoder[MAX_ENCODER_TYPES];
 
 /*******************************************************************************
 * Platform specific code
 *******************************************************************************/
 static VCOS_ONCE_T once = VCOS_ONCE_INIT;
-static VCOS_MUTEX_T brcmjpeg_lock;
+static VCOS_MUTEX_T brcmimage_lock;
 
-static void brcmjpeg_init_once(void)
+static void brcmimage_init_once(void)
 {
-   vcos_mutex_create(&brcmjpeg_lock, VCOS_FUNCTION);
+   vcos_mutex_create(&brcmimage_lock, VCOS_FUNCTION);
+
+   for (int i=0; i < MAX_ENCODER_TYPES; i++)
+   {
+       brcmimage_encoder[i] = NULL;
+       brcmimage_decoder[i] = NULL;
+   }
+
 }
 
-#define LOCK() vcos_mutex_lock(&brcmjpeg_lock)
-#define UNLOCK() vcos_mutex_unlock(&brcmjpeg_lock)
+#define LOCK() vcos_mutex_lock(&brcmimage_lock)
+#define UNLOCK() vcos_mutex_unlock(&brcmimage_lock)
 #define LOCK_COMP(ctx) vcos_mutex_lock(&(ctx)->lock)
 #define UNLOCK_COMP(ctx) vcos_mutex_unlock(&(ctx)->lock)
 #define LOCK_PROCESS(ctx) vcos_mutex_lock(&(ctx)->process_lock)
@@ -109,31 +119,46 @@ static void brcmjpeg_init_once(void)
 * Implementation
 *******************************************************************************/
 
-BRCMJPEG_STATUS_T brcmjpeg_create(BRCMJPEG_TYPE_T type, BRCMJPEG_T **ctx)
+inline int getEncoderIndexFromType(unsigned int encoding)
 {
-   BRCMJPEG_STATUS_T status = BRCMJPEG_SUCCESS;
-   BRCMJPEG_T **comp;
+    switch(encoding)
+    {
+        case MMAL_ENCODING_GIF: return 1; break;
+        case MMAL_ENCODING_PNG: return 2; break;
+        case MMAL_ENCODING_PPM: return 3; break;
+        case MMAL_ENCODING_TGA: return 4; break;
+        case MMAL_ENCODING_BMP: return 5; break;
+        default:
+            return 0;
+    }
+}
 
-   if (type == BRCMJPEG_TYPE_ENCODER)
-      comp = &brcmjpeg_encoder;
+BRCMIMAGE_STATUS_T brcmimage_create(BRCMIMAGE_TYPE_T type, unsigned int encoding, BRCMIMAGE_T **ctx)
+{
+   BRCMIMAGE_STATUS_T status = BRCMIMAGE_SUCCESS;
+   BRCMIMAGE_T **comp;
+
+   if (type == BRCMIMAGE_TYPE_ENCODER)
+      comp = &brcmimage_encoder[getEncoderIndexFromType(encoding)];
    else
-      comp = &brcmjpeg_decoder;
+      comp = &brcmimage_decoder[getEncoderIndexFromType(encoding)];
 
-   vcos_once(&once, brcmjpeg_init_once);
+   vcos_once(&once, brcmimage_init_once);
    LOCK();
    if (!*comp)
    {
       int init1, init2, init3;
-      *comp = (BRCMJPEG_T*)calloc(sizeof(BRCMJPEG_T), 1);
+      *comp = (BRCMIMAGE_T*)calloc(sizeof(BRCMIMAGE_T), 1);
       if (!*comp)
       {
          UNLOCK();
-         return BRCMJPEG_ERROR_NOMEM;
+         return BRCMIMAGE_ERROR_NOMEM;
       }
       (*comp)->type = type;
-      init1 = vcos_mutex_create(&(*comp)->lock, "brcmjpeg lock") != VCOS_SUCCESS;
-      init2 = vcos_mutex_create(&(*comp)->process_lock, "brcmjpeg process lock") != VCOS_SUCCESS;
-      init3 = vcos_semaphore_create(&(*comp)->sema, "brcmjpeg sema", 0) != VCOS_SUCCESS;
+      (*comp)->encoding = encoding;
+      init1 = vcos_mutex_create(&(*comp)->lock, "brcmimage lock") != VCOS_SUCCESS;
+      init2 = vcos_mutex_create(&(*comp)->process_lock, "brcmimage process lock") != VCOS_SUCCESS;
+      init3 = vcos_semaphore_create(&(*comp)->sema, "brcmimage sema", 0) != VCOS_SUCCESS;
       if (init1 | init2 | init3)
       {
          if (init1) vcos_mutex_delete(&(*comp)->lock);
@@ -141,7 +166,7 @@ BRCMJPEG_STATUS_T brcmjpeg_create(BRCMJPEG_TYPE_T type, BRCMJPEG_T **ctx)
          if (init3) vcos_semaphore_delete(&(*comp)->sema);
          free(comp);
          UNLOCK();
-         return BRCMJPEG_ERROR_NOMEM;
+         return BRCMIMAGE_ERROR_NOMEM;
       }
    }
    (*comp)->ref_count++;
@@ -150,30 +175,30 @@ BRCMJPEG_STATUS_T brcmjpeg_create(BRCMJPEG_TYPE_T type, BRCMJPEG_T **ctx)
    LOCK_COMP(*comp);
    if (!(*comp)->init)
    {
-      if (type == BRCMJPEG_TYPE_ENCODER)
-         status = brcmjpeg_init_encoder(*comp);
+      if (type == BRCMIMAGE_TYPE_ENCODER)
+         status = brcmimage_init_encoder(*comp);
       else
-         status = brcmjpeg_init_decoder(*comp);
+         status = brcmimage_init_decoder(*comp);
 
-      (*comp)->init = status == BRCMJPEG_SUCCESS;
+      (*comp)->init = status == BRCMIMAGE_SUCCESS;
    }
    UNLOCK_COMP(*comp);
 
-   if (status != BRCMJPEG_SUCCESS)
-      brcmjpeg_release(*comp);
+   if (status != BRCMIMAGE_SUCCESS)
+      brcmimage_release(*comp);
 
    *ctx = *comp;
    return status;
 }
 
-void brcmjpeg_acquire(BRCMJPEG_T *ctx)
+void brcmimage_acquire(BRCMIMAGE_T *ctx)
 {
    LOCK_COMP(ctx);
    ctx->ref_count++;
    UNLOCK_COMP(ctx);
 }
 
-void brcmjpeg_release(BRCMJPEG_T *ctx)
+void brcmimage_release(BRCMIMAGE_T *ctx)
 {
    LOCK_COMP(ctx);
    if (--ctx->ref_count)
@@ -183,20 +208,20 @@ void brcmjpeg_release(BRCMJPEG_T *ctx)
    }
 
    LOCK();
-   if (ctx->type == BRCMJPEG_TYPE_ENCODER)
-      brcmjpeg_encoder = NULL;
+   if (ctx->type == BRCMIMAGE_TYPE_ENCODER)
+      brcmimage_encoder[ctx->encoding] = NULL;
    else
-      brcmjpeg_decoder = NULL;
+      brcmimage_decoder[ctx->encoding] = NULL;
    UNLOCK();
    UNLOCK_COMP(ctx);
 
-   brcmjpeg_destroy(ctx);
+   brcmimage_destroy(ctx);
    return;
 }
 
-BRCMJPEG_STATUS_T brcmjpeg_process(BRCMJPEG_T *ctx, BRCMJPEG_REQUEST_T *req)
+BRCMIMAGE_STATUS_T brcmimage_process(BRCMIMAGE_T *ctx, BRCMIMAGE_REQUEST_T *req)
 {
-   BRCMJPEG_STATUS_T status;
+   BRCMIMAGE_STATUS_T status;
 
    /* Sanity check */
    if ((req->input && req->input_handle) ||
@@ -204,20 +229,20 @@ BRCMJPEG_STATUS_T brcmjpeg_process(BRCMJPEG_T *ctx, BRCMJPEG_REQUEST_T *req)
    {
       LOG_ERROR("buffer pointer and handle both set (%p/%u %p/%u)",
             req->input, req->input_handle, req->output, req->output_handle);
-      return BRCMJPEG_ERROR_REQUEST;
+      return BRCMIMAGE_ERROR_REQUEST;
    }
 
    LOCK_PROCESS(ctx);
-   if (ctx->type == BRCMJPEG_TYPE_ENCODER)
-      status = brcmjpeg_encode(ctx, req);
+   if (ctx->type == BRCMIMAGE_TYPE_ENCODER)
+      status = brcmimage_encode(ctx, req);
    else
-      status = brcmjpeg_decode(ctx, req);
+      status = brcmimage_decode(ctx, req);
    UNLOCK_PROCESS(ctx);
 
    return status;
 }
 
-static void brcmjpeg_destroy(BRCMJPEG_T *ctx)
+static void brcmimage_destroy(BRCMIMAGE_T *ctx)
 {
    if (ctx->mmal)
       mmal_wrapper_destroy(ctx->mmal);
@@ -227,28 +252,28 @@ static void brcmjpeg_destroy(BRCMJPEG_T *ctx)
    free(ctx);
 }
 
-static void brcmjpeg_mmal_cb(MMAL_WRAPPER_T *wrapper)
+static void brcmimage_mmal_cb(MMAL_WRAPPER_T *wrapper)
 {
-   BRCMJPEG_T *ctx = (BRCMJPEG_T*)wrapper->user_data;
+   BRCMIMAGE_T *ctx = (BRCMIMAGE_T*)wrapper->user_data;
    SIGNAL(ctx);
 }
 
-static BRCMJPEG_STATUS_T brcmjpeg_init_encoder(BRCMJPEG_T *ctx)
+static BRCMIMAGE_STATUS_T brcmimage_init_encoder(BRCMIMAGE_T *ctx)
 {
    MMAL_STATUS_T status;
-   BRCMJPEG_STATUS_T err = BRCMJPEG_SUCCESS;
+   BRCMIMAGE_STATUS_T err = BRCMIMAGE_SUCCESS;
 
    /* Create encoder component */
    status = mmal_wrapper_create(&ctx->mmal, MMAL_COMPONENT_IMAGE_ENCODE);
    CHECK_MMAL_STATUS(status, INIT, "failed to create encoder");
    ctx->mmal->user_data = ctx;
-   ctx->mmal->callback = brcmjpeg_mmal_cb;
+   ctx->mmal->callback = brcmimage_mmal_cb;
 
    /* Configure things that won't change from encode to encode */
    mmal_port_parameter_set_boolean(ctx->mmal->control,
       MMAL_PARAMETER_EXIF_DISABLE, MMAL_TRUE);
 
-   ctx->mmal->output[0]->format->encoding = MMAL_ENCODING_JPEG;
+   ctx->mmal->output[0]->format->encoding = ctx->encoding;
    status = mmal_port_format_commit(ctx->mmal->output[0]);
    CHECK_MMAL_STATUS(status, INIT, "failed to commit output port format");
 
@@ -257,27 +282,27 @@ static BRCMJPEG_STATUS_T brcmjpeg_init_encoder(BRCMJPEG_T *ctx)
    status = mmal_wrapper_port_enable(ctx->mmal->output[0], 0);
    CHECK_MMAL_STATUS(status, INIT, "failed to enable output port");
 
-   LOG_DEBUG("encoder initialised (output chunk size %i)",
+   LOG_DEBUG("encoder initialised (output chunk size %i)\n",
       ctx->mmal->output[0]->buffer_size);
-   return BRCMJPEG_SUCCESS;
+   return BRCMIMAGE_SUCCESS;
 
  error:
    return err;
 }
 
-static BRCMJPEG_STATUS_T brcmjpeg_init_decoder(BRCMJPEG_T *ctx)
+static BRCMIMAGE_STATUS_T brcmimage_init_decoder(BRCMIMAGE_T *ctx)
 {
    MMAL_STATUS_T status;
-   BRCMJPEG_STATUS_T err = BRCMJPEG_SUCCESS;
+   BRCMIMAGE_STATUS_T err = BRCMIMAGE_SUCCESS;
 
    /* Create decoder component */
    status = mmal_wrapper_create(&ctx->mmal, MMAL_COMPONENT_IMAGE_DECODE);
    CHECK_MMAL_STATUS(status, INIT, "failed to create decoder");
    ctx->mmal->user_data = ctx;
-   ctx->mmal->callback = brcmjpeg_mmal_cb;
+   ctx->mmal->callback = brcmimage_mmal_cb;
 
    /* Configure things that won't change from decode to decode */
-   ctx->mmal->input[0]->format->encoding = MMAL_ENCODING_JPEG;
+   ctx->mmal->input[0]->format->encoding = ctx->encoding;
    status = mmal_port_format_commit(ctx->mmal->input[0]);
    CHECK_MMAL_STATUS(status, INIT, "failed to commit input port format");
 
@@ -286,22 +311,22 @@ static BRCMJPEG_STATUS_T brcmjpeg_init_decoder(BRCMJPEG_T *ctx)
    status = mmal_wrapper_port_enable(ctx->mmal->input[0], 0);
    CHECK_MMAL_STATUS(status, INIT, "failed to enable input port");
 
-   LOG_DEBUG("decoder initialised (input chunk size %i)",
+   LOG_DEBUG("decoder initialised (input chunk size %i)\n",
       ctx->mmal->input[0]->buffer_size);
-   return BRCMJPEG_SUCCESS;
+   return BRCMIMAGE_SUCCESS;
 
  error:
-   return BRCMJPEG_ERROR_INIT;
+   return BRCMIMAGE_ERROR_INIT;
 }
 
 /* Configuration which needs to be done on a per encode basis */
-static BRCMJPEG_STATUS_T brcmjpeg_configure_encoder(BRCMJPEG_T *ctx,
-   BRCMJPEG_REQUEST_T *req)
+static BRCMIMAGE_STATUS_T brcmimage_configure_encoder(BRCMIMAGE_T *ctx,
+   BRCMIMAGE_REQUEST_T *req)
 {
    MMAL_STATUS_T status = MMAL_SUCCESS;
-   MMAL_FOURCC_T encoding = brcmjpeg_pixfmt_to_encoding(req->pixel_format);
+   MMAL_FOURCC_T encoding = brcmimage_pixfmt_to_encoding(req->pixel_format);
    MMAL_PORT_T *port_in;
-   BRCMJPEG_STATUS_T err = BRCMJPEG_SUCCESS;
+   BRCMIMAGE_STATUS_T err = BRCMIMAGE_SUCCESS;
    MMAL_BOOL_T slice_mode = MMAL_FALSE;
 
    if (encoding == MMAL_ENCODING_UNKNOWN)
@@ -371,25 +396,25 @@ static BRCMJPEG_STATUS_T brcmjpeg_configure_encoder(BRCMJPEG_T *ctx,
       CHECK_MMAL_STATUS(status, EXECUTE, "failed to enable output port");
    }
 
-   LOG_DEBUG("encoder configured (%4.4s:%ux%u|%ux%u slice: %u)",
+   LOG_DEBUG("encoder configured (%4.4s:%ux%u|%ux%u slice: %u)\n",
       (char *)&port_in->format->encoding,
       port_in->format->es->video.crop.width, port_in->format->es->video.crop.height,
       port_in->format->es->video.width, port_in->format->es->video.height,
       ctx->slice_height);
-   return BRCMJPEG_SUCCESS;
+   return BRCMIMAGE_SUCCESS;
 
  error:
    return err;
 }
 
 /* Configuration which needs to be done on a per decode basis */
-static BRCMJPEG_STATUS_T brcmjpeg_configure_decoder(BRCMJPEG_T *ctx,
-   BRCMJPEG_REQUEST_T *req)
+static BRCMIMAGE_STATUS_T brcmimage_configure_decoder(BRCMIMAGE_T *ctx,
+   BRCMIMAGE_REQUEST_T *req)
 {
    MMAL_STATUS_T status = MMAL_SUCCESS;
-   MMAL_FOURCC_T encoding = brcmjpeg_pixfmt_to_encoding(req->pixel_format);
+   MMAL_FOURCC_T encoding = brcmimage_pixfmt_to_encoding(req->pixel_format);
    MMAL_PORT_T *port_out;
-   BRCMJPEG_STATUS_T err = BRCMJPEG_SUCCESS;
+   BRCMIMAGE_STATUS_T err = BRCMIMAGE_SUCCESS;
 
    if (encoding != MMAL_ENCODING_I420 &&
        encoding != MMAL_ENCODING_I422 &&
@@ -426,19 +451,19 @@ static BRCMJPEG_STATUS_T brcmjpeg_configure_decoder(BRCMJPEG_T *ctx,
       status = mmal_wrapper_port_enable(port_out, MMAL_WRAPPER_FLAG_PAYLOAD_ALLOCATE);
    CHECK_MMAL_STATUS(status, EXECUTE, "failed to enable output port");
 
-   LOG_DEBUG("decoder configured (%4.4s:%ux%u|%ux%u)", (char *)&port_out->format->encoding,
+   LOG_DEBUG("decoder configured (%4.4s:%ux%u|%ux%u)\n", (char *)&port_out->format->encoding,
          port_out->format->es->video.crop.width, port_out->format->es->video.crop.height,
          port_out->format->es->video.width, port_out->format->es->video.height);
-   return BRCMJPEG_SUCCESS;
+   return BRCMIMAGE_SUCCESS;
 
  error:
    return err;
 }
 
-static BRCMJPEG_STATUS_T brcmjpeg_encode(BRCMJPEG_T *ctx,
-   BRCMJPEG_REQUEST_T *je)
+static BRCMIMAGE_STATUS_T brcmimage_encode(BRCMIMAGE_T *ctx,
+   BRCMIMAGE_REQUEST_T *je)
 {
-   BRCMJPEG_STATUS_T err;
+   BRCMIMAGE_STATUS_T err;
    MMAL_STATUS_T status = MMAL_SUCCESS;
    MMAL_BUFFER_HEADER_T *in, *out;
    MMAL_BOOL_T eos = MMAL_FALSE;
@@ -448,8 +473,8 @@ static BRCMJPEG_STATUS_T brcmjpeg_encode(BRCMJPEG_T *ctx,
    MMAL_PORT_T *port_out = ctx->mmal->output[0];
 
    je->output_size = 0;
-   err = brcmjpeg_configure_encoder(ctx, je);
-   if (err != BRCMJPEG_SUCCESS)
+   err = brcmimage_configure_encoder(ctx, je);
+   if (err != BRCMIMAGE_SUCCESS)
       return err;
 
    /* Then we read the encoded data back from the encoder */
@@ -478,7 +503,7 @@ static BRCMJPEG_STATUS_T brcmjpeg_encode(BRCMJPEG_T *ctx,
          }
          else
          {
-            in->length = brcmjpeg_copy_pixels(in->data, in->alloc_size,
+            in->length = brcmimage_copy_pixels(in->data, in->alloc_size,
                je->input, je->input_size, je->pixel_format,
                port_in->format->es->video.width,
                ctx->slice_height, je->buffer_width, je->buffer_height,
@@ -504,7 +529,7 @@ static BRCMJPEG_STATUS_T brcmjpeg_encode(BRCMJPEG_T *ctx,
       }
       CHECK_MMAL_STATUS(status, EXECUTE, "failed to get full buffer");
 
-      LOG_DEBUG("received %i bytes", out->length);
+      LOG_DEBUG("received %i bytes\n", out->length);
       je->output_size += out->length;
       eos = out->flags & MMAL_BUFFER_HEADER_FLAG_EOS;
 
@@ -521,10 +546,10 @@ static BRCMJPEG_STATUS_T brcmjpeg_encode(BRCMJPEG_T *ctx,
    /* Check if buffer was too small */
    CHECK_MMAL_STATUS(status, OUTPUT_BUFFER, "output buffer too small");
 
-   LOG_DEBUG("encoded W:%ixH:%i:%i (%i bytes) in %i slices",
+   LOG_DEBUG("encoded W:%ixH:%i:%i (%i bytes) in %i slices\n",
          je->width, je->height, je->pixel_format, je->output_size, slices);
    mmal_port_flush(port_out);
-   return BRCMJPEG_SUCCESS;
+   return BRCMIMAGE_SUCCESS;
 
  error:
    mmal_wrapper_port_disable(port_in);
@@ -532,10 +557,10 @@ static BRCMJPEG_STATUS_T brcmjpeg_encode(BRCMJPEG_T *ctx,
    return err;
 }
 
-static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *ctx,
-   BRCMJPEG_REQUEST_T *jd)
+static BRCMIMAGE_STATUS_T brcmimage_decode(BRCMIMAGE_T *ctx,
+   BRCMIMAGE_REQUEST_T *jd)
 {
-   BRCMJPEG_STATUS_T err;
+   BRCMIMAGE_STATUS_T err;
    MMAL_STATUS_T status;
    MMAL_BUFFER_HEADER_T *in, *out;
    MMAL_BOOL_T eos = MMAL_FALSE;
@@ -543,11 +568,11 @@ static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *ctx,
    unsigned int slices = 0, inBufSize = jd->input_size;
    MMAL_PORT_T *port_in = ctx->mmal->input[0];
    MMAL_PORT_T *port_out = ctx->mmal->output[0];
-   LOG_DEBUG("decode %i bytes", jd->input_size);
+   LOG_DEBUG("decode %i bytes\n", jd->input_size);
 
    jd->output_size = 0;
-   err = brcmjpeg_configure_decoder(ctx, jd);
-   if (err != BRCMJPEG_SUCCESS)
+   err = brcmimage_configure_decoder(ctx, jd);
+   if (err != BRCMIMAGE_SUCCESS)
       return err;
 
    while (!eos)
@@ -566,7 +591,7 @@ static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *ctx,
          inBufSize -= in->length;
          inBuf += in->length;
          in->flags = inBufSize ? 0 : MMAL_BUFFER_HEADER_FLAG_EOS;
-         LOG_DEBUG("send decode in (%i bytes)", in->length);
+         LOG_DEBUG("send decode in (%i bytes)\n", in->length);
          status = mmal_port_send_buffer(port_in, in);
          CHECK_MMAL_STATUS(status, EXECUTE, "failed to send input buffer");
       }
@@ -593,7 +618,7 @@ static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *ctx,
             status = MMAL_EINVAL;
          CHECK_MMAL_STATUS(status, EXECUTE, "invalid format change event");
 
-         LOG_DEBUG("new format (%4.4s:%ux%u|%ux%u)", (char *)&event->format->encoding,
+         LOG_DEBUG("new format (%4.4s:%ux%u|%ux%u)\n", (char *)&event->format->encoding,
             event->format->es->video.crop.width, event->format->es->video.crop.height,
             event->format->es->video.width, event->format->es->video.height);
 
@@ -617,7 +642,7 @@ static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *ctx,
             }
          }
 
-         LOG_DEBUG("using slice size %u", ctx->slice_height);
+         LOG_DEBUG("using slice size %u\n", ctx->slice_height);
          status = mmal_port_format_commit(port_out);
          CHECK_MMAL_STATUS(status, EXECUTE, "invalid format change event");
          port_out->buffer_size = port_out->buffer_size_min;
@@ -664,7 +689,7 @@ static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *ctx,
       }
       else
       {
-         jd->output_size = brcmjpeg_copy_pixels(jd->output, jd->output_alloc_size,
+         jd->output_size = brcmimage_copy_pixels(jd->output, jd->output_alloc_size,
             out->data, out->length, jd->pixel_format,
             jd->buffer_width, jd->buffer_height,
             port_out->format->es->video.width,
@@ -689,11 +714,12 @@ static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *ctx,
       CHECK_MMAL_STATUS(status, OUTPUT_BUFFER, "invalid output buffer");
    }
 
-   LOG_DEBUG("decoded W:%ixH%i:(W%ixH%i):%i in %i slices",
+   LOG_DEBUG("decoded W:%ixH%i:(W%ixH%i):%i in %i slices\n",
       jd->width, jd->height, jd->buffer_width, jd->buffer_height,
       jd->pixel_format, slices);
    mmal_port_flush(port_in);
-   return BRCMJPEG_SUCCESS;
+
+   return BRCMIMAGE_SUCCESS;
 
  error:
    mmal_port_flush(port_in);
@@ -702,7 +728,7 @@ static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *ctx,
 
 /*****************************************************************************/
 static struct {
-    BRCMJPEG_PIXEL_FORMAT_T pixel_format;
+    BRCMIMAGE_PIXEL_FORMAT_T pixel_format;
     MMAL_FOURCC_T encoding;
 } mmal_raw_conversion[] = {
     {PIXEL_FORMAT_I420, MMAL_ENCODING_I420},
@@ -713,7 +739,7 @@ static struct {
     {PIXEL_FORMAT_RGBA, MMAL_ENCODING_RGBA},
     {PIXEL_FORMAT_UNKNOWN, MMAL_ENCODING_UNKNOWN} };
 
-static MMAL_FOURCC_T brcmjpeg_pixfmt_to_encoding(BRCMJPEG_PIXEL_FORMAT_T pixel_format)
+static MMAL_FOURCC_T brcmimage_pixfmt_to_encoding(BRCMIMAGE_PIXEL_FORMAT_T pixel_format)
 {
    unsigned int i;
    for (i = 0; mmal_raw_conversion[i].encoding != MMAL_ENCODING_UNKNOWN; i++)
@@ -726,8 +752,8 @@ extern void log(const char * format, ...);
 
 // Copy a raw frame from 1 buffer to another, taking care of
 // stride / height differences between the input and output buffers.
-static unsigned int brcmjpeg_copy_pixels(uint8_t *out, unsigned int out_size,
-    const uint8_t *in, unsigned int in_size, BRCMJPEG_PIXEL_FORMAT_T fmt,
+static unsigned int brcmimage_copy_pixels(uint8_t *out, unsigned int out_size,
+    const uint8_t *in, unsigned int in_size, BRCMIMAGE_PIXEL_FORMAT_T fmt,
     unsigned int out_width, unsigned int out_height,
     unsigned int in_width, unsigned int in_height,
     unsigned int line_offset, unsigned int convert_from)
@@ -746,7 +772,6 @@ static unsigned int brcmjpeg_copy_pixels(uint8_t *out, unsigned int out_size,
     // Sanity check line_offset
     if (line_offset >= (convert_from ? in_height : out_height))
     {
-        log("Sanity check failed");
         return 0;
     }
 
