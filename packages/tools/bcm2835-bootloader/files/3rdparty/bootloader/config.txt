@@ -50,11 +50,12 @@
 # mode 'High'                   :    950   |    450    |    450     |      6
 # mode 'Turbo'                  :   1000   |    500    |    500     |      6
 
+force_turbo=1
 arm_freq=1000
 core_freq=500
 sdram_freq=500
 over_voltage=2
-gpu_freq=350
+gpu_freq=500
 
 # set to 'force_turbo=1' to disable dynamic overclocking (you can lose your warranty!)
   force_turbo=0
