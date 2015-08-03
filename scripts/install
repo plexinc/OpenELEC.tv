@@ -135,7 +135,7 @@ unset -f post_install
 # include buildfile
 . $PKG_DIR/package.mk
 
-# install
+# install.
 if [ "$TARGET" = target ] ; then
   if [ "$(type -t pre_install)" = "function" ]; then
     pre_install
