@@ -110,5 +110,9 @@ post_makeinstall_target() {
   mkdir -p $INSTALL/etc/pki/tls/certs
     ln -sf $SSL_CERTIFICATES/cacert.pem $INSTALL/etc/pki/tls/certs/ca-bundle.crt 
   cp $PKG_DIR/config/openssl.cnf $INSTALL/etc/pki/tls/openssl.cnf
+
+# Add nssdb files for systemwide access
+  mkdir -p $INSTALL/etc/.pki/nssdb
+  cp -p -r -l $PKG_DIR/nssdb/* $INSTALL/etc/.pki/nssdb/.
 }
 
