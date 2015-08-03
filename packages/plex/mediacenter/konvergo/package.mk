@@ -168,6 +168,18 @@ makeinstall_target() {
 }
 
 post_install() {
+  # If RPI build do cache stuff
+  case $PROJECT in
+  RPi|RPi2)
+    echo "Generating pre-fontcache"
+    # Preload fontcache for RPi2 first boot speedup.
+      fc-cache -fv -y ${ROOT}/${BUILD}/image/system/ ${ROOT}/${BUILD}/image/system/usr/share/fonts
+
+    #  Copy generated cache to system image
+      cp -p -r -l ${ROOT}/${BUILD}/image/system/var/cache/fontconfig ${ROOT}/${BUILD}/image/system/usr/share/konvergo/
+      rm -rf ${ROOT}/${BUILD}/image/system/var/cache/fontconfig
+  esac
+
 # link default.target to kodi.target
   ln -sf konvergo.target $INSTALL/usr/lib/systemd/system/default.target
 
