@@ -53,6 +53,7 @@ PKG_CONFIGURE_OPTS_TARGET="bash_cv_have_mbstate_t=set \
                            --disable-libquadmath-support \
                            --enable-libada \
                            --enable-libssp \
+                           --without-python \
                            --disable-werror"
 
 ### PLEX : install gdb and gdbserver
