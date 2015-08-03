@@ -41,7 +41,7 @@ fi
 STAMP=$STAMPS_INSTALL/$PACKAGE_NAME/install_$TARGET
 mkdir -p $STAMPS_INSTALL/$PACKAGE_NAME
 
-[ -f $STAMP ] && exit 0
+[ -f $STAMP -a $FORCE_INSTALL = "no" ] && exit 0
 
 if [ -n "$PKG_ARCH" -a ! "$PKG_ARCH" = "any" ]; then
   echo "$PKG_ARCH" | grep -q "$TARGET_ARCH" || exit 0
@@ -141,6 +141,7 @@ if [ "$TARGET" = target ] ; then
     pre_install
   fi
 fi
+<<<<<<< HEAD
 
 if [ "$TARGET" = "target" -a -d $PKG_BUILD/.install_pkg ]; then
   mkdir -p $INSTALL
@@ -171,4 +172,21 @@ for i in `sed -n "s/^\([^#].*\)=\".*$/\1/p" $PROJECT_DIR/$PROJECT/options | grep
   eval val=\$$i
   echo "STAMP_$i=\"$val"\" >> $STAMP
 done
+=======
+
+if [ "$TARGET" = "target" -a -d $PKG_BUILD/.install_pkg ]; then
+  mkdir -p $INSTALL
+  cp -PR $PKG_BUILD/.install_pkg/* $INSTALL
+elif [ "$TARGET" = "init" -a -d $PKG_BUILD/.install_init ]; then
+  mkdir -p $INSTALL
+  cp -PR $PKG_BUILD/.install_init/* $INSTALL
+fi
+
+if [ "$TARGET" = target ] ; then
+  if [ "$(type -t post_install)" = "function" ]; then
+    post_install
+  fi
+fi
+
+>>>>>>> (cosmetics) scripts/install: cosmetics
 touch $STAMP
