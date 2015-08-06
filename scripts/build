@@ -344,10 +344,18 @@ if [ ! -f $STAMP ]; then
 
           find $INSTALL -type d -exec rmdir -p "{}" ";" 2>/dev/null || true
 
+### PLEX
+grep -v -e "mpv.*/.install_pkg|ffmpeg.*/.install_pkg|konvergo.*/.install_pkg"
           if [ ! "$DEBUG" = yes ]; then
-            $STRIP `find $INSTALL -name "*.so" 2>/dev/null` 2>/dev/null || :
-            $STRIP `find $INSTALL -name "*.so.[0-9]*" 2>/dev/null` 2>/dev/null || :
+            if [ "$PLEX_DEBUG" = yes ]; then
+              $STRIP `find $INSTALL -name "*.so" | grep -v -e "mpv.*|ffmpeg.*|konvergo.*" 2>/dev/null` 2>/dev/null || :
+              $STRIP `find $INSTALL -name "*.so.[0-9]*" | grep -v -e "mpv.*|ffmpeg.*|konvergo.*" 2>/dev/null` 2>/dev/null || :
+            else
+              $STRIP `find $INSTALL -name "*.so" 2>/dev/null` 2>/dev/null || :
+              $STRIP `find $INSTALL -name "*.so.[0-9]*" 2>/dev/null` 2>/dev/null || :
+            fi
           fi
+### END PLEX
         fi
       fi
 
