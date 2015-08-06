@@ -345,7 +345,6 @@ if [ ! -f $STAMP ]; then
           find $INSTALL -type d -exec rmdir -p "{}" ";" 2>/dev/null || true
 
 ### PLEX
-grep -v -e "mpv.*/.install_pkg|ffmpeg.*/.install_pkg|konvergo.*/.install_pkg"
           if [ ! "$DEBUG" = yes ]; then
             if [ "$PLEX_DEBUG" = yes ]; then
               $STRIP `find $INSTALL -name "*.so" | grep -v -e "mpv.*|ffmpeg.*|konvergo.*" 2>/dev/null` 2>/dev/null || :
