@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="icu"
-PKG_VERSION="54_1"
+PKG_VERSION="52_1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -40,7 +40,7 @@ unpack() {
         tar -xzf $SOURCES/${PKG_NAME}/icu4c-$PKG_VERSION-src.tgz -C $BUILD/
         mv $BUILD/icu/source $BUILD/${PKG_NAME}-${PKG_VERSION}
         rm -rf $BUILD/icu
-        cp  $PKG_DIR/icudt54l.dat $BUILD/${PKG_NAME}-${PKG_VERSION}/data/in/
+        cp  $PKG_DIR/icudt52l.dat $BUILD/${PKG_NAME}-${PKG_VERSION}/data/in/
 }
 
 configure_host() {
