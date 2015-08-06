@@ -29,7 +29,7 @@
 
 ### PLEX
   # If running debug on QT it gets really huge and we need a larger image size
-  if [ "$DEBUG" = "yes" ]; then
+  if [ "$DEBUG" = "yes" -o "$PLEX_DEBUG" = "yes" ]; then
     SYSTEM_SIZE=1280
   else
     SYSTEM_SIZE=256
@@ -113,9 +113,9 @@ fi
 
 ### PLEX
   # Sleep because of huge image size
-  if [ "$DEBUG" = "yes" ]; then
+  if [ "$DEBUG" = "yes" -o "$PLEX_DEBUG" = "yes" ]; then
     sleep 1
-  if
+  fi
 ### END PLEX
 
   losetup -o $OFFSET --sizelimit $SIZELIMIT "$LOOP" "$DISK"

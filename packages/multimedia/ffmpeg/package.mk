@@ -77,6 +77,12 @@ else
   FFMPEG_DEBUG="--disable-debug --enable-stripping"
 fi
 
+### PLEX
+if [ "$PLEX_DEBUG" = yes ];then
+  FFMPEG_DEBUG="--enable-debug --disable-stripping"
+fi
+## END PLEX
+
 case "$TARGET_ARCH" in
   arm)
       FFMPEG_CPU=""
