@@ -48,7 +48,7 @@ fi
 
 
 #add gdb tools if we are in debug
-if [ "$DEBUG" = yes ]; then
+if [ "$PLEX_DEBUG" = yes ]; then
 	PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} gdb"
 fi
 
@@ -61,7 +61,7 @@ unpack() {
           git clone --depth 1 -b $PKG_VERSION git@github.com:plexinc/konvergo.git  $BUILD/${PKG_NAME}-${PKG_VERSION}
         fi
 
-	if [ "$DEBUG" = yes ]; then
+	if [ "$PLEX_DEBUG" = yes ]; then
 		cd $BUILD/${PKG_NAME}-${PKG_VERSION}
 
 		#This is used when using QtCreator from the build tree to deploy to /storage root
@@ -88,7 +88,7 @@ configure_target() {
         [ ! -d build ] && mkdir build
         cd build
 
- 	if [ "$DEBUG" = yes ]; then
+ 	if [ "$PLEX_DEBUG" = yes ]; then
           BUILD_TYPE="debug"
         else
           BUILD_TYPE="release"
@@ -150,7 +150,7 @@ makeinstall_target() {
         cp $PKG_DIR/scripts/konvergo_update.sh ${INSTALL}/usr/share/konvergo/scripts/
 
 
-	if [ "$DEBUG" = yes ]; then
+	if [ "$PLEX_DEBUG" = yes ]; then
 		#This allows cross compiler to find the libs that are used by other libs for QT5
                 mkdir -p ${INSTALL}/etc
 		cp $PKG_DIR/ld.so.conf $INSTALL/etc/		
