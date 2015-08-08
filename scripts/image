@@ -106,7 +106,7 @@ fi
   if [ -n "$GIT_HASH" ]; then
     echo "$GIT_HASH" >> $INSTALL/etc/gitrev
   fi
-  
+
 # create /etc/os-release
   echo -e "NAME=\"$DISTRONAME\"" > $INSTALL/etc/os-release
   echo -e "VERSION=\"$OPENELEC_VERSION\"" >> $INSTALL/etc/os-release
@@ -124,7 +124,7 @@ fi
   if [ "$OFFICIAL" = "yes" ]; then
     echo -e "OPENELEC_BUILD=\"official\"" >> $INSTALL/etc/os-release
   else
-    echo -e "OPENELEC_BUILD=\"community\"" >> $INSTALL/etc/os-release
+    echo -e "OPENELEC_BUILD=\"unofficial\"" >> $INSTALL/etc/os-release
   fi
 
 # create /etc/issue
