@@ -114,3 +114,6 @@ hdmi_drive=2
 # all values below this line were inserted from config.txt.bk (your old config)
 # and can be merged with the above values
 ################################################################################
+
+#No rainbow screen upon startup
+disable_splash=1
