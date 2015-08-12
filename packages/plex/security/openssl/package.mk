@@ -112,7 +112,7 @@ post_makeinstall_target() {
   cp $PKG_DIR/config/openssl.cnf $INSTALL/etc/pki/tls/openssl.cnf
 
 # Add nssdb files for systemwide access
-  mkdir -p $INSTALL/etc/.pki/nssdb
+  mkdir -p $INSTALL/etc/pki/nssdb
   cp -p -r -l $PKG_DIR/nssdb/* $INSTALL/etc/pki/nssdb/.
 }
 
