@@ -61,7 +61,7 @@ case $PROJECT in
 							-sysroot ${SYSROOT_PREFIX} \
 							-prefix /usr/local/qt5
                                                         -hostprefix ${ROOT}/${BUILD} \
-                                                        -release \
+                                                        -debug \
                                                         -v \
                                                         -opensource \
                                                         -confirm-license \
@@ -105,7 +105,7 @@ case $PROJECT in
                                                         -prefix /usr/local/qt5 \
                                                         -hostprefix ${ROOT}/${BUILD} \
                                                         -v \
-                                                        -release \
+                                                        -debug \
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
