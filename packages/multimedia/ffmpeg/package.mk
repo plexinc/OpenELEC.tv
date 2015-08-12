@@ -86,7 +86,7 @@ fi
 case "$TARGET_ARCH" in
   arm)
       FFMPEG_CPU=""
-      FFMPEG_TABLES="--enable-hardcoded-tables"
+      FFMPEG_TABLES="--disable-hardcoded-tables"
       FFMPEG_PIC="--enable-pic"
   ;;
   x86_64)
