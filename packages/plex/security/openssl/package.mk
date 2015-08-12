@@ -113,6 +113,6 @@ post_makeinstall_target() {
 
 # Add nssdb files for systemwide access
   mkdir -p $INSTALL/etc/.pki/nssdb
-  cp -p -r -l $PKG_DIR/nssdb/* $INSTALL/etc/.pki/nssdb/.
+  cp -p -r -l $PKG_DIR/nssdb/* $INSTALL/etci/pki/nssdb/.
 }
 
