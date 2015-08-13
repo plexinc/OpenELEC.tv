@@ -244,7 +244,7 @@ IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$P
   chmod 0644 $TARGET_IMG/$IMAGE_NAME.system
 
 ### PLEX
-if [ -z "$MINI_BUILD" ] && [ "$MINI_BUILD" != "true" ]; then
+if [ ! -z "$MINI_BUILD" -o "$MINI_BUILD" != "true" ]; then
   if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" ]; then
 
     RELEASE_DIR="target/$IMAGE_NAME"
@@ -335,6 +335,22 @@ if [ -z "$MINI_BUILD" ] && [ "$MINI_BUILD" != "true" ]; then
         echo "mkimage: boo. now root access (sudo) is required..."
         echo "mkimage: see scripts/image and scripts/mkimage if you dont trust us :)"
         # variables used in image script must be passed
+        if [ -z "$PLEX_DEBUG" -o -z "$DEBUG" ];then
+        sudo env \
+          PATH="$PATH:/sbin" \
+          ROOT="$ROOT" \
+          DEBUG="yes" \
+          TOOLCHAIN="$TOOLCHAIN" \
+          TARGET_IMG="$TARGET_IMG" \
+          IMAGE_NAME="$IMAGE_NAME" \
+          BOOTLOADER="$BOOTLOADER" \
+          KERNEL_NAME="$KERNEL_NAME" \
+          RELEASE_DIR="$RELEASE_DIR" \
+          UUID_SYSTEM="$(uuidgen)" \
+          UUID_STORAGE="$(uuidgen)" \
+          UBOOT_SYSTEM="$UBOOT_SYSTEM" \
+          $SCRIPTS/mkimage
+        else
         sudo env \
           PATH="$PATH:/sbin" \
           ROOT="$ROOT" \
@@ -348,6 +364,7 @@ if [ -z "$MINI_BUILD" ] && [ "$MINI_BUILD" != "true" ]; then
           UUID_STORAGE="$(uuidgen)" \
           UBOOT_SYSTEM="$UBOOT_SYSTEM" \
           $SCRIPTS/mkimage
+        fi
       fi
 
     # create WeTek Play (Amlogic) ZIP update and auto-install packages if requested
