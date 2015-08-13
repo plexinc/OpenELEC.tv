@@ -345,10 +345,10 @@ if [ ! -f $STAMP ]; then
           find $INSTALL -type d -exec rmdir -p "{}" ";" 2>/dev/null || true
 
 ### PLEX
-          if [ ! "$DEBUG" = yes ]; then
+          if [ "$DEBUG" != yes ]; then
             if [ "$PLEX_DEBUG" = yes ]; then
-              $STRIP `find $INSTALL -name "*.so" | grep -v -e "libpthread.*|mpv.*|ffmpeg.*|konvergo.*" 2>/dev/null` 2>/dev/null || :
-              $STRIP `find $INSTALL -name "*.so.[0-9]*" | grep -v -e "libpthread.*|mpv.*|ffmpeg.*|konvergo.*" 2>/dev/null` 2>/dev/null || :
+              $STRIP `find $INSTALL -name "*.so" ! -name "libpthread*" ! -name "libmpv*" ! -name "ffmpeg*" 2>/dev/null` 2>/dev/null || :
+              $STRIP `find $INSTALL -name "*.so.[0-9]*" ! -name "libpthread*" ! -name "libmpv*" ! -name "ffmpeg*" 2>/dev/null` 2>/dev/null || :
             else
               $STRIP `find $INSTALL -name "*.so" 2>/dev/null` 2>/dev/null || :
               $STRIP `find $INSTALL -name "*.so.[0-9]*" 2>/dev/null` 2>/dev/null || :
