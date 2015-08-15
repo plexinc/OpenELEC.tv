@@ -62,7 +62,7 @@
 # additional drivers to install:
 # for a list of additinoal drivers see packages/linux-drivers
 # Space separated list is supported,
-# e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
+# E.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
   ADDITIONAL_DRIVERS="RTL8192CU RTL8192DU RTL8192EU RTL8188EU RTL8812AU"
 
 # build and install bluetooth support (yes / no)
