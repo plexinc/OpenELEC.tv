@@ -34,6 +34,8 @@ PKG_AUTORECONF="no"
 
 PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-cplayer --disable-apple-remote --prefix=${SYSROOT_PREFIX}/usr"
 
+MPV_EXTRA_CFLAGS="-I$PWD/$BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders"
+
 unpack() {
 
         mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
@@ -43,6 +45,10 @@ unpack() {
                 ;;
                 RPi|RPi2)
                 git clone -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
+                # These are needed on RPI only. Without, RPI output support
+                # will not be compiled.
+                mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders || true
+                cp -r $PKG_DIR/GL/ $BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders
                 ;;
         esac
 }
@@ -50,7 +56,7 @@ unpack() {
 configure_target() {
         cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 	./bootstrap.py
-        ./waf configure ${PKG_CONFIGURE_OPTS_TARGET}
+        CFLAGS="$MPV_EXTRA_CFLAGS" ./waf configure ${PKG_CONFIGURE_OPTS_TARGET}
 }
 
 make_target() {
