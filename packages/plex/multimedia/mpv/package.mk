@@ -32,7 +32,7 @@ PKG_LONGDESC="
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-cplayer --disable-apple-remote --prefix=${SYSROOT_PREFIX}/usr"
+PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-libsmbclient --disable-apple-remote --prefix=${SYSROOT_PREFIX}/usr"
 
 MPV_EXTRA_CFLAGS="-I$PWD/$BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders"
 
@@ -70,6 +70,9 @@ makeinstall_target() {
 
 	mkdir -p $INSTALL/usr/lib
         cp ${SYSROOT_PREFIX}/usr/lib/libmpv.so ${INSTALL}/usr/lib
+
+        mkdir -p $INSTALL/usr/bin
+        cp ${SYSROOT_PREFIX}/usr/bin/mpv ${INSTALL}/usr/bin
 
 	cd ${INSTALL}/usr/lib/
 	ln -s libmpv.so libmpv.so.1
