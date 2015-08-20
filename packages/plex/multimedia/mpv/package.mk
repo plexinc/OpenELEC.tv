@@ -44,7 +44,8 @@ unpack() {
                 git clone --depth 1 -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
                 ;;
                 RPi|RPi2)
-                git clone --depth 1 -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
+                # Before changing the subtitle renderer to EGL/GLES
+                git clone --depth 1 -b before_egl git@github.com:wm4/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
                 # These are needed on RPI only. Without, RPI output support
                 # will not be compiled.
                 mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders || true
