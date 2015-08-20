@@ -41,10 +41,10 @@ unpack() {
         mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
         case $PROJECT in
                 Generic)
-                git clone -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
+                git clone --depth 1 -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
                 ;;
                 RPi|RPi2)
-                git clone -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
+                git clone --depth 1 -b $PKG_VERSION git@github.com:mpv-player/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
                 # These are needed on RPI only. Without, RPI output support
                 # will not be compiled.
                 mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders || true
