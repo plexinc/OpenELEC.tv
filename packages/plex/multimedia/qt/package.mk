@@ -26,11 +26,11 @@ PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-everywhere-opensource-src-
 
 case $PROJECT in
 	Generic)
-		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu libXcursor libXtst pciutils  nss libxkbcommon libdrm libXi"
+		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby libXcursor libXtst pciutils  nss libxkbcommon libdrm libXi"
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libXcursor libXtst pciutils pulseaudio nss libxkbcommon"
 	;;
 	RPi|RPi2)
-		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby icu libX11 xrandr libXdmcp libxslt libXcomposite libwebp libevdev libxkbcommon libdrm libXi"
+		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby libX11 xrandr libXdmcp libxslt libXcomposite libwebp libevdev libxkbcommon libdrm libXi"
 		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxkbcommon"
 
 	;;
@@ -111,6 +111,7 @@ case $PROJECT in
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
+                                                        -no-icu \
                                                         -qpa eglfs \
                                                         -no-xcb \
                                                         -no-kms \
