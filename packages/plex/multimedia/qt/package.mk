@@ -70,6 +70,8 @@ case $PROJECT in
                                                         -opengl desktop\
                                                         -make libs \
 							-no-pch \
+							-no-icu \
+							-qpa xcb \
 							-system-xkbcommon \
 							-qt-xcb \
 							-no-sql-sqlite2 \
@@ -293,7 +295,7 @@ makeinstall_target() {
         cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/translations/* ${INSTALL}/usr/local/qt5/translations
 
         cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/qtwebengine_resources.pak ${INSTALL}/usr/local/qt5/qtwebengine_resources.pak
-
+	cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/icudtl.dat ${INSTALL}/usr/local/qt5/icudtl.dat
 
 	#cleanup the plugins
 	case $PROJECT in
