@@ -249,7 +249,18 @@ fi
   chmod 0644 $TARGET_IMG/$IMAGE_NAME.system
 
 ### PLEX
-if [ ! -z "$MINI_BUILD" -a "$MINI_BUILD" != "true" ]; then
+if [ "$MINI_BUILD" = "true" ]; then
+  mkdir -p $BUILD/UPDATE_TEMP/bin
+  mkdir -p $BUILD/UPDATE_TEMP/lib
+  cp -d $BUILD/konvergo-master/.install_pkg/usr/bin/Konvergo $BUILD/UPDATE_TEMP/bin
+  cp -d $BUILD/ffmpeg-master/.install_pkg/usr/bin/ffmpeg $BUILD/UPDATE_TEMP/bin
+  cp -d $BUILD/ffmpeg-master/.install_pkg/usr/lib/* $BUILD/UPDATE_TEMP/lib
+  cp -d $BUILD/mpv-master/.install_pkg/usr/lib/libmpv.so $BUILD/UPDATE_TEMP/lib
+  find $BUILD/UPDATE_TEMP -type f|sort| xargs -n1 md5sum | sed "s|$BUILD/UPDATE_TEMP/||g"|grep -v "md5.txt" > $BUILD/UPDATE_TEMP/md5.txt
+  touch $BUILD/UPDATE_TEMP/konvergo_mini_update
+  tar cf $TARGET_IMG/${IMAGE_NAME}.tar -C $BUILD/UPDATE_TEMP .
+  rm -rf $BUILD/UPDATE_TEMP
+else
   if [ "$1" = "release" -o "$1" = "mkimage" -o "$1" = "amlpkg" ]; then
 
     RELEASE_DIR="target/$IMAGE_NAME"
@@ -523,16 +534,5 @@ if [ ! -z "$MINI_BUILD" -a "$MINI_BUILD" != "true" ]; then
     # cleanup release dir
       rm -rf $RELEASE_DIR
   fi  
-else
-  mkdir -p $BUILD/UPDATE_TEMP/bin
-  mkdir -p $BUILD/UPDATE_TEMP/lib
-  cp -d $BUILD/konvergo-master/.install_pkg/usr/bin/Konvergo $BUILD/UPDATE_TEMP/bin
-  cp -d $BUILD/ffmpeg-master/.install_pkg/usr/bin/ffmpeg $BUILD/UPDATE_TEMP/bin
-  cp -d $BUILD/ffmpeg-master/.install_pkg/usr/lib/* $BUILD/UPDATE_TEMP/lib
-  cp -d $BUILD/mpv-master/.install_pkg/usr/lib/libmpv.so $BUILD/UPDATE_TEMP/lib
-  find $BUILD/UPDATE_TEMP -type f|sort| xargs -n1 md5sum | sed "s|$BUILD/UPDATE_TEMP/||g"|grep -v "md5.txt" > $BUILD/UPDATE_TEMP/md5.txt
-  touch $BUILD/UPDATE_TEMP/konvergo_mini_update
-  tar cf $TARGET_IMG/${IMAGE_NAME}.tar -C $BUILD/UPDATE_TEMP .
-  rm -rf $BUILD/UPDATE_TEMP
 fi
 #END PLEX
