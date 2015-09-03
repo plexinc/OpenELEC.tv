@@ -91,7 +91,7 @@ configure_target() {
  	if [ "$PLEX_DEBUG" = yes ]; then
           BUILD_TYPE="debug"
         else
-          BUILD_TYPE="release"
+          BUILD_TYPE="relwithdebinfo"
         fi
 
         # Configure the build
