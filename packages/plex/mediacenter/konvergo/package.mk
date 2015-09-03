@@ -32,7 +32,7 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://nightlies.plex.tv"
 PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
-PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libX11 xrandr libcec mpv SDL2 libXdmcp breakpad libconnman-qt strace"
+PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libX11 xrandr libcec mpv SDL2 libXdmcp breakpad breakpad:host libconnman-qt strace"
 PKG_DEPENDS_HOST="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="mediacenter"
@@ -109,24 +109,25 @@ configure_target() {
                         -DENABLE_MPV=on \
                         -DCMAKE_VERBOSE_MAKEFILE=on \
                         -DOPENELEC=on \
+                        -DENABLE_DUMP_SYMBOLS=on \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
 
         	RPi|RPi2)
 		cmake \
-			-DCMAKE_INSTALL_PREFIX=/usr \
-			-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-			-DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
-			-DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
-			-DCMAKE_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include" \
-			-DQTROOT=${SYSROOT_PREFIX}/usr/local/qt5 \
-			-DCMAKE_FIND_ROOT_PATH="${SYSROOT_PREFIX}/usr/local/qt5" \
-			-DUSE_QTQUICK=on \
-			-DENABLE_MPV=on \
-			-DBUILD_TARGET="RPI" \
-			-DCMAKE_VERBOSE_MAKEFILE=on \
-			-DOPENELEC=on \
-			-DBUILD_TARGET="RPI" \
+                        -DCMAKE_INSTALL_PREFIX=/usr \
+                        -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+                        -DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
+                        -DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
+                        -DCMAKE_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include" \
+                        -DQTROOT=${SYSROOT_PREFIX}/usr/local/qt5 \
+                        -DCMAKE_FIND_ROOT_PATH="${SYSROOT_PREFIX}/usr/local/qt5" \
+                        -DUSE_QTQUICK=on \
+                        -DENABLE_MPV=on \
+                        -DBUILD_TARGET="RPI" \
+                        -DCMAKE_VERBOSE_MAKEFILE=on \
+                        -DOPENELEC=on \
+                        -DENABLE_DUMP_SYMBOLS=on \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
 
 		#make the Qt JPEG hardware decoding plugin
@@ -191,4 +192,6 @@ post_install() {
   enable_service konvergo.target
   enable_service konvergo-waitonnetwork.service
 
+# copy debug symbols
+  cp ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/build/src/Konvergo.symbols.xz $ROOT/target
 }
