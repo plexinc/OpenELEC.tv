@@ -91,7 +91,8 @@ configure_target() {
  	if [ "$PLEX_DEBUG" = yes ]; then
           BUILD_TYPE="debug"
         else
-          BUILD_TYPE="relwithdebinfo"
+          BUILD_TYPE="RelWithDebInfo"
+          strip_strip
         fi
 
         # Configure the build
@@ -141,6 +142,9 @@ configure_target() {
 
 makeinstall_target() {
 
+        #strips the binary
+        $STRIP $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/Konvergo
+	
   	mkdir -p $INSTALL/usr/bin
         cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/Konvergo ${INSTALL}/usr/bin/
 
