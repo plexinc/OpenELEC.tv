@@ -42,6 +42,8 @@ PKG_LONGDESC="Plex Konvergo is the king or PC clients for Plex :P"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+PLEX_DUMP_SYMBOLS=yes
+
 if [ "$KODI_SAMBA_SUPPORT" = yes ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET samba"
 fi
@@ -92,7 +94,6 @@ configure_target() {
           BUILD_TYPE="debug"
         else
           BUILD_TYPE="RelWithDebInfo"
-          strip_strip
         fi
 
         # Configure the build
@@ -141,10 +142,6 @@ configure_target() {
 }
 
 makeinstall_target() {
-
-        #strips the binary
-        $STRIP $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/Konvergo
-	
   	mkdir -p $INSTALL/usr/bin
         cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/Konvergo ${INSTALL}/usr/bin/
 
