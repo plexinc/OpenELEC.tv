@@ -161,6 +161,12 @@ fi
     fi
   fi
 
+### PLEX
+if [ "$PLEX_DUMP_SYMBOLS" = "yes" ]; then
+  cp $PKG_DIR/.symbols/* $ROOT/target
+fi
+### END PLEX
+
 for i in `sed -n "s/^\([^#].*\)=\".*$/\1/p" $PROJECT_DIR/$PROJECT/options | grep -v "#"`; do
   eval val=\$$i
   echo "STAMP_$i=\"$val"\" >> $STAMP

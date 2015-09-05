@@ -318,6 +318,25 @@ if [ ! -f $STAMP ]; then
         post_makeinstall_$TARGET
       fi
 
+      ### PLEX
+      if [ "$PLEX_DUMP_SYMBOLS" = "yes" ]; then
+	# create the symbols dump directory
+        PLEX_DUMP_DIR=$PKG_DIR/.symbols
+        rm -rf $PLEX_DUMP_DIR || true
+        mkdir $PLEX_DUMP_DIR 
+	
+        echo "Symbols dump : processing package $PKG_NAME"
+	PLEX_DUMP_LIBRARIES=`find $INSTALL -name "*.so*" -type f`
+	PLEX_DUMP_BINARIES=`find $INSTALL ! -name "*.*" -type f -executable`
+
+	for i in  $PLEX_DUMP_LIBRARIES $PLEX_DUMP_BINARIES; do
+          PLEX_DUMP_FILE_NAME=`basename $i`
+          echo " Dumping symbols for $PLEX_DUMP_FILE_NAME..."
+          $ROOT/$TOOLCHAIN/bin/dump_syms $i | xz > $PLEX_DUMP_DIR/$PLEX_DUMP_FILE_NAME.symbols.xz
+        done
+      fi
+      ### END PLEX
+
       if [ "$TARGET" = "target" -o "$TARGET" = "init" ]; then
        if [ -d $INSTALL ] ; then
          for i in $INSTALL $INSTALL/usr; do
