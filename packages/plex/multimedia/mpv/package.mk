@@ -34,6 +34,8 @@ PKG_AUTORECONF="no"
 
 PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-libsmbclient --disable-apple-remote --prefix=${SYSROOT_PREFIX}/usr"
 
+PLEX_DUMP_SYMBOLS=yes
+
 MPV_EXTRA_CFLAGS="-I$PWD/$BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders"
 
 unpack() {
