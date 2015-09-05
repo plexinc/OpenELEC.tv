@@ -44,6 +44,8 @@ PKG_LONGDESC="Qt GUI toolkit"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+PLEX_DUMP_SYMBOLS=yes
+
 case $PROJECT in
         RPi)
 	ARM_COMPILER_PREFIX="armv6zk-openelec-linux-gnueabi-"
@@ -62,6 +64,7 @@ case $PROJECT in
 							-prefix /usr/local/qt5
                                                         -hostprefix ${ROOT}/${BUILD} \
                                                         -release \
+                                                        --force-debug-info \
                                                         -v \
                                                         -opensource \
                                                         -confirm-license \
@@ -108,6 +111,7 @@ case $PROJECT in
                                                         -hostprefix ${ROOT}/${BUILD} \
                                                         -v \
                                                         -release \
+                                                        --force-debug-info \
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
