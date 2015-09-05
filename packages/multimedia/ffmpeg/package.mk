@@ -33,6 +33,8 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 ### PLEX
+PLEX_DUMP_SYMBOLS=yes
+
 unpack() {
 
 case $PROJECT in
@@ -78,9 +80,7 @@ else
 fi
 
 ### PLEX
-if [ "$PLEX_DEBUG" = yes ];then
   FFMPEG_DEBUG="--enable-debug --disable-stripping"
-fi
 ## END PLEX
 
 case "$TARGET_ARCH" in
@@ -248,4 +248,9 @@ configure_target() {
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/share/ffmpeg/examples
+   
+  ### PLEX 
+  # We dont need the ffmpeg binaries
+  rm -rf $INSTALL/usr/bin
+  ### END PLEX
 }
