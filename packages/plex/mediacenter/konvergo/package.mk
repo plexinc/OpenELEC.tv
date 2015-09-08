@@ -146,9 +146,7 @@ makeinstall_target() {
         cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/Konvergo ${INSTALL}/usr/bin/
 
 	mkdir -p $INSTALL/usr/share/konvergo $INSTALL/usr/share/konvergo/scripts
-        mkdir -p $INSTALL/usr/share/fonts
 	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/konvergo
-        cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/share/fonts/* ${INSTALL}/usr/share/fonts/
         cp $PKG_DIR/scripts/konvergo_update.sh ${INSTALL}/usr/share/konvergo/scripts/
 
 
