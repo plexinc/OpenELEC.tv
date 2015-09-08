@@ -37,14 +37,7 @@ PLEX_DUMP_SYMBOLS=yes
 
 unpack() {
 
-case $PROJECT in
-	Generic)
-        git clone --depth 1 -b $PKG_VERSION git@github.com:FFmpeg/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
-	;;
-	RPi|RPi2)
-        git clone --depth 1 -b $PKG_VERSION git@github.com:FFmpeg/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
-	;;
-esac
+        git clone --depth 1 -b $PKG_VERSION git@github.com:wm4/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
 
 }
 ### END PLEX
