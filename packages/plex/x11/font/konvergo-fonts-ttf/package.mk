@@ -38,7 +38,7 @@ make_target() {
 
 makeinstall_target() {
   mkdir -p $INSTALL/usr/share/fonts/konvergo
-    cp *.ttf $INSTALL/usr/share/fonts/konvergo
+    cp *.ttf *.ttc $INSTALL/usr/share/fonts/konvergo
 }
 
 post_install() {
