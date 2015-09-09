@@ -326,7 +326,7 @@ if [ ! -f $STAMP ]; then
         mkdir $PLEX_DUMP_DIR 
 	
         echo "Symbols dump : processing package $PKG_NAME"
-	PLEX_DUMP_LIBRARIES=`find $INSTALL -name "*.so*" -type f`
+	PLEX_DUMP_LIBRARIES=`find $INSTALL -name "*.so" -type f -follow`
 	PLEX_DUMP_BINARIES=`find $INSTALL ! -name "*.*" -type f -executable`
 
 	for i in  $PLEX_DUMP_LIBRARIES $PLEX_DUMP_BINARIES; do
