@@ -32,7 +32,7 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://nightlies.plex.tv"
 PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
-PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libX11 xrandr libcec mpv SDL2 libXdmcp breakpad breakpad:host libconnman-qt strace konvergo-fonts-ttf"
+PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libX11 xrandr libcec mpv SDL2 libXdmcp breakpad breakpad:host libconnman-qt strace konvergo-fonts-ttf fc-cache"
 PKG_DEPENDS_HOST="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="mediacenter"
@@ -191,6 +191,7 @@ post_install() {
   enable_service konvergo.target
   enable_service konvergo-waitonnetwork.service
 
-# copy debug symbols
-  cp ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/build/src/Konvergo.symbols.xz $ROOT/target
+  echo "Generating pre-fontcache"
+  export FONTCONFIG_FILE=$ROOT/$BUILD/image/system/etc/fonts/fonts.conf
+  $ROOT/$TOOLCHAIN/bin/fc-cache -fv  -y ${ROOT}/${BUILD}/image/system /usr/share/fonts
 }
