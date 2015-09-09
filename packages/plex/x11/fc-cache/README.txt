@@ -6,6 +6,6 @@ To build the pre-cache fc-cache use the following from a 64 bits ubuntu build ho
 * make -j8
 
 - Intel (64 bits)
-* ./configure  --with-default-fonts=/usr/share/fonts --without-add-fonts --disable-dependency-tracking --disable-docs --enable-static --disable-shared --with-cache-dir=/usr/share/konvergo/fc-cache$
+* ./configure  --with-default-fonts=/usr/share/fonts --without-add-fonts --disable-dependency-tracking --disable-docs --enable-static --disable-shared --with-cache-dir=/usr/share/konvergo/fc-cache --with-arch=x86_64
 * make -j8
 
