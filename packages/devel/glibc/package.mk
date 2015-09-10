@@ -171,7 +171,7 @@ makeinstall_init() {
   mkdir -p $INSTALL/lib
     cp -PR $ROOT/$PKG_BUILD/.$TARGET_NAME/elf/ld*.so* $INSTALL/lib
     cp $ROOT/$PKG_BUILD/.$TARGET_NAME/libc.so.6 $INSTALL/lib
-    ### PLEX : we want all libpthead libs deployed otherwise doesnt allow gdb thread debug
+    ### PLEX : we want all libpthead libs deployed otherwise doesnt allow gdb thread debug.
     cp $ROOT/$PKG_BUILD/.$TARGET_NAME/nptl/libpthread.so* $INSTALL/lib
     ### END PLEX
     cp -PR $ROOT/$PKG_BUILD/.$TARGET_NAME/rt/librt.so* $INSTALL/lib
