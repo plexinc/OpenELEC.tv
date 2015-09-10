@@ -171,6 +171,7 @@ makeinstall_init() {
     ### PLEX : we want all libpthead libs deployed otherwise doesnt allow gdb thread debug
     cp $ROOT/$PKG_BUILD/.$TARGET_NAME/nptl/libpthread.so* $INSTALL/lib
     ### END PLEX
+    cp $ROOT/$PKG_BUILD/.$TARGET_NAME/rt/librt.so* $INSTALL/lib
 
     if [ "$TARGET_ARCH" = "arm" -a "$TARGET_FLOAT" = "hard" ]; then
       ln -sf ld.so $INSTALL/lib/ld-linux.so.3
