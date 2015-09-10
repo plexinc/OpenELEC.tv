@@ -251,7 +251,10 @@ fi
 ### PLEX
 if [ "$MINI_BUILD" = "true" ]; then
   mkdir -p $BUILD/UPDATE_TEMP/bin
+  mkdir -p $BUILD/UPDATE_TEMP/lib
   cp -d $BUILD/konvergo-master/.install_pkg/usr/bin/Konvergo $BUILD/UPDATE_TEMP/bin
+  cp -d $BUILD/ffmpeg-master/.install_pkg/usr/lib/* $BUILD/UPDATE_TEMP/lib
+  cp -d $BUILD/mpv-master/.install_pkg/usr/lib/libmpv.so $BUILD/UPDATE_TEMP/lib
   find $BUILD/UPDATE_TEMP -type f|sort| xargs -n1 md5sum | sed "s|$BUILD/UPDATE_TEMP/||g"|grep -v "md5.txt" > $BUILD/UPDATE_TEMP/md5.txt
   touch $BUILD/UPDATE_TEMP/konvergo_mini_update
   tar cf $TARGET_IMG/${IMAGE_NAME}.tar -C $BUILD/UPDATE_TEMP .
