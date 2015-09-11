@@ -144,6 +144,7 @@ configure_target() {
 makeinstall_target() {
   	mkdir -p $INSTALL/usr/bin
         cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/Konvergo ${INSTALL}/usr/bin/
+	cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/KonvergoHelper ${INSTALL}/usr/bin/
 
 	mkdir -p $INSTALL/usr/share/konvergo $INSTALL/usr/share/konvergo/scripts
 	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/konvergo
