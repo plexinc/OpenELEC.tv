@@ -44,18 +44,18 @@ fi
 ### PLEX
 # Use set GIT_TOKEN variable to ?token=<git_token> before running.
 if [ "`curl -sL -w "%{http_code}\\n" --user "plex-konvergo:$GIT_TOKEN" https://raw.githubusercontent.com/plexinc/konvergo/master/CMakeModules/VersionConfiguration.cmake -o /dev/null`" = "200" ]; then
-  KONVERGO_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/konvergo/master/CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g'`"
+  PLEX_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/konvergo/master/CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g'`"
 else
-  KONVERGO_VERSION="dev"
+  PLEX_VERSION="dev"
 fi
-KONVERGO_GITSHA=`git ls-remote git@github.com:plexinc/konvergo.git HEAD|awk '{print substr($0,0,8)}'`
+PLEX_GITSHA=`git ls-remote git@github.com:plexinc/konvergo.git HEAD|awk '{print substr($0,0,8)}'`
 
 TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
 
 if [ "$CIDEBUG" = yes ]; then
-  IMAGE_NAME="KonvergoEmbeddedDebug-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$PROJECT-$TARGET_ARCH"
+  IMAGE_NAME="${MEDIACENTER}EmbeddedDebug-$PLEX_VERSION.$BUILD_NUMBER-$PLEX_GITSHA.$PROJECT-$TARGET_ARCH"
 else
-  IMAGE_NAME="KonvergoEmbedded-$KONVERGO_VERSION.$BUILD_NUMBER-$KONVERGO_GITSHA.$PROJECT-$TARGET_ARCH"
+  IMAGE_NAME="${MEDIACENTER}Embedded-$PLEX_VERSION.$BUILD_NUMBER-$PLEX_GITSHA.$PROJECT-$TARGET_ARCH"
 fi
 #END PLEX
 

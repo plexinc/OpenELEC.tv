@@ -16,7 +16,7 @@
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-PKG_NAME="konvergo"
+PKG_NAME="${MEDIACENTER,,}"
 
 case $PROJECT in
      Generic)
@@ -32,12 +32,12 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://nightlies.plex.tv"
 PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
-PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libX11 xrandr libcec mpv SDL2 libXdmcp breakpad breakpad:host libconnman-qt strace konvergo-fonts-ttf fc-cache"
+PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libX11 xrandr libcec mpv SDL2 libXdmcp breakpad breakpad:host libconnman-qt strace ${MEDIACENTER,,}-fonts-ttf fc-cache"
 PKG_DEPENDS_HOST="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="mediacenter"
-PKG_SHORTDESC="Plex Konvergo Mediacenter"
-PKG_LONGDESC="Plex Konvergo is the king or PC clients for Plex :P"
+PKG_SHORTDESC="Plex Mediacenter"
+PKG_LONGDESC="Plex is the king or PC clients for Plex :P"
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
@@ -79,7 +79,7 @@ unpack() {
 #        WEB_CLIENT_VERSION=`cat $BUILD/${PKG_NAME}-${PKG_VERSION}/CMakeModules/WebClientVariables.cmake|awk '/WEB_CLIENT_VERSION/ {gsub(")$","") ; print $2}'`
 #        mkdir -p cd $BUILD/${PKG_NAME}-${PKG_VERSION}/build/src
 #	cd $BUILD/${PKG_NAME}-${PKG_VERSION}/build/src
-#        wget https://nightlies.plex.tv/directdl/plex-web-client-konvergo/master/plex-web-client-konvergo-${WEB_CLIENT_VERSION}.cpp.bz2 -O web-client-${WEB_CLIENT_VERSION}.cpp.bz2
+#        wget https://nightlies.plex.tv/directdl/plex-web-client-${MEDIACENTER,,}/master/plex-web-client-${MEDIACENTER,,}-${WEB_CLIENT_VERSION}.cpp.bz2 -O web-client-${WEB_CLIENT_VERSION}.cpp.bz2
 	cd ${ROOT}	
 }
 
@@ -143,12 +143,12 @@ configure_target() {
 
 makeinstall_target() {
   	mkdir -p $INSTALL/usr/bin
-        cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/Konvergo ${INSTALL}/usr/bin/
-	cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/KonvergoHelper ${INSTALL}/usr/bin/
+        cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/${MEDIACENTER} ${INSTALL}/usr/bin/
+	cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/${MEDIACENTER}Helper ${INSTALL}/usr/bin/
 
-	mkdir -p $INSTALL/usr/share/konvergo $INSTALL/usr/share/konvergo/scripts
-	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/konvergo
-        cp $PKG_DIR/scripts/konvergo_update.sh ${INSTALL}/usr/share/konvergo/scripts/
+	mkdir -p $INSTALL/usr/share/${MEDIACENTER,,} $INSTALL/usr/share/${MEDIACENTER,,}/scripts
+	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/${MEDIACENTER,,}
+        cp $PKG_DIR/scripts/${MEDIACENTER,,}_update.sh ${INSTALL}/usr/share/${MEDIACENTER,,}/scripts/
 
 
 	if [ "$PLEX_DEBUG" = yes ]; then
@@ -170,13 +170,13 @@ makeinstall_target() {
 
 post_install() {
 # link default.target to kodi.target
-  ln -sf konvergo.target $INSTALL/usr/lib/systemd/system/default.target
+  ln -sf ${MEDIACENTER,,}.target $INSTALL/usr/lib/systemd/system/default.target
 
 # enable default services
-  enable_service konvergo-autostart.service
-  enable_service konvergo.service
-  enable_service konvergo.target
-  enable_service konvergo-waitonnetwork.service
+  enable_service ${MEDIACENTER,,}-autostart.service
+  enable_service ${MEDIACENTER,,}.service
+  enable_service ${MEDIACENTER,,}.target
+  enable_service ${MEDIACENTER,,}-waitonnetwork.service
 
 # install plex splash screen
   cp $PKG_DIR/oemsplash.png $INSTALL/flash
@@ -184,13 +184,13 @@ post_install() {
 
 post_install() {
 # link default.target to kodi.target
-  ln -sf konvergo.target $INSTALL/usr/lib/systemd/system/default.target
+  ln -sf ${MEDIACENTER,,}.target $INSTALL/usr/lib/systemd/system/default.target
 
 # enable default services
-  enable_service konvergo-autostart.service
-  enable_service konvergo.service
-  enable_service konvergo.target
-  enable_service konvergo-waitonnetwork.service
+  enable_service ${MEDIACENTER,,}-autostart.service
+  enable_service ${MEDIACENTER,,}.service
+  enable_service ${MEDIACENTER,,}.target
+  enable_service ${MEDIACENTER,,}-waitonnetwork.service
 
   echo "Generating pre-fontcache"
   export FONTCONFIG_FILE=$ROOT/$BUILD/image/system/etc/fonts/fonts.conf
