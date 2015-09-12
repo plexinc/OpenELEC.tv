@@ -24,7 +24,7 @@ PKG_LICENSE="GPL"
 PKG_SITE="http://www.openelec.tv"
 PKG_URL=""
 ### PLEX : set our own mediacenter
-PKG_DEPENDS_TARGET="toolchain $MEDIACENTER"
+PKG_DEPENDS_TARGET="toolchain ${MEDIACENTER,,}"
 PKG_PRIORITY="optional"
 PKG_SECTION="virtual"
 PKG_SHORTDESC="Mediacenter: Metapackage"

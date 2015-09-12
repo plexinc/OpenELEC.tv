@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="breakpad"
-PKG_VERSION="konvergo"
+PKG_VERSION="${MEDIACENTER,,}"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

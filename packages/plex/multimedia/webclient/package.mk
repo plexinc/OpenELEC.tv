@@ -42,9 +42,9 @@ make_target() {
 
 makeinstall_target() {
 
-	mkdir -p $INSTALL/usr/share/konvergo/webclient
-        cp -R ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/* $INSTALL/usr/share/konvergo/webclient
-	mkdir -p ${ROOT}/${BUILD}/konvergo-master/web-client/build/
-	cp -R ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/* ${ROOT}/${BUILD}/konvergo-master/web-client/build/
+	mkdir -p $INSTALL/usr/share/${MEDIACENTER,,}/webclient
+        cp -R ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/* $INSTALL/usr/share/${MEDIACENTER,,}/webclient
+	mkdir -p ${ROOT}/${BUILD}/${MEDIACENTER,,}-master/web-client/build/
+	cp -R ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/* ${ROOT}/${BUILD}/${MEDIACENTER,,}-master/web-client/build/
         cd ${ROOT}
 }

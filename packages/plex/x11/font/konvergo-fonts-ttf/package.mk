@@ -16,7 +16,7 @@
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-PKG_NAME="konvergo-fonts-ttf"
+PKG_NAME="${MEDIACENTER,,}-fonts-ttf"
 PKG_VERSION="1"
 PKG_REV="1"
 PKG_ARCH="any"
@@ -26,8 +26,8 @@ PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="x11/fonts"
-PKG_SHORTDESC="konvergo fonts"
-PKG_LONGDESC="konvergo fonts"
+PKG_SHORTDESC="Plex Mediacenter fonts"
+PKG_LONGDESC="Plex Mediacenter fonts"
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
@@ -37,11 +37,11 @@ make_target() {
 }
 
 makeinstall_target() {
-  mkdir -p $INSTALL/usr/share/fonts/konvergo
-    cp *.ttf *.ttc $INSTALL/usr/share/fonts/konvergo
+  mkdir -p $INSTALL/usr/share/fonts/${MEDIACENTER,,}
+    cp *.ttf *.ttc $INSTALL/usr/share/fonts/${MEDIACENTER,,}
 }
 
 post_install() {
-  mkfontdir $INSTALL/usr/share/fonts/konvergo
-  mkfontscale $INSTALL/usr/share/fonts/konvergo
+  mkfontdir $INSTALL/usr/share/fonts/${MEDIACENTER,,}
+  mkfontscale $INSTALL/usr/share/fonts/${MEDIACENTER,,}
 }
