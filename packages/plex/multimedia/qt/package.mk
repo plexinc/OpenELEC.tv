@@ -99,7 +99,7 @@ case $PROJECT in
                                                         -skip qtxmlpatterns \
                                                         -skip qttranslations \
                                                         -skip qtmultimedia \
-                                                        -skip qtwebkit \
+                                                        -skip qtquickcontrols2 \
                                                         -skip qt3d \
                                                         -nomake examples \
                                                         -nomake tests"
@@ -150,7 +150,7 @@ case $PROJECT in
                                                         -skip qtxmlpatterns \
                                                         -skip qttranslations \
                                                         -skip qtmultimedia \
-                                                        -skip qtwebkit \
+                                                        -skip qtquickcontrols2 \
                                                         -skip qt3d \
 							"
         ;;
