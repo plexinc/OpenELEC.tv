@@ -17,7 +17,7 @@
 #  ################################################################################
 
 PKG_NAME="qt"
-PKG_VERSION="5.5.0"
+PKG_VERSION="5.6.0-alpha"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -26,11 +26,11 @@ PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-everywhere-opensource-src-
 
 case $PROJECT in
 	Generic)
-		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby libXcursor libXtst pciutils  nss libxkbcommon libdrm libXi"
+		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby libXcursor libXtst pciutils  nss libxkbcommon libdrm libXi atk"
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libXcursor libXtst pciutils pulseaudio nss libxkbcommon"
 	;;
 	RPi|RPi2)
-		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby libX11 xrandr libXdmcp libxslt libXcomposite libwebp libevdev libxkbcommon libdrm libXi"
+		PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby libX11 xrandr libXdmcp libxslt libXcomposite libwebp libevdev libxkbcommon libdrm libXi atk"
 		PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libxkbcommon"
 
 	;;
@@ -89,12 +89,10 @@ case $PROJECT in
                                                         -skip qtgraphicaleffects \
                                                         -skip qtlocation \
                                                         -skip qtmacextras \
-                                                        -skip qtquick1 \
                                                         -skip qtscript \
                                                         -skip qtsensors \
                                                         -skip qtserialport \
                                                         -skip qtwayland \
-                                                        -skip qtwebkit-examples \
                                                         -skip qtwinextras \
                                                         -skip qtxmlpatterns \
                                                         -skip qttranslations \
@@ -139,12 +137,10 @@ case $PROJECT in
                                                         -skip qtgraphicaleffects \
                                                         -skip qtlocation \
                                                         -skip qtmacextras \
-                                                        -skip qtquick1 \
                                                         -skip qtscript \
                                                         -skip qtsensors \
                                                         -skip qtserialport \
                                                         -skip qtwayland \
-                                                        -skip qtwebkit-examples \
                                                         -skip qtwinextras \
                                                         -skip qtx11extras \
                                                         -skip qtxmlpatterns \
