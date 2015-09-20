@@ -9,7 +9,7 @@
   GREETING1="# ......... PlexMediaPlayer - Plex ......... #"
   GREETING2="# ........... visit https//plex.tv ......... #"
   GREETING3="##############################################"
-  GREETING4=""
+  GREETING4=" "
 
 # Root password to integrate in the target system
   ROOT_PASSWORD="plex"
