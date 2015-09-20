@@ -17,6 +17,9 @@
 # Mediacenter to use (kodi / Plex Client / no)
   MEDIACENTER="PlexMediaPlayer"
 
+# Install glibc locales to the build (yes / no)
+  GLIBC_LOCALES="yes"
+
 # Skins to install (Confluence)
 # Space separated list is supported,
 # e.g. SKINS="Confluence"
