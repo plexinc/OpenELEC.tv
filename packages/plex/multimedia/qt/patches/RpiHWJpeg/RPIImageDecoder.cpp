@@ -53,6 +53,9 @@ namespace
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     FILE *logFile=NULL;
 
+    // decoding mutex : RPI HW decoder can only safely process one decode at a time
+    pthread_mutex_t decode_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 } // namespace
 
 namespace blink
@@ -72,15 +75,6 @@ namespace blink
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    bool RPIImageDecoder::isSizeAvailable()
-    {
-        if (!ImageDecoder::isSizeAvailable())
-            decode(true);
-
-        return ImageDecoder::isSizeAvailable();
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
     bool RPIImageDecoder::setSize(unsigned width, unsigned height)
     {
         if (!ImageDecoder::setSize(width, height))
@@ -89,7 +83,14 @@ namespace blink
         if (!desiredScaleNumerator())
             return setFailed();
 
+        setDecodedSize(width, height);
         return true;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    void RPIImageDecoder::setDecodedSize(unsigned width, unsigned height)
+    {
+        m_decodedSize = IntSize(width, height);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,35 +107,6 @@ namespace blink
                                                                   static_cast<float>(m_maxDecodedBytes * scaleDenominator * scaleDenominator / originalBytes))));
 
         return scaleNumerator;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ImageFrame* RPIImageDecoder::frameBufferAtIndex(size_t index)
-    {
-        if (index)
-            return 0;
-
-        if (m_frameBufferCache.isEmpty()) {
-            m_frameBufferCache.resize(1);
-            m_frameBufferCache[0].setPremultiplyAlpha(m_premultiplyAlpha);
-        }
-
-        ImageFrame& frame = m_frameBufferCache[0];
-        if (frame.status() != ImageFrame::FrameComplete) {
-            PlatformInstrumentation::willDecodeImage(platformDecode());
-            decode(false);
-            PlatformInstrumentation::didDecodeImage();
-        }
-
-        frame.notifyBitmapIfPixelsChanged();
-        return &frame;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    bool RPIImageDecoder::setFailed()
-    {
-        log("setFailed");
-        return ImageDecoder::setFailed();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,6 +158,9 @@ namespace blink
                 buffer.setHasAlpha(false);
             }
 
+            // lock the mutex so that we only process once at a time
+            pthread_mutex_lock(&decode_mutex);
+
             // setup decoder request information
             BRCMIMAGE_REQUEST_T* dec_request = getDecoderRequest();
             BRCMIMAGE_T *decoder = getDecoder();
@@ -228,15 +203,17 @@ namespace blink
                 unsigned long copymillis = (end - copy) * 1000 / CLOCKS_PER_SEC;
 
                 log("decode : image (%d x %d)(Alpha=%d) decoded in %d ms (copy in %d ms), source size = %d bytes", width, height, m_hasAlpha, millis, copymillis, m_data->size());
-                return;
 
             }
             else
             {
                 log("decode : Decoding failed with status %d", status);
-                return;
             }
+
+            pthread_mutex_unlock(&decode_mutex);
         }
+
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////

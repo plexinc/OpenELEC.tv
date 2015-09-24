@@ -45,10 +45,8 @@ namespace blink
         // ImageDecoder
         virtual String filenameExtension() const override { return "jpg"; }
         virtual char* platformDecode() { return (char*)"JPEG"; }
-        virtual bool isSizeAvailable() override;
+        IntSize decodedSize() const override { return m_decodedSize; }
         virtual bool setSize(unsigned width, unsigned height) override;
-        virtual ImageFrame* frameBufferAtIndex(size_t) override;
-        virtual bool setFailed() override;
 
         virtual bool readSize(unsigned int &width, unsigned int &height) { return false; }
         unsigned desiredScaleNumerator() const;
@@ -62,10 +60,17 @@ namespace blink
         bool m_hasAlpha;
 
     private:
+        void setDecodedSize(unsigned width, unsigned height);
+
+        void decodeSize() override { decode(true); }
+        void decode(size_t) override { decode(false); }
+
         // Decodes the image.  If |onlySize| is true, stops decoding after
         // calculating the image size.  If decoding fails but there is no more
         // data coming, sets the "decode failure" flag.
         void decode(bool onlySize);
+
+        IntSize m_decodedSize;
     };
 
 } // namespace blink
