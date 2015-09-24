@@ -297,7 +297,7 @@ makeinstall_target() {
 	mkdir -p $INSTALL/usr/local/qt5/translations
         cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/translations/* ${INSTALL}/usr/local/qt5/translations
 
-        cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/qtwebengine_resources.pak ${INSTALL}/usr/local/qt5/qtwebengine_resources.pak
+        cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/qtwebengine*.pak ${INSTALL}/usr/local/qt5/
 	cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/icudtl.dat ${INSTALL}/usr/local/qt5/icudtl.dat
 
 	#cleanup the plugins
