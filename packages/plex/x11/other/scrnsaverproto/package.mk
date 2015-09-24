@@ -16,20 +16,19 @@
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
-PKG_NAME="libXScrnSaver"
+PKG_NAME="scrnsaverproto"
 PKG_VERSION="1.2.2"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
-PKG_SITE=" http://ftp.x.org/pub/individual/lib/"
-PKG_URL=" http://ftp.x.org/pub/individual/lib/$PKG_NAME-$PKG_VERSION.tar.gz"
-PKG_DEPENDS_TARGET="toolchain scrnsaverproto"
+PKG_SITE="http://xorg.freedesktop.org/releases/individual/proto/"
+PKG_URL="http://xorg.freedesktop.org/releases/individual/proto/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_DEPENDS_TARGET="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="x11/lib"
-PKG_SHORTDESC="libXScrnSaver The XScrnSaver library"
-PKG_LONGDESC="libXScrnSaver The XScrnSaver library"
+PKG_SHORTDESC="scrnsaverproto The scrnsaverproto library"
+PKG_LONGDESC="scrnsaverprotover The scrnsaverproto library"
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
-PKG_CONFIGURE_OPTS_TARGET="--enable-malloc0returnsnull"
