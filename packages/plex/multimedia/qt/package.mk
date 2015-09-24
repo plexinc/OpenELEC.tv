@@ -26,7 +26,7 @@ PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-everywhere-opensource-src-
 
 case $PROJECT in
 	Generic)
-		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby libXcursor libXtst pciutils  nss libxkbcommon libdrm libXi atk"
+		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby libXcursor libXtst pciutils  nss libxkbcommon libdrm libXi atk libXScrnSaver"
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libXcursor libXtst pciutils pulseaudio nss libxkbcommon"
 	;;
 	RPi|RPi2)
