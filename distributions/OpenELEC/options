@@ -1,5 +1,5 @@
 # Name of the Distro to build (full name, without special characters)
-  DISTRONAME="KonvergoEmbedded"
+  DISTRONAME="Plex Media Player"
 
 # short project description
   DESCRIPTION="Plex - Enjoy your videos, photos and music anytime, anywhere"
@@ -15,7 +15,7 @@
   ROOT_PASSWORD="plex"
 
 # Mediacenter to use (kodi / Plex Client / no)
-  MEDIACENTER="Konvergo"
+  MEDIACENTER="PlexMediaPlayer"
 
 # Skins to install (Confluence)
 # Space separated list is supported,
