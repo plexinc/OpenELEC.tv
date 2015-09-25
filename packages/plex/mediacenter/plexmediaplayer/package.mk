@@ -36,7 +36,7 @@ PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt libX11 xrandr libcec mpv SDL
 PKG_DEPENDS_HOST="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="mediacenter"
-PKG_SHORTDESC="Plex Mediacenter"
+PKG_SHORTDESC="Plex Media Player"
 PKG_LONGDESC="Plex is the king or PC clients for Plex :P"
 
 PKG_IS_ADDON="no"
