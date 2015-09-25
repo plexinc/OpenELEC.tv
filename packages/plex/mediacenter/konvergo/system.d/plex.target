@@ -1,5 +1,5 @@
 [Unit]
-Description=Konvergo Mediacenter
+Description=¨Plex Media Player
 Requires=multi-user.target graphical.target
 After=graphical.target
 Conflicts=rescue.target
