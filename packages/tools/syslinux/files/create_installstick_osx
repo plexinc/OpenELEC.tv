@@ -146,8 +146,8 @@ prepare_target(){
   echo "INFO: Erasing existing partition schemes on ${TARGET}"
   dd if=/dev/zero of=${TARGET} bs=512 count=100 1>&3 2>&4
   gpt destroy ${TARGET} 1>&3 2>&4
-  echo "INFO: Creating MBR 'KONVERGO' disk on ${TARGET}"
-  diskutil eraseDisk MS-DOS KONVERGO MBR ${TARGET} 1>&3 2>&4
+  echo "INFO: Creating MBR 'PLEX' disk on ${TARGET}"
+  diskutil eraseDisk MS-DOS PLEX MBR ${TARGET} 1>&3 2>&4
   unmount_target
   chmod 755 3rdparty/macfiles/*
   cat 3rdparty/macfiles/mbr.bin > ${TARGET}
@@ -176,19 +176,19 @@ check_checksums(){
 
 copy_files(){
   mount_target
-  echo "INFO: Copying SYSTEM and KERNEL files to 'KONVERGO'"
-  cp -a target/KERNEL /Volumes/KONVERGO/
+  echo "INFO: Copying SYSTEM and KERNEL files to 'PLEX'"
+  cp -a target/KERNEL /Volumes/PLEX/
 
-  cp -a target/SYSTEM /Volumes/KONVERGO/
-  echo "INFO: Creating syslinux.cfg on 'KONVERGO'"
-  cat >/Volumes/KONVERGO/syslinux.cfg << EOF
+  cp -a target/SYSTEM /Volumes/PLEX/
+  echo "INFO: Creating syslinux.cfg on 'PLEX'"
+  cat >/Volumes/PLEX/syslinux.cfg << EOF
 PROMPT 0
 DEFAULT installer
 
 LABEL installer
   MENU LABEL Run OpenELEC Installer
   KERNEL /KERNEL
-  APPEND boot=LABEL=KONVERGO installer quiet tty vga=current
+  APPEND boot=LABEL=PLEX installer quiet tty vga=current
 
 EOF
 }
