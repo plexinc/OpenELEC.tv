@@ -1,6 +1,6 @@
 [Unit]
-Description=Konvergo user autostart script
-Before=konvergo.service
+Description=Plex Media Player user autostart script
+Before=plex.service
 After=graphical.target
 ConditionPathExists=/storage/.config/autostart.sh
 
@@ -11,4 +11,4 @@ ExecStart=-/bin/sh -c ". /etc/profile; exec /bin/sh /storage/.config/autostart.s
 RemainAfterExit=yes
 
 [Install]
-WantedBy=konvergo.service
+WantedBy=plex.service
