@@ -143,12 +143,12 @@ configure_target() {
 
 makeinstall_target() {
   	mkdir -p $INSTALL/usr/bin
-        cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/${MEDIACENTER} ${INSTALL}/usr/bin/
-	cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/${MEDIACENTER}Helper ${INSTALL}/usr/bin/
+        cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/${MEDIACENTER,,} ${INSTALL}/usr/bin/
+	cp  $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/build/src/pmphelper ${INSTALL}/usr/bin/
 
 	mkdir -p $INSTALL/usr/share/${MEDIACENTER,,} $INSTALL/usr/share/${MEDIACENTER,,}/scripts
 	cp -R $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/resources/* ${INSTALL}/usr/share/${MEDIACENTER,,}
-        cp $PKG_DIR/scripts/${MEDIACENTER,,}_update.sh ${INSTALL}/usr/share/${MEDIACENTER,,}/scripts/
+        cp $PKG_DIR/scripts/plex_update.sh ${INSTALL}/usr/share/${MEDIACENTER,,}/scripts/
 
 
 	if [ "$PLEX_DEBUG" = yes ]; then
@@ -169,28 +169,28 @@ makeinstall_target() {
 }
 
 post_install() {
-# link default.target to kodi.target
-  ln -sf ${MEDIACENTER,,}.target $INSTALL/usr/lib/systemd/system/default.target
+# link default.target to plex.target
+  ln -sf plex.target $INSTALL/usr/lib/systemd/system/default.target
 
 # enable default services
-  enable_service ${MEDIACENTER,,}-autostart.service
-  enable_service ${MEDIACENTER,,}.service
-  enable_service ${MEDIACENTER,,}.target
-  enable_service ${MEDIACENTER,,}-waitonnetwork.service
+  enable_service plex-autostart.service
+  enable_service plex.service
+  enable_service plex.target
+  enable_service plex-waitonnetwork.service
 
 # install plex splash screen
   cp $PKG_DIR/oemsplash.png $INSTALL/flash
 }
 
 post_install() {
-# link default.target to kodi.target
-  ln -sf ${MEDIACENTER,,}.target $INSTALL/usr/lib/systemd/system/default.target
+# link default.target to plex.target
+  ln -sf plex.target $INSTALL/usr/lib/systemd/system/default.target
 
 # enable default services
-  enable_service ${MEDIACENTER,,}-autostart.service
-  enable_service ${MEDIACENTER,,}.service
-  enable_service ${MEDIACENTER,,}.target
-  enable_service ${MEDIACENTER,,}-waitonnetwork.service
+  enable_service plex-autostart.service
+  enable_service plex.service
+  enable_service plex.target
+  enable_service plex-waitonnetwork.service
 
   echo "Generating pre-fontcache"
   export FONTCONFIG_FILE=$ROOT/$BUILD/image/system/etc/fonts/fonts.conf
