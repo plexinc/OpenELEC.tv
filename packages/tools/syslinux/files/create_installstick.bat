@@ -88,7 +88,7 @@ ECHO.
 ECHO.
 ECHO.
 
-ECHO. | >NUL format %DRIVE% /V:KONVERGO /Q /FS:FAT32 /X
+ECHO. | >NUL format %DRIVE% /V:PLEX /Q /FS:FAT32 /X
 IF ERRORLEVEL 1 goto InvalidDrive
 >NUL 3rdparty\syslinux\win32\syslinux.exe -f -m -a %DRIVE%
 >NUL copy target\* %DRIVE%
@@ -104,7 +104,7 @@ ECHO DEFAULT installer >> %DRIVE%\syslinux.cfg
 ECHO. >> %DRIVE%\syslinux.cfg
 ECHO LABEL installer >> %DRIVE%\syslinux.cfg
 ECHO   KERNEL /KERNEL >> %DRIVE%\syslinux.cfg
-ECHO   APPEND boot=LABEL=KONVERGO installer quiet tty >> %DRIVE%\syslinux.cfg
+ECHO   APPEND boot=LABEL=PLEX installer quiet tty >> %DRIVE%\syslinux.cfg
 ECHO. >> %DRIVE%\syslinux.cfg
 GOTO END
 
