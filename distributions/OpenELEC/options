@@ -1,5 +1,5 @@
 # Name of the Distro to build (full name, without special characters)
-  DISTRONAME="Plex Media Player"
+  DISTRONAME="PlexMediaPlayer"
 
 # short project description
   DESCRIPTION="Plex - Enjoy your videos, photos and music anytime, anywhere"
