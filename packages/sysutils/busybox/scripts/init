@@ -556,9 +556,9 @@
         done < $UPDATE_DIR/.tmp/md5.txt
         if [ "$MD5_FAILED" -eq "0" ] ; then
           echo "Updating Plex Media Player to latest version.."
-          rm -rf /storage/.pmp_update
-          mkdir /storage/.pmp_update
-          mv $UPDATE_DIR/.tmp/* /storage/.pmp_update/.
+          rm -rf /storage/.plex_update
+          mkdir /storage/.plex_update
+          mv $UPDATE_DIR/.tmp/* /storage/.plex_update/.
           rm -rf $UPDATE_DIR/[0-9a-zA-Z]* &>/dev/null
           do_reboot
         else
@@ -649,7 +649,7 @@
             update "System" "$UPDATE_SYSTEM" "/flash/$IMAGE_SYSTEM"
             update_bootloader
             rm -rf $UPDATE_DIR/[0-9a-zA-Z]* &>/dev/null
-            rm -rf /storage/.pmp_update
+            rm -rf /storage/.plex_update
             do_reboot
           else
             rm -rf $UPDATE_DIR/[0-9a-zA-Z]* &>/dev/null

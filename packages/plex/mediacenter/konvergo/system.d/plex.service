@@ -9,7 +9,7 @@ Environment=SDL_MOUSE_RELATIVE=0
 Environment=HOME=/storage
 ExecStartPre="rm -f /storage/.local/share/plexmediaplayer/plexmediaplayer.conf.* /storage/.local/share/plexmediaplayer/plexmediaplayer.pid"
 ExecStartPre=/bin/sh -c "mkdir -p /storage/.cache/fontconfig/; rm /storage/.cache/fontconfig/* ; cp -p /usr/share/plexmediaplayer/fc-cache/* /storage/.cache/fontconfig/"
-ExecStart=/bin/sh -c ". /etc/profile; /usr/share/plexmediaplayer/scripts/pmp_update.sh ; if [ -f /storage/.pmp_update/bin/plexmediaplayer ]; then exec /storage/.pmp_update/bin/plexmediaplayer ; else exec /usr/bin/plexmadiaplayer ; fi"
+ExecStart=/bin/sh -c ". /etc/profile; /usr/share/plexmediaplayer/scripts/plex_update.sh ; if [ -f /storage/.plex_update/bin/plexmediaplayer ]; then exec /storage/.plex_update/bin/plexmediaplayer ; else exec /usr/bin/plexmadiaplayer ; fi"
 # keep KillMode=process unless there is no good reason to switch to cgroup
 #KillMode=process
 TimeoutStopSec=5
