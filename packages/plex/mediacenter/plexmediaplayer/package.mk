@@ -23,7 +23,7 @@ case $PROJECT in
      PKG_VERSION="master"
      ;;
      RPi|RPi2)
-     PKG_VERSION="master"
+     PKG_VERSION="plex_theater_rename"
      ;;
 esac
 
