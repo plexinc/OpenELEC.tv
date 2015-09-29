@@ -20,10 +20,10 @@ PKG_NAME="${MEDIACENTER,,}"
 
 case $PROJECT in
      Generic)
-     PKG_VERSION="plex_theater_rename"
+     PKG_VERSION="master"
      ;;
      RPi|RPi2)
-     PKG_VERSION="plex_theater_rename"
+     PKG_VERSION="master"
      ;;
 esac
 
