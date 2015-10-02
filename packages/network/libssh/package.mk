@@ -26,7 +26,7 @@ PKG_URL="https://red.libssh.org/attachments/download/177/$PKG_NAME-$PKG_VERSION.
 PKG_DEPENDS_TARGET="toolchain zlib openssl"
 PKG_PRIORITY="optional"
 PKG_SECTION="network"
-PKG_SHORTDESC="libssh: A working SSH implementation by means of a library"
+PKG_SHORTDESC="libssh: A working SSH implementation by means of a library."
 PKG_LONGDESC="The ssh library was designed to be used by programmers needing a working SSH implementation by the mean of a library. The complete control of the client is made by the programmer. With libssh, you can remotely execute programs, transfer files, use a secure and transparent tunnel for your remote programs. With its Secure FTP implementation, you can play with remote files easily, without third-party programs others than libcrypto (from openssl)."
 
 PKG_IS_ADDON="no"
