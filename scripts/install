@@ -163,7 +163,7 @@ fi
 
 ### PLEX
 if [ "$PLEX_DUMP_SYMBOLS" = "yes" ]; then
-  if [[ "$PKG_DIR" =~ ^.*qt-.*$ ]] ; then
+  if [[ "$PKG_DIR" =~ ^.*/qt$ ]] ; then
     mkdir -p $ROOT/target/qt
     cp $PKG_DIR/.symbols/* $ROOT/target/qt
   else
