@@ -27,7 +27,7 @@ PKG_DEPENDS_HOST="toolchain libffi:host"
 PKG_DEPENDS_TARGET="toolchain zlib libffi:host pcre Python:host libffi"
 PKG_PRIORITY="optional"
 PKG_SECTION="devel"
-PKG_SHORTDESC="glib: C support library"
+PKG_SHORTDESC="glib: C support library."
 PKG_LONGDESC="GLib is a library which includes support routines for C such as lists, trees, hashes, memory allocation, and many other things."
 
 PKG_IS_ADDON="no"
