@@ -20,10 +20,10 @@ PKG_NAME="${MEDIACENTER,,}"
 
 case $PROJECT in
      Generic)
-     PKG_VERSION="master"
+     PKG_VERSION="dist-ninja"
      ;;
      RPi|RPi2)
-     PKG_VERSION="master"
+     PKG_VERSION="dist-ninja"
      ;;
 esac
 
