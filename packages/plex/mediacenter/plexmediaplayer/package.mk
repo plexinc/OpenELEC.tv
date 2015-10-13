@@ -60,7 +60,7 @@ unpack() {
           git pull ; git reset --hard
         else
           rm -rf $BUILD/${PKG_NAME}-${PKG_VERSION}
-          git clone --depth 1 -b $PKG_VERSION git@github.com:plexinc/konvergo.git  $BUILD/${PKG_NAME}-${PKG_VERSION}
+          git clone --depth 1 -b $PKG_VERSION git@github.com:plexinc/plex-media-player.git $BUILD/${PKG_NAME}-${PKG_VERSION}
         fi
 
 	if [ "$PLEX_DEBUG" = yes ]; then
