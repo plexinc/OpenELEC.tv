@@ -43,8 +43,12 @@ fi
 
 ### PLEX
 # Use set GIT_TOKEN variable to ?token=<git_token> before running.
-if [ "`curl -sL -w "%{http_code}\\n" --user "plex-konvergo:$GIT_TOKEN" https://raw.githubusercontent.com/plexinc/konvergo/master/CMakeModules/VersionConfiguration.cmake -o /dev/null`" = "200" ]; then
-  PLEX_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/konvergo/master/CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g'`"
+# Also set PMP repo to public if private not defined.
+if [ "$PMP_REPO" != "plex-media-player" ]; then
+  export PMP_REPO="plex-media-player-public"
+fi
+if [ "`curl -sL -w "%{http_code}\\n" --user "plex-konvergo:$GIT_TOKEN" https://raw.githubusercontent.com/plexinc/$PMP_REPO/master/CMakeModules/VersionConfiguration.cmake -o /dev/null`" = "200" ]; then
+  PLEX_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/$PMP_REPO/master/CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g'`"
 else
   PLEX_VERSION="dev"
 fi
