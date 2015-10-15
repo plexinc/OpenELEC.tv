@@ -260,10 +260,12 @@ fi
 
 ### PLEX
 if [ "$MINI_BUILD" = "true" ]; then
+  # Set PMP build dir
+  PMP_DIR="`ls -1 $BUILD|grep plexmediaplayer|grep -v fonts-ttf`"
   mkdir -p $BUILD/UPDATE_TEMP/bin
   mkdir -p $BUILD/UPDATE_TEMP/lib
-  cp -d $BUILD/plexmediaplayer-master/.install_pkg/usr/bin/plexmediaplayer $BUILD/UPDATE_TEMP/bin
-  cp -d $BUILD/plexmediaplayer-master/.install_pkg/usr/bin/pmphelper $BUILD/UPDATE_TEMP/bin
+  cp -d $BUILD/$PMP_DIR/.install_pkg/usr/bin/plexmediaplayer $BUILD/UPDATE_TEMP/bin
+  cp -d $BUILD/$PMP_DIR/.install_pkg/usr/bin/pmphelper $BUILD/UPDATE_TEMP/bin
   cp -d $BUILD/ffmpeg-master/.install_pkg/usr/lib/* $BUILD/UPDATE_TEMP/lib
   cp -d $BUILD/mpv-master/.install_pkg/usr/lib/libmpv.so $BUILD/UPDATE_TEMP/lib
   find $BUILD/UPDATE_TEMP -type f|sort| xargs -n1 md5sum | sed "s|$BUILD/UPDATE_TEMP/||g"|grep -v "md5.txt" > $BUILD/UPDATE_TEMP/md5.txt
