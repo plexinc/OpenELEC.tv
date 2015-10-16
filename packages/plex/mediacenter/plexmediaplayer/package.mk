@@ -54,6 +54,10 @@ if [ "$PLEX_DEBUG" = yes ]; then
 	PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} gdb"
 fi
 
+if [ -z "$CI_CRASHDUMP_SECRET" ]; then
+  CRASHDUMP_SECRET="-DCRASHDUMP_SECRET=${CI_CRASHDUMP_SECRET}"
+fi
+
 unpack() {
         if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
           cd $BUILD/${PKG_NAME}-${PKG_VERSION} ; rm -rf build
@@ -112,6 +116,7 @@ configure_target() {
                         -DCMAKE_VERBOSE_MAKEFILE=on \
                         -DOPENELEC=on \
                         -DENABLE_DUMP_SYMBOLS=on \
+			$CRASHDUMP_SECRET \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
         	;;
 
@@ -130,6 +135,7 @@ configure_target() {
                         -DCMAKE_VERBOSE_MAKEFILE=on \
                         -DOPENELEC=on \
                         -DENABLE_DUMP_SYMBOLS=on \
+			$CRASHDUMP_SECRET \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
 
 		#make the Qt JPEG hardware decoding plugin
