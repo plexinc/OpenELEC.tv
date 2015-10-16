@@ -54,7 +54,7 @@ if [ "$PLEX_DEBUG" = yes ]; then
 	PKG_DEPENDS_TARGET="${PKG_DEPENDS_TARGET} gdb"
 fi
 
-if [ -z "$CI_CRASHDUMP_SECRET" ]; then
+if [ ! -z "$CI_CRASHDUMP_SECRET" ]; then
   CRASHDUMP_SECRET="-DCRASHDUMP_SECRET=${CI_CRASHDUMP_SECRET}"
 fi
 
