@@ -56,7 +56,7 @@ fi
 if [ -z "$PMP_RELEASE_SHA" ]; then
   PLEX_GITSHA=`git ls-remote git@github.com:plexinc/$PMP_REPO.git HEAD|awk '{print substr($0,0,8)}'`
 else
-  PLEX_GITSHA="echo $PMP_RELEASE_SHA|cut -d -7"
+  PLEX_GITSHA="echo $PMP_RELEASE_SHA|cut -c -7"
 fi
 
 TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
