@@ -65,7 +65,7 @@ unpack() {
         else
           rm -rf $BUILD/${PKG_NAME}-${PKG_VERSION}
           git clone --depth 20 -b $PKG_VERSION git@github.com:plexinc/$PMP_REPO.git $BUILD/${PKG_NAME}-${PKG_VERSION}
-          if [ ! -z "$CI_BUILD" ]; then
+          if [ ! -z "$PMP_RELEASE_SHA" ]; then
             if [ "`git --git-dir=$BUILD/${PKG_NAME}-${PKG_VERSION}/.git --work-tree=$BUILD/${PKG_NAME}-${PKG_VERSION} log --pretty=%H|grep -c $PMP_RELEASE_SHA`" = "1" ]; then
               git --git-dir=$BUILD/plexmediaplayer-dist-ninja/.git --work-tree=$BUILD/plexmediaplayer-dist-ninja checkout $PMP_RELEASE_SHA
             else
