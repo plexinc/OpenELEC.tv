@@ -52,12 +52,12 @@
 
 arm_freq=1000
 core_freq=500
-sdram_freq=500
+sdram_freq=450
 over_voltage=2
-gpu_freq=500
+gpu_freq=450
 
 # set to 'force_turbo=1' to disable dynamic overclocking
-  force_turbo=1
+  force_turbo=0
 
 # If you have any data corruption using Turbo Mode and overclocking
 # try with this setting uncommented
