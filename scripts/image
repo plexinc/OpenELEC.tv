@@ -52,7 +52,8 @@ if [ "`curl -sL -w "%{http_code}\\n" --user "plex-konvergo:$GIT_TOKEN" https://r
 else
   PLEX_VERSION="dev"
 fi
-PLEX_GITSHA=`git ls-remote git@github.com:plexinc/konvergo.git HEAD|awk '{print substr($0,0,8)}'`
+
+PLEX_GITSHA=`git ls-remote git@github.com:plexinc/$PMP_REPO.git HEAD|awk '{print substr($0,0,8)}'`
 
 TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
 
