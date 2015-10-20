@@ -37,7 +37,7 @@ PKG_CONFIGURE_OPTS_TARGET="CONFIG+=notests VERSION=5.4.1 PREFIX=${SYSROOT_PREFIX
 unpack() {
 
         mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
-	git clone -b $PKG_VERSION git@github.com:nemomobile/libconnman-qt.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
+	git clone -b $PKG_VERSION git@github.com:plexinc/libconnman-qt.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
 }
 
 configure_target() {
