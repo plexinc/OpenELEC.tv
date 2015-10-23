@@ -1,3 +1,4 @@
+#!/bin/bash -ax
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2014 Stephan Raue (stephan@openelec.tv)
@@ -19,7 +20,7 @@
 PKG_NAME="${MEDIACENTER,,}"
 
 case $PROJECT in
-     Generic)
+     Generic|Nvidia_Legacy)
      PKG_VERSION="dist-ninja"
      ;;
      RPi|RPi2)
@@ -59,6 +60,7 @@ if [ ! -z "$CI_CRASHDUMP_SECRET" ]; then
 fi
 
 unpack() {
+set -x
         if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
           cd $BUILD/${PKG_NAME}-${PKG_VERSION} ; rm -rf build
           git pull ; git reset --hard
@@ -110,7 +112,7 @@ configure_target() {
 
         # Configure the build
 	case $PROJECT in
-        	Generic)
+        	Generic|Nvidia_Legacy)
 		cmake \
 			-DCMAKE_INSTALL_PREFIX=/usr \
                         -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \

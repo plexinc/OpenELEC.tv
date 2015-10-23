@@ -101,7 +101,7 @@ esac
 
 ### PLEX
 case $PROJECT in
-      Generic)
+      Generic|Nvidia_Legacy)
       ;;
       RPi|RPi2)
       FFMPEG_MMAL="--enable-mmal"

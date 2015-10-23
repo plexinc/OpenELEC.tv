@@ -25,7 +25,7 @@ PKG_SITE="https://nightlies.plex.tv"
 PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-everywhere-opensource-src-$PKG_VERSION.tar.gz"
 
 case $PROJECT in
-	Generic)
+	Generic|Nvidia_Legacy)
 		PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc liberation-fonts-ttf font-util font-xfree86-type1 font-misc-misc alsa flex bison ruby libXcursor libXtst pciutils  nss libxkbcommon libdrm libXi atk libXScrnSaver"
 		PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig openssl linux-headers glibc alsa libXcursor libXtst pciutils pulseaudio nss libxkbcommon"
 	;;
@@ -58,7 +58,7 @@ esac
 
 
 case $PROJECT in
-	Generic)
+	Generic|Nvidia_Legacy)
                 PKG_CONFIGURE_OPTS="\
 							-sysroot ${SYSROOT_PREFIX} \
 							-prefix /usr/local/qt5
@@ -229,7 +229,7 @@ pre_configure_target() {
 configure_target() {
 
 	case $PROJECT in
-		Generic)
+		Generic|Nvidia_Legacy)
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
 			export QT_FORCE_PKGCONFIG=yes
 			unset QMAKESPEC
@@ -258,7 +258,7 @@ configure_target() {
 
 make_target() {
 	case $PROJECT in
-		Generic)
+		Generic|Nvidia_Legacy)
 			export PYTHON_EXEC="$SYSROOT_PREFIX/usr/bin/python2.7"
 			export PYTHONPATH="$SYSROOT_PREFIX/usr/lib/python2.7/lib-dynload"
 			unset CC CXX AR OBJCOPY STRIP CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LD RANLIB
@@ -302,7 +302,7 @@ makeinstall_target() {
 
 	#cleanup the plugins
 	case $PROJECT in
-          Generic)
+          Generic|Nvidia_Legacy)
 	  ;;
 	  RPi|RPi2)
 	    rm -f  ${INSTALL}/usr/local/qt5/plugins/generic/libqevdevtabletplugin.so

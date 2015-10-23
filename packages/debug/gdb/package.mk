@@ -58,7 +58,7 @@ PKG_CONFIGURE_OPTS_TARGET="bash_cv_have_mbstate_t=set \
 
 ### PLEX : install gdb and gdbserver
 case $PROJECT in
-        Generic)
+        Generic|Nvidia_Legacy)
         ;;
         RPi|RPi2)
                 PKG_CONFIGURE_OPTS_TARGET="${PKG_CONFIGURE_OPTS_TARGET} --host=arm-none-linux-gnueabi"
