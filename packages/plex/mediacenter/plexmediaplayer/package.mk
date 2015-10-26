@@ -19,12 +19,17 @@
 
 PKG_NAME="${MEDIACENTER,,}"
 
+# Edit CI repo name to exclude origin
+if [[ "$PMP_BRANCH" =~ .*/.* ]]; then
+  export GIT_REPO="`echo $PMP_BRANCH | sed 's/.*\///g'`"
+fi
+
 case $PROJECT in
      Generic|Nvidia_Legacy)
-     PKG_VERSION="${PMP_BRANCH:-dist-ninja}"
+     PKG_VERSION="${GIT_REPO:-dist-ninja}"
      ;;
      RPi|RPi2)
-     PKG_VERSION="${PMP_BRANCH:-dist-ninja}"
+     PKG_VERSION="${GIT_REPO:-dist-ninja}"
      ;;
 esac
 
