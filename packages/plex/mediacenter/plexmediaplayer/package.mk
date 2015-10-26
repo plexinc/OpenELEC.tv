@@ -48,7 +48,9 @@ PKG_LONGDESC="Plex is the king or PC clients for Plex :P"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-PLEX_DUMP_SYMBOLS=yes
+if [ "$CI_BUILD" = true ]; then
+ PLEX_DUMP_SYMBOLS=yes
+fi
 
 if [ "$KODI_SAMBA_SUPPORT" = yes ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET samba"

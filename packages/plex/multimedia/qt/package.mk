@@ -44,7 +44,9 @@ PKG_LONGDESC="Qt GUI toolkit"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-PLEX_DUMP_SYMBOLS=yes
+if [ "$CI_BUILD" = true ]; then
+ PLEX_DUMP_SYMBOLS=yes
+fi
 
 case $PROJECT in
         RPi)

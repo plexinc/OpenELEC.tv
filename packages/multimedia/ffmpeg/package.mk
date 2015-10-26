@@ -33,7 +33,9 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 ### PLEX
-PLEX_DUMP_SYMBOLS=yes
+if [ "$CI_BUILD" = true ]; then
+ PLEX_DUMP_SYMBOLS=yes
+fi
 
 unpack() {
 
