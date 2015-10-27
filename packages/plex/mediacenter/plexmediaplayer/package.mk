@@ -1,4 +1,4 @@
-#!/bin/bash -ax
+#!/bin/bash
 ################################################################################
 #      This file is part of OpenELEC - http://www.openelec.tv
 #      Copyright (C) 2009-2014 Stephan Raue (stephan@openelec.tv)
