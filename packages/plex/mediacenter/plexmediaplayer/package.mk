@@ -67,7 +67,6 @@ if [ ! -z "$CI_CRASHDUMP_SECRET" ]; then
 fi
 
 unpack() {
-set -x
         if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
           cd $BUILD/${PKG_NAME}-${PKG_VERSION} ; rm -rf build
           git pull ; git reset --hard
