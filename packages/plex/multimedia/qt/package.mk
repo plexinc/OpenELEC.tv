@@ -17,7 +17,7 @@
 #  ################################################################################
 
 PKG_NAME="qt"
-PKG_VERSION="5.6.0-beta"
+PKG_VERSION="5.6.0-alpha"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
