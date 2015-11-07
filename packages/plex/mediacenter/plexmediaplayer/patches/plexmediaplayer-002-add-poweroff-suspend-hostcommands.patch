@@ -1,0 +1,17 @@
+--- a/src/ui/KonvergoWindow.cpp   2015-10-27 20:08:01.378076967 +0800
++++ b/src/ui/KonvergoWindow.cpp   2015-10-27 20:10:48.576126862 +0800
+@@ -369,6 +369,14 @@
+   {
+     *(volatile int*)0=0;
+   }
++  else if (hostCommand == "poweroff")
++  {
++    PowerComponent::Get().PowerOff();
++  }
++  else if (hostCommand == "suspend")
++  {
++    PowerComponent::Get().Suspend();
++  }
+   else
+   {
+     QLOG_WARN() << "unknown host command" << hostCommand;
