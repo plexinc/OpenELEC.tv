@@ -333,7 +333,9 @@ if [ ! -f $STAMP ]; then
           PLEX_DUMP_FILE_NAME=`basename $i`
           echo " Dumping symbols for $PLEX_DUMP_FILE_NAME..."
           $ROOT/$TOOLCHAIN/bin/dump_syms $i | xz > $PLEX_DUMP_DIR/$PLEX_DUMP_FILE_NAME.symbols.xz
-          $TARGET_STRIP  $i
+          if [ "$PLEX_DEBUG" != yes ]; then
+            $TARGET_STRIP  $i
+          fi
         done
       fi
       ### END PLEX
