@@ -76,6 +76,7 @@ unpack() {
           if [ ! -z "$PMP_RELEASE_SHA" ]; then
             if [ "`git --git-dir=$BUILD/${PKG_NAME}-${PKG_VERSION}/.git --work-tree=$BUILD/${PKG_NAME}-${PKG_VERSION} log --pretty=%H|grep -c $PMP_RELEASE_SHA`" = "1" ]; then
               git --git-dir=$BUILD/plexmediaplayer-${PKG_VERSION}/.git --work-tree=$BUILD/plexmediaplayer-${PKG_VERSION} checkout $PMP_RELEASE_SHA
+              echo "Checked out $PMP_RELEASE_SHA release from github."
             else
               echo "There are more than 20 commits in the REPO since the release build was initiated. Erroring out!"
               exit 1
