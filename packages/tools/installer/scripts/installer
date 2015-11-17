@@ -397,7 +397,7 @@ do_install_custom() {
     get_partition $device
     for partition in $PARTITIONS; do
       PARTITION_TYPE="`parted -s -m $device print |grep -v ^/dev | grep "^$partition:" | awk -F ':' '{print $5}'`"
-      if [ "${PARTITION_TYPE}" == "vfat" ]; then
+      if [ "${PARTITION_TYPE}" == "vfat" -o "${PARTITION_TYPE}" == "fat32" ]; then
         LABEL="`dosfslabel $device$partition|tail -1`"
       else
         LABEL=$(tune2fs -l $device$partition | awk 'BEGIN {FS=":"} /Filesystem volume name/ {gsub(/ /,"",$2); print $2}')
