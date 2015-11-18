@@ -26,7 +26,7 @@ PKG_URL="https://github.com/libass/libass/releases/download/$PKG_VERSION/$PKG_NA
 PKG_DEPENDS_TARGET="toolchain freetype fontconfig fribidi"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
-PKG_SHORTDESC="libass: a portable subtitle renderer for the ASS/SSA (Advanced Substation Alpha/Substation Alpha) subtitle format."
+PKG_SHORTDESC="libass: a portable subtitle renderer for the ASS/SSA (Advanced Substation Alpha/Substation Alpha) subtitle format"
 PKG_LONGDESC="libass is a portable subtitle renderer for the ASS/SSA (Advanced Substation Alpha/Substation Alpha) subtitle format. It is mostly compatible with VSFilter"
 
 PKG_IS_ADDON="no"
