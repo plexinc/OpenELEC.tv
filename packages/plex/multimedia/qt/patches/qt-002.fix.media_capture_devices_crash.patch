@@ -1,0 +1,10 @@
+--- a/qtwebengine/src/core/media_capture_devices_dispatcher.cpp.orig	2015-12-15 15:09:01.657467000 +0100
++++ b/qtwebengine/src/core/media_capture_devices_dispatcher.cpp	2015-12-15 15:06:05.297467000 +0100
+@@ -39,6 +39,7 @@
+ // found in the LICENSE file.
+ 
+ 
++#include <QCoreApplication>
+ #include "media_capture_devices_dispatcher.h"
+ 
+ #include "javascript_dialog_manager_qt.h"
