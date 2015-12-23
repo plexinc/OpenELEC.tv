@@ -62,7 +62,7 @@ else
 fi
 
 if [ "$DCADEC_SUPPORT" = yes ]; then
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET dcadec"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libdcadec"
   FFMPEG_LIBDCADEC="--enable-libdcadec"
 else
   FFMPEG_LIBDCADEC="--disable-libdcadec"
