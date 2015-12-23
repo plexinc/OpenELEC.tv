@@ -32,15 +32,11 @@ PKG_LONGDESC="libdcadec : DTS Coherent Acoustics decoder with support for HD ext
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+PKG_MAKE_OPTS_TARGET="PREFIX=/usr BINDIR=/usr/bin LIBDIR=/usr/lib INCLUDEDIR=/usr/include PKG_CONFIG_PATH=/usr/lib/pkgconfig CONFIG_SHARED=1"
+PKG_MAKEINSTALL_OPTS_TARGET="$PKG_MAKE_OPTS_TARGET"
+
 pre_configure_target() {
   export CFLAGS="$CFLAGS -fPIC"
   export CXXFLAGS="$CXXFLAGS -fPIC"
   export LDFLAGS="$LDFLAGS -fPIC"
-}
-
-makeinstall_target() {
-
-  cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
-  make install DESTDIR=${SYSROOT_PREFIX}
-  mv ${SYSROOT_PREFIX}/dcadec.pc ${SYSROOT_PREFIX}/usr/lib/pkgconfig
 }
