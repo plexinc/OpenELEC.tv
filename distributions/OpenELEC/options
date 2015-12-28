@@ -6,8 +6,8 @@
 
 # Welcome Message for e.g. SSH Server (up to 5 Lines)
   GREETING0="##############################################"
-  GREETING1="#.......... ${DISTRONAME} - Plex .........#"
-  GREETING2="# ........... visit http://plex.tv ......... #"
+  GREETING1="# ......... PlexMediaPlayer - Plex ......... #"
+  GREETING2="# ........... visit https//plex.tv ......... #"
   GREETING3="##############################################"
   GREETING4=""
 
