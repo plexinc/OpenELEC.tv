@@ -58,6 +58,9 @@ case $PROJECT in
 	;;
 esac
 
+if [ "$PLEX_DEBUG" = yes ]; then
+ QT_FLAGS=--force-debug-info
+fi
 
 case $PROJECT in
 	Generic|Nvidia_Legacy)
@@ -66,7 +69,6 @@ case $PROJECT in
 							-prefix /usr/local/qt5
                                                         -hostprefix ${ROOT}/${BUILD} \
                                                         -release \
-                                                        --force-debug-info \
                                                         -v \
                                                         -opensource \
                                                         -confirm-license \
@@ -74,15 +76,15 @@ case $PROJECT in
                                                         -shared \
                                                         -opengl desktop\
                                                         -make libs \
-							-no-pch \
-							-no-icu \
-							-qpa xcb \
-							-system-xkbcommon \
-							-qt-xcb \
-							-no-sql-sqlite2 \
-							-arch $TARGET_ARCH \
-							-platform linux-g++ \
-							-xplatform linux-g++-openelec \
+                                                        -no-pch \
+                                                        -no-icu \
+                                                        -qpa xcb \
+                                                        -system-xkbcommon \
+                                                        -qt-xcb \
+                                                        -no-sql-sqlite2 \
+                                                        -arch $TARGET_ARCH \
+                                                        -platform linux-g++ \
+                                                        -xplatform linux-g++-openelec \
                                                         -no-accessibility \
                                                         -skip qtactiveqt \
                                                         -skip qtandroidextras \
@@ -103,7 +105,8 @@ case $PROJECT in
                                                         -skip qtquickcontrols2 \
                                                         -skip qt3d \
                                                         -nomake examples \
-                                                        -nomake tests"
+                                                        -nomake tests \
+                                                        $QT_FLAGS"
 	;;
  	RPi|RPi2)
                 PKG_CONFIGURE_OPTS="\
@@ -112,7 +115,6 @@ case $PROJECT in
                                                         -hostprefix ${ROOT}/${BUILD} \
                                                         -v \
                                                         -release \
-                                                        --force-debug-info \
                                                         -opensource \
                                                         -confirm-license \
                                                         -optimized-qmake \
@@ -152,7 +154,7 @@ case $PROJECT in
                                                         -skip qtmultimedia \
                                                         -skip qtquickcontrols2 \
                                                         -skip qt3d \
-							"
+                                                        $QT_FLAGS"
         ;;
 esac
 
