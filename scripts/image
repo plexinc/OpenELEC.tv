@@ -124,7 +124,7 @@ fi
   if [ "$OFFICIAL" = "yes" ]; then
     echo -e "OPENELEC_BUILD=\"official\"" >> $INSTALL/etc/os-release
   else
-    echo -e "OPENELEC_BUILD=\"unofficial\"" >> $INSTALL/etc/os-release
+    echo -e "OPENELEC_BUILD=\"community\"" >> $INSTALL/etc/os-release
   fi
 
 # create /etc/issue
