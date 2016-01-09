@@ -38,6 +38,8 @@ PKG_CONFIGURE_OPTS_TARGET="--disable-werror \
                            --disable-optimizations \
                            --disable-examples \
                            --disable-debug \
+                           --with-libgcrypt-prefix=$SYSROOT_PREFIX/usr \
+                           --with-libgpg-error-prefix=$SYSROOT_PREFIX/usr \
                            --with-gnu-ld"
 
 pre_configure_target() {
