@@ -27,7 +27,7 @@ PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain libgcrypt"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
-PKG_SHORTDESC="libaacs: a research project to implement the Advanced Access Content System specification."
+PKG_SHORTDESC="libaacs: a research project to implement the Advanced Access Content System specification"
 PKG_LONGDESC="libaacs is a research project to implement the Advanced Access Content System specification. This research project provides, through an open-source library, a way to understand how the AACS works. This research project is mainly developed by an international team of developers from Doom9."
 
 PKG_IS_ADDON="no"
