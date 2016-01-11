@@ -32,7 +32,7 @@
   if [ "$DEBUG" = "yes" -o "$PLEX_DEBUG" = "yes" ]; then
     SYSTEM_SIZE=1280
   else
-    SYSTEM_SIZE=256
+    SYSTEM_SIZE=512
   fi
 ### END PLEX
 
