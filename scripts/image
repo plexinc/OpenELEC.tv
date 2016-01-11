@@ -131,18 +131,14 @@ fi
   fi
 
 # create /etc/issue
-  echo $GREETING0 >  $INSTALL/etc/issue
-  echo $GREETING1 >> $INSTALL/etc/issue
-  echo $GREETING2 >> $INSTALL/etc/issue
-  echo $GREETING3 >> $INSTALL/etc/issue
-  echo $GREETING4 >> $INSTALL/etc/issue
-<<<<<<< HEAD
+  echo "$GREETING0" >  $INSTALL/etc/issue
+  echo "$GREETING1" >> $INSTALL/etc/issue
+  echo "$GREETING2" >> $INSTALL/etc/issue
+  echo "$GREETING3" >> $INSTALL/etc/issue
+  echo "$GREETING4" >> $INSTALL/etc/issue
   ### PLEX
-  echo "$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "unofficial")) Version: $PLEX_VERSION" >> $INSTALL/etc/issue
+  echo "$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "community")) Version: $PLEX_VERSION" >> $INSTALL/etc/issue
   ### END PLEX
-=======
-  echo "$DISTRONAME ($([ "$OFFICIAL" = "yes" ] && echo "official" ||  echo "community")) Version: $OPENELEC_VERSION" >> $INSTALL/etc/issue
->>>>>>> cosmetics: rename 'unofficial' to 'community' builds
   if [ -n "$GIT_HASH" ]; then
     echo "$DISTRONAME git: $GIT_HASH" >> $INSTALL/etc/issue
   fi
