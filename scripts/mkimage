@@ -28,7 +28,7 @@
   LOOP=$(losetup -f)
 
 ### PLEX
-  # If running debug on QT it gets really huge and we need a larger image size
+  # If running debug on QT it gets really huge and we need a larger image size.
   if [ "$DEBUG" = "yes" -o "$PLEX_DEBUG" = "yes" ]; then
     SYSTEM_SIZE=1280
   else
