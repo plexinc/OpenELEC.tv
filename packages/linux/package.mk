@@ -31,7 +31,7 @@ PKG_SHORTDESC="linux26: The Linux kernel 2.6 precompiled kernel binary image and
 PKG_LONGDESC="This package contains a precompiled kernel image and the modules."
 case "$LINUX" in
   amlogic)
-    PKG_VERSION="amlogic-3.10-a9cef51"
+    PKG_VERSION="amlogic-3.10-9df7905"
     PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
     ;;
   imx6)
@@ -40,7 +40,7 @@ case "$LINUX" in
     PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET imx6-status-led imx6-soc-fan"
     ;;
   *)
-    PKG_VERSION="4.0.4"
+    PKG_VERSION="4.1.12"
     PKG_URL="http://www.kernel.org/pub/linux/kernel/v4.x/$PKG_NAME-$PKG_VERSION.tar.xz"
     ;;
 esac
@@ -74,11 +74,6 @@ post_patch() {
 
   # set default hostname based on $DISTRONAME
     sed -i -e "s|@DISTRONAME@|$DISTRONAME|g" $PKG_BUILD/.config
-
-  # disable PPP support if not enabled
-  if [ ! "$PPTP_SUPPORT" = yes ]; then
-    sed -i -e "s|^CONFIG_PPP=.*$|# CONFIG_PPP is not set|" $PKG_BUILD/.config
-  fi
 
   # disable swap support if not enabled
   if [ ! "$SWAP_SUPPORT" = yes ]; then
@@ -155,14 +150,11 @@ makeinstall_target() {
     done
   elif [ "$BOOTLOADER" = "bcm2835-bootloader" ]; then
     mkdir -p $INSTALL/usr/share/bootloader/overlays
-    touch $INSTALL/usr/share/bootloader/overlays/README.TXT
-    for dtb in arch/arm/boot/dts/*.dtb; do
-      if `echo "$dtb" | grep ".*/bcm2[^/]*$" >/dev/null`; then
-        cp $dtb $INSTALL/usr/share/bootloader 2>/dev/null || :
-      else
-        cp $dtb $INSTALL/usr/share/bootloader/overlays 2>/dev/null || :
-      fi
+    cp -p arch/arm/boot/dts/*.dtb $INSTALL/usr/share/bootloader
+    for dtb in arch/arm/boot/dts/overlays/*.dtb; do
+      cp $dtb $INSTALL/usr/share/bootloader/overlays 2>/dev/null || :
     done
+    cp -p arch/arm/boot/dts/overlays/README $INSTALL/usr/share/bootloader/overlays
   fi
 }
 
@@ -194,6 +186,4 @@ makeinstall_init() {
 post_install() {
   mkdir -p $INSTALL/lib/firmware/
     ln -sf /storage/.config/firmware/ $INSTALL/lib/firmware/updates
-
-  enable_service cpufreq-threshold.service
 }

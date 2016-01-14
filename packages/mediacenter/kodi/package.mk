@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="kodi"
-PKG_VERSION="15.0-beta2-45c2a2d"
+PKG_VERSION="15.2-02e7013"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -71,6 +71,14 @@ if [ "$ALSA_SUPPORT" = yes ]; then
   KODI_ALSA="--enable-alsa"
 else
   KODI_ALSA="--disable-alsa"
+fi
+
+if [ "$PULSEAUDIO_SUPPORT" = yes ]; then
+# for PulseAudio support
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET pulseaudio"
+  KODI_PULSEAUDIO="--enable-pulse"
+else
+  KODI_PULSEAUDIO="--disable-pulse"
 fi
 
 if [ "$ESPEAK_SUPPORT" = yes ]; then
@@ -195,6 +203,7 @@ if [ ! "$KODIPLAYER_DRIVER" = default ]; then
     KODI_CXXFLAGS="$KODI_CXXFLAGS $BCM2835_INCLUDES"
   elif [ "$KODIPLAYER_DRIVER" = libfslvpuwrap ]; then
     KODI_CODEC="--enable-codec=imxvpu"
+    PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET gpu-viv-g2d"
   elif [ "$KODIPLAYER_DRIVER" = libamcodec ]; then
     KODI_CODEC="--enable-codec=amcodec"
   else
@@ -253,7 +262,7 @@ PKG_CONFIGURE_OPTS_TARGET="gl_cv_func_gettimeofday_clobber=no \
                            $KODI_XORG \
                            --disable-ccache \
                            $KODI_ALSA \
-                           --disable-pulse \
+                           $KODI_PULSEAUDIO \
                            --enable-rtmp \
                            $KODI_SAMBA \
                            $KODI_NFS \
@@ -340,8 +349,8 @@ post_makeinstall_target() {
   rm -rf $INSTALL/usr/bin/xbmc-standalone
   rm -rf $INSTALL/usr/lib/kodi/*.cmake
 
-  # fix binaryaddons multiarch build meh
-  cp -P project/cmake/scripts/linux/UseMultiArch.cmake $SYSROOT_PREFIX/usr/lib/kodi
+  # more binaddons cross compile badness meh
+  sed -i -e "s:INCLUDE_DIR /usr/include/kodi:INCLUDE_DIR $SYSROOT_PREFIX/usr/include/kodi:g" $SYSROOT_PREFIX/usr/lib/kodi/kodi-config.cmake
 
   mkdir -p $INSTALL/usr/lib/kodi
     cp $PKG_DIR/scripts/kodi-config $INSTALL/usr/lib/kodi

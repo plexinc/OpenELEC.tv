@@ -70,7 +70,7 @@
   # OpenGL(X) implementation to use (no / mesa)
     OPENGL="mesa"
 
-  # OpenGL-ES implementation to use (no / bcm2835-driver / imx-gpu-viv)
+  # OpenGL-ES implementation to use (no / bcm2835-driver / gpu-viv-bin-mx6q)
     OPENGLES="no"
 
   # include uvesafb support (yes / no)
@@ -97,4 +97,4 @@
   # for a list of additinoal drivers see packages/linux-drivers
   # Space separated list is supported,
   # e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
-    ADDITIONAL_DRIVERS="$ADDITIONAL_DRIVERS mt7601u bcm_sta"
+    ADDITIONAL_DRIVERS="$ADDITIONAL_DRIVERS bcm_sta"
