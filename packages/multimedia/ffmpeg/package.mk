@@ -154,7 +154,8 @@ configure_target() {
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
               --pkg-config="$ROOT/$TOOLCHAIN/bin/pkg-config" \
-              --disable-armv5te --disable-armv6t2 \
+              --enable-optimizations \
+              --disable-extra-warnings \
               --disable-ffprobe \
               --disable-ffplay \
               --disable-ffserver \
