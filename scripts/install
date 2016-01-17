@@ -32,7 +32,7 @@ if [ -z "$INSTALL" ] ; then
 fi
 
 # set defaults
-  PACKAGE_NAME=$(echo $1 | awk -F : '{print $1}')
+  PACKAGE_NAME=$(echo $1 | awk -F : '{print $1}')
   TARGET=$(echo $1 | awk -F : '{print $2}')
   if [ -z "$TARGET" ]; then
     TARGET="target"
@@ -167,6 +167,7 @@ if [ "$PLEX_DUMP_SYMBOLS" = "yes" ]; then
     mkdir -p $ROOT/target/qt
     cp $PKG_DIR/.symbols/* $ROOT/target/qt
   else
+    mkdir -p $ROOT/target
     cp $PKG_DIR/.symbols/* $ROOT/target
   fi
 fi
