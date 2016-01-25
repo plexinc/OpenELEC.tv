@@ -72,7 +72,7 @@
   AVAHI_DAEMON="no"
 
 # build with UPnP support (yes / no)
-  KODI_UPNP_SUPPORT="yes"
+  KODI_UPNP_SUPPORT="no"
 
 # build with MySQL support (yes / no)
   KODI_MYSQL_SUPPORT="no"
