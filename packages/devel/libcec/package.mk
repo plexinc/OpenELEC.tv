@@ -63,7 +63,3 @@ configure_target() {
         $EXTRA_CMAKE_OPTS \
         ..
 }
-
-post_makeinstall_target() {
-  mv $INSTALL/usr/lib/python2.7/dist-packages $INSTALL/usr/lib/python2.7/site-packages
-}
