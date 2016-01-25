@@ -29,7 +29,7 @@
   SKIN_DEFAULT="Confluence"
 
 # install extra subtitle Fonts for KODI (yes / no)
-  KODI_EXTRA_FONTS="yes"
+  KODI_EXTRA_FONTS="no"
 
 # build and install PulseAudio support (yes / no)
   PULSEAUDIO_SUPPORT="no"
@@ -54,7 +54,7 @@
 
 # build and install with DVDCSS support
 # (DVD decryption support in KODI) (yes / no)
-  KODI_DVDCSS_SUPPORT="yes"
+  KODI_DVDCSS_SUPPORT="no"
 
 # additional drivers to install:
 # for a list of additinoal drivers see packages/linux-drivers
@@ -84,19 +84,19 @@
   KODI_OPTICAL_SUPPORT="no"
 
 # build with AirPlay support (stream videos from iDevices to KODI) (yes / no)
-  KODI_AIRPLAY_SUPPORT="yes"
+  KODI_AIRPLAY_SUPPORT="no"
 
 # build with AirTunes support (stream music from iDevices to KODI) (yes / no)
-  KODI_AIRTUNES_SUPPORT="yes"
+  KODI_AIRTUNES_SUPPORT="no"
 
 # build with libnfs support (mounting nfs shares with KODI) (yes / no)
-  KODI_NFS_SUPPORT="yes"
+  KODI_NFS_SUPPORT="no"
 
 # build with Samba Client support (mounting SAMBA shares with KODI) (yes / no)
   KODI_SAMBA_SUPPORT="yes"
 
 # build with NFS support (mounting nfs shares via the OS) (yes / no)
-  NFS_SUPPORT="yes"
+  NFS_SUPPORT="no"
 
 # build with Samba Client support (mounting samba shares via the OS) (yes / no)
   SAMBA_SUPPORT="yes"
