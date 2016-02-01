@@ -23,7 +23,7 @@ PKG_ARCH="any"
 PKG_LICENSE="LGPLv2.1+"
 PKG_SITE="https://ffmpeg.org"
 PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
-PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis openssl libdcadec gnutls"
+PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis openssl gnutls"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video"
@@ -59,13 +59,6 @@ if [ "$VDPAU_SUPPORT" = yes ]; then
   FFMPEG_VDPAU="--enable-vdpau"
 else
   FFMPEG_VDPAU="--disable-vdpau"
-fi
-
-if [ "$DCADEC_SUPPORT" = yes ]; then
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libdcadec"
-  FFMPEG_LIBDCADEC="--enable-libdcadec"
-else
-  FFMPEG_LIBDCADEC="--disable-libdcadec"
 fi
 
 if [ "$DEBUG" = yes ]; then
@@ -170,12 +163,10 @@ configure_target() {
               --enable-muxer=spdif \
               --disable-indevs \
               --disable-outdevs \
-              $FFMPEG_LIBDCADEC \
               --disable-altivec \
               $FFMPEG_CPU \
               $FFMPEG_FPU \
               --disable-symver \
-              --enable-libdcadec \
               $FFMPEG_MMAL
 }
 
