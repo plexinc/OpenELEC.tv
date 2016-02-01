@@ -67,7 +67,6 @@ if [ ! -z "$CI_CRASHDUMP_SECRET" ]; then
 fi
 
 unpack() {
-if false ; then
         if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
           cd $BUILD/${PKG_NAME}-${PKG_VERSION} ; rm -rf build
           git pull ; git reset --hard
@@ -84,10 +83,6 @@ if false ; then
             fi
           fi
         fi
-fi
-
-           git clone /mnt/ssd/money/konvergo $BUILD/${PKG_NAME}-${PKG_VERSION}
-          cd $ROOT
 
 	if [ "$PLEX_DEBUG" = yes ]; then
 		cd $BUILD/${PKG_NAME}-${PKG_VERSION}
