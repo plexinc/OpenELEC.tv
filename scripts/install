@@ -156,4 +156,19 @@ if [ "$TARGET" = target ] ; then
   fi
 fi
 
+### PLEX
+if [ "$PLEX_DUMP_SYMBOLS" = "yes" ]; then
+  if [[ "$PKG_DIR" =~ ^.*/qt$ ]] ; then
+    mkdir -p $ROOT/target/qt
+    cp $PKG_DIR/.symbols/* $ROOT/target/qt
+  else
+    cp $PKG_DIR/.symbols/* $ROOT/target
+  fi
+fi
+### END PLEX
+
+for i in `sed -n "s/^\([^#].*\)=\".*$/\1/p" $PROJECT_DIR/$PROJECT/options | grep -v "#"`; do
+  eval val=\$$i
+  echo "STAMP_$i=\"$val"\" >> $STAMP
+done
 touch $STAMP

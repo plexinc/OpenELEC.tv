@@ -28,3 +28,8 @@ mkpkg-temp
 
 # crap
 .DS_Store
+
+### PLEX
+# symbol dumps directories
+.symbols
+### END PLEX

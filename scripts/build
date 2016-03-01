@@ -324,6 +324,28 @@ if [ ! -f $STAMP ]; then
         post_makeinstall_$TARGET
       fi
 
+      ### PLEX
+      if [ "$PLEX_DUMP_SYMBOLS" = "yes" ]; then
+	# create the symbols dump directory
+        PLEX_DUMP_DIR=$PKG_DIR/.symbols
+        rm -rf $PLEX_DUMP_DIR || true
+        mkdir $PLEX_DUMP_DIR 
+	
+        echo "Symbols dump : processing package $PKG_NAME"
+	PLEX_DUMP_LIBRARIES=`find $INSTALL -name "*.so" -type f -follow`
+	PLEX_DUMP_BINARIES=`find $INSTALL ! -name "*.*" -type f -executable`
+
+	for i in  $PLEX_DUMP_LIBRARIES $PLEX_DUMP_BINARIES; do
+          PLEX_DUMP_FILE_NAME=`basename $i`
+          echo " Dumping symbols for $PLEX_DUMP_FILE_NAME..."
+          $ROOT/$TOOLCHAIN/bin/dump_syms $i | xz > $PLEX_DUMP_DIR/$PLEX_DUMP_FILE_NAME.symbols.xz
+          if [ "$PLEX_DEBUG" != yes ]; then
+            $TARGET_STRIP  $i
+          fi
+        done
+      fi
+      ### END PLEX
+
       if [ "$TARGET" = "target" -o "$TARGET" = "init" ]; then
        if [ -d $INSTALL ] ; then
          for i in $INSTALL $INSTALL/usr; do
@@ -351,10 +373,17 @@ if [ ! -f $STAMP ]; then
 
           find $INSTALL -type d -exec rmdir -p "{}" ";" 2>/dev/null || true
 
-          if [ ! "$DEBUG" = yes ]; then
-            $STRIP `find $INSTALL -name "*.so" 2>/dev/null` 2>/dev/null || :
-            $STRIP `find $INSTALL -name "*.so.[0-9]*" 2>/dev/null` 2>/dev/null || :
+### PLEX
+          if [ "$DEBUG" != yes ]; then
+            if [ "$PLEX_DEBUG" = yes ]; then
+              $STRIP `find $INSTALL -name "*.so" ! -name "libpthread*" ! -name "libmpv*" ! -name "ffmpeg*" 2>/dev/null` 2>/dev/null || :
+              $STRIP `find $INSTALL -name "*.so.[0-9]*" ! -name "libpthread*" ! -name "libmpv*" ! -name "ffmpeg*" 2>/dev/null` 2>/dev/null || :
+            else
+              $STRIP `find $INSTALL -name "*.so" 2>/dev/null` 2>/dev/null || :
+              $STRIP `find $INSTALL -name "*.so.[0-9]*" 2>/dev/null` 2>/dev/null || :
+            fi
           fi
+### END PLEX
         fi
       fi
 

@@ -35,6 +35,13 @@ PKG_AUTORECONF="yes"
 PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC --enable-static --disable-shared --disable-nls --disable-rpath --with-gnu-ld"
 
 pre_configure_target() {
+
+  ### PLEX
+  CFLAGS="$CFLAGS -fPIC"
+  CXXFLAGS="$CXXFLAGS -fPIC"
+  LDFLAGS="$LDFLAGS -fPIC"
+  ### END PLEX
+
 # inspired by openembedded
   case ${TARGET_ARCH} in
     aarch64)

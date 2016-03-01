@@ -199,6 +199,13 @@ strip_gold() {
   LDFLAGS=`echo $LDFLAGS | sed -e "s|-fuse-ld=gold||g"`
 }
 
+### PLEX
+strip_strip() {
+ # removes -s (stripping) from linker flags
+ LDFLAGS=`echo $LDFLAGS | sed -e "s| -s||g"`
+}
+### END PLEX 
+
 fix_module_depends() {
   # modify .modinfo section in kernel module to depends on other required modules
   local MODULE="$1"

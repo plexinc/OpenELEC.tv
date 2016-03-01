@@ -33,8 +33,6 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
 PKG_CONFIGURE_OPTS_TARGET="--disable-test \
-                           --enable-fontconfig \
-                           --disable-harfbuzz \
                            --disable-silent-rules \
                            --with-gnu-ld"
 

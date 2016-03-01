@@ -1,0 +1,15 @@
+--- ./qtwebengine/src/core/qtwebengine.gypi	2015-12-28 10:44:18.281838359 +0100
++++ ./qtwebengine/src/core/qtwebengine.gypi	2015-12-28 10:44:50.369838359 +0100
+@@ -115,6 +115,12 @@
+         'dependencies': [
+           '<(chromium_src_dir)/build/linux/system.gyp:fontconfig',
+         ],
++	'ldflags': [
++          '-lmmal_core',
++          '-lmmal_util',
++          '-lmmal_vc_client',
++          '-lvcos',
++        ],
+       }],
+       ['OS=="mac"', {
+         'xcode_settings': {'OTHER_LDFLAGS': ['-Wl,-ObjC']},

@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="2.6.4"
+PKG_VERSION="master"
 PKG_REV="1"
 PKG_ARCH="any"
-PKG_LICENSE="LGPLv2.1+"
-PKG_SITE="https://ffmpeg.org"
-PKG_URL="https://ffmpeg.org/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis libressl"
+PKG_LICENSE="LGPL"
+PKG_SITE="https://nightlies.plex.tv"
+PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
+PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis openssl gnutls"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video."
@@ -31,6 +31,18 @@ PKG_LONGDESC="FFmpeg is a complete, cross-platform solution to record, convert a
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
+
+### PLEX
+if [ "$CI_BUILD" = true ]; then
+ PLEX_DUMP_SYMBOLS=yes
+fi
+
+unpack() {
+
+        git clone --depth 1 -b $PKG_VERSION git@github.com:wm4/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
+
+}
+### END PLEX
 
 # configure GPU drivers and dependencies:
   get_graphicdrivers
@@ -49,28 +61,23 @@ else
   FFMPEG_VDPAU="--disable-vdpau"
 fi
 
-if [ "$DCADEC_SUPPORT" = yes ]; then
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET dcadec"
-  FFMPEG_LIBDCADEC="--enable-libdcadec"
-else
-  FFMPEG_LIBDCADEC="--disable-libdcadec"
-fi
-
 if [ "$DEBUG" = yes ]; then
   FFMPEG_DEBUG="--enable-debug --disable-stripping"
 else
   FFMPEG_DEBUG="--disable-debug --enable-stripping"
 fi
 
+### PLEX
+  FFMPEG_DEBUG="--enable-debug --disable-stripping"
+## END PLEX
+
 case "$TARGET_ARCH" in
   arm)
       FFMPEG_CPU=""
-      FFMPEG_TABLES="--enable-hardcoded-tables"
       FFMPEG_PIC="--enable-pic"
   ;;
   x86_64)
       FFMPEG_CPU=""
-      FFMPEG_TABLES="--disable-hardcoded-tables"
       FFMPEG_PIC="--enable-pic"
   ;;
 esac
@@ -86,6 +93,17 @@ case "$TARGET_FPU" in
       FFMPEG_FPU=""
   ;;
 esac
+
+### PLEX
+case $PROJECT in
+      Generic|Nvidia_Legacy)
+      ;;
+      RPi|RPi2)
+      FFMPEG_MMAL="--enable-mmal"
+      PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
+      ;;
+esac
+### END PLEX
 
 pre_configure_target() {
   cd $ROOT/$PKG_BUILD
@@ -124,99 +142,40 @@ configure_target() {
               --build-suffix="" \
               --disable-static \
               --enable-shared \
-              --enable-gpl \
               --disable-version3 \
-              --disable-nonfree \
-              --enable-logging \
               --disable-doc \
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
               --pkg-config="$ROOT/$TOOLCHAIN/bin/pkg-config" \
               --enable-optimizations \
               --disable-extra-warnings \
+              --disable-armv5te --disable-armv6t2 \
               --disable-ffprobe \
               --disable-ffplay \
               --disable-ffserver \
-              --enable-ffmpeg \
-              --enable-avdevice \
-              --enable-avcodec \
-              --enable-avformat \
-              --enable-swscale \
-              --enable-postproc \
-              --enable-avfilter \
               --disable-devices \
-              --enable-pthreads \
-              --disable-w32threads \
               --disable-x11grab \
-              --enable-network \
-              --disable-gnutls --enable-libressl \
-              --disable-gray \
-              --enable-swscale-alpha \
-              --disable-small \
-              --enable-dct \
-              --enable-fft \
-              --enable-mdct \
-              --enable-rdft \
-              --disable-crystalhd \
+              --enable-gnutls  \
               $FFMPEG_VAAPI \
               $FFMPEG_VDPAU \
-              --disable-dxva2 \
-              --enable-runtime-cpudetect \
-              $FFMPEG_TABLES \
-              --disable-memalign-hack \
               --disable-encoders \
               --enable-encoder=ac3 \
-              --enable-encoder=aac \
-              --enable-encoder=wmav2 \
-              --disable-decoder=mpeg_xvmc \
-              --enable-hwaccels \
               --disable-muxers \
               --enable-muxer=spdif \
-              --enable-muxer=adts \
-              --enable-muxer=asf \
-              --enable-muxer=ipod \
-              --enable-muxer=mpegts \
-              --enable-demuxers \
-              --enable-parsers \
-              --enable-bsfs \
-              --enable-protocol=http \
               --disable-indevs \
               --disable-outdevs \
-              --enable-filters \
-              --disable-avisynth \
-              --enable-bzlib \
-              --disable-frei0r \
-              --disable-libopencore-amrnb \
-              --disable-libopencore-amrwb \
-              --disable-libopencv \
-              --disable-libdc1394 \
-              $FFMPEG_LIBDCADEC \
-              --disable-libfaac \
-              --disable-libfreetype \
-              --disable-libgsm \
-              --disable-libmp3lame \
-              --disable-libnut \
-              --disable-libopenjpeg \
-              --disable-librtmp \
-              --disable-libschroedinger \
-              --disable-libspeex \
-              --disable-libtheora \
-              --disable-libvo-aacenc \
-              --disable-libvo-amrwbenc \
-              --enable-libvorbis --enable-muxer=ogg --enable-encoder=libvorbis \
-              --disable-libvpx \
-              --disable-libx264 \
-              --disable-libxavs \
-              --disable-libxvid \
-              --enable-zlib \
-              --enable-asm \
               --disable-altivec \
               $FFMPEG_CPU \
               $FFMPEG_FPU \
-              --enable-yasm \
-              --disable-symver
+              --disable-symver \
+              $FFMPEG_MMAL
 }
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/share/ffmpeg/examples
+   
+  ### PLEX 
+  # We dont need the ffmpeg binaries
+  rm -rf $INSTALL/usr/bin
+  ### END PLEX
 }
