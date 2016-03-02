@@ -44,7 +44,6 @@ fi
 
 ### PLEX
 # Use set GIT_TOKEN variable to ?token=<git_token> before running.
-# Also set PMP repo to public if private not defined.
 if [ -z "$PMP_RELEASE_SHA" ]; then
   DEFAULT_GIT_REPO="${GIT_REPO:-dist-ninja}"
   PLEX_GITSHA=`git ls-remote --heads git@github.com:plexinc/plex-media-player.git $DEFAULT_GIT_REPO|awk '{print substr($0,0,8)}'`
