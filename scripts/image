@@ -45,21 +45,19 @@ fi
 ### PLEX
 # Use set GIT_TOKEN variable to ?token=<git_token> before running.
 # Also set PMP repo to public if private not defined.
-if [ "$PMP_REPO" != "plex-media-player-private" ]; then
-  export PMP_REPO="plex-media-player"
+if [ -z "$PMP_RELEASE_SHA" ]; then
+  DEFAULT_GIT_REPO="${GIT_REPO:-dist-ninja}"
+  PLEX_GITSHA=`git ls-remote --heads git@github.com:plexinc/plex-media-player.git $DEFAULT_GIT_REPO|awk '{print substr($0,0,8)}'`
+else
+  PLEX_GITSHA="`echo $PMP_RELEASE_SHA|cut -c -8`"
 fi
-if [ "`curl -sL -w "%{http_code}\\n" --user "plex-konvergo:$GIT_TOKEN" https://raw.githubusercontent.com/plexinc/$PMP_REPO/master/CMakeModules/VersionConfiguration.cmake -o /dev/null`" = "200" ]; then
-  PLEX_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/$PMP_REPO/master/CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g'`"
+
+if [ "`curl -sL -w "%{http_code}\\n" --user "plex-konvergo:$GIT_TOKEN" https://raw.githubusercontent.com/plexinc/plex-media-player/$PLEX_GITSHA/CMakeModules/VersionConfiguration.cmake -o /dev/null`" = "200" ]; then
+  PLEX_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/plex-media-player/$PLEX_GITSHA/CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g'`"
 else
   PLEX_VERSION="dev"
 fi
 
-if [ -z "$PMP_RELEASE_SHA" ]; then
-  DEFAULT_GIT_REPO="${GIT_REPO:-dist-ninja}"
-  PLEX_GITSHA=`git ls-remote --heads git@github.com:plexinc/$PMP_REPO.git $DEFAULT_GIT_REPO|awk '{print substr($0,0,8)}'`
-else
-  PLEX_GITSHA="`echo $PMP_RELEASE_SHA|cut -c -8`"
-fi
 
 TARGET_VERSION="$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION"
 
