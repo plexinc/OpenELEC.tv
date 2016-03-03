@@ -51,7 +51,7 @@
     PROJECT_CFLAGS="-mmmx -msse -msse2 -mfpmath=sse"
 
   # LTO (Link Time Optimization) support
-    LTO_SUPPORT="no"
+    LTO_SUPPORT="yes"
 
   # GOLD (Google Linker) support
     GOLD_SUPPORT="yes"
