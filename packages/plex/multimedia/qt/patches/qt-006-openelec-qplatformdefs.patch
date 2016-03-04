@@ -1,0 +1,4 @@
+--- /dev/null	2015-03-02 20:32:15.331938000 +0100
++++ b/qtbase/mkspecs/linux-g++-openelec/qplatformdefs.h	2015-03-05 15:29:59.302096999 +0100
+@@ -0,0 +1 @@
++#include "../linux-g++/qplatformdefs.h"

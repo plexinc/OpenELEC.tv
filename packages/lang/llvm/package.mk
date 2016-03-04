@@ -102,10 +102,15 @@ pre_configure_host() {
     mkdir -p BuildTools && cd BuildTools
 }
 
+### PLEX
 pre_configure_target() {
+# llvm fails to build with LTO support
+  strip_lto
+
   export CFLAGS="$CFLAGS -fPIC"
   export CXXFLAGS="$CXXFLAGS -fPIC"
 }
+#END PLEX
 
 makeinstall_host() {
 # nothing to install here

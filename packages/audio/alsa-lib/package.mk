@@ -60,6 +60,11 @@ post_makeinstall_target() {
 
   mkdir -p $INSTALL/usr/config
     cp -PR $PKG_DIR/config/modprobe.d $INSTALL/usr/config
+
+  ### PLEX
+  mkdir -p $INSTALL/usr/share/alsa/cards
+   cp -PR $PKG_DIR/config/plex.bcm2835.conf $INSTALL/usr/share/alsa/cards/bcm2835.conf
+  ### END PLEX
 }
 
 post_install() {

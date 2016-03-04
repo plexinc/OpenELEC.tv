@@ -17,13 +17,14 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="2.6.4"
+PKG_VERSION="master"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPLv2.1+"
-PKG_SITE="https://ffmpeg.org"
-PKG_URL="https://ffmpeg.org/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis libressl"
+PKG_SITE="https://nightlies.plex.tv"
+PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
+PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis openssl gnutls"
+
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video."
@@ -34,6 +35,18 @@ PKG_AUTORECONF="no"
 
 # configure GPU drivers and dependencies:
   get_graphicdrivers
+
+### PLEX
+if [ "$CI_BUILD" = true ]; then
+ PLEX_DUMP_SYMBOLS=yes
+fi
+
+unpack() {
+
+        git clone --depth 1 -b $PKG_VERSION git@github.com:wm4/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
+
+}
+### END PLEX
 
 if [ "$VAAPI_SUPPORT" = yes ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libva-intel-driver"
@@ -56,11 +69,10 @@ else
   FFMPEG_LIBDCADEC="--disable-libdcadec"
 fi
 
-if [ "$DEBUG" = yes ]; then
+### PLEX
+# We always want debugging on ffmpeg
   FFMPEG_DEBUG="--enable-debug --disable-stripping"
-else
-  FFMPEG_DEBUG="--disable-debug --enable-stripping"
-fi
+## END PLEX
 
 case "$TARGET_ARCH" in
   arm)
@@ -86,6 +98,17 @@ case "$TARGET_FPU" in
       FFMPEG_FPU=""
   ;;
 esac
+
+-### PLEX
+-case $PROJECT in
+-      Generic|Nvidia_Legacy)
+-      ;;
+-      RPi|RPi2)
+-      FFMPEG_MMAL="--enable-mmal"
+-      PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
+-      ;;
+-esac
+-### END PLEX
 
 pre_configure_target() {
   cd $ROOT/$PKG_BUILD
@@ -148,6 +171,7 @@ configure_target() {
               --enable-pthreads \
               --disable-w32threads \
               --disable-x11grab \
+              --enable-gnutls  \
               --enable-network \
               --disable-gnutls --enable-libressl \
               --disable-gray \
@@ -213,6 +237,7 @@ configure_target() {
               --disable-altivec \
               $FFMPEG_CPU \
               $FFMPEG_FPU \
+              $FFMPEG_MMAL \
               --enable-yasm \
               --disable-symver
 }
@@ -220,3 +245,8 @@ configure_target() {
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/share/ffmpeg/examples
 }
+
+### PLEX 
+# We dont need the ffmpeg binaries
+rm -rf $INSTALL/usr/bin
+### END PLEX

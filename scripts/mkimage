@@ -27,7 +27,15 @@
   OE_TMP=$(mktemp -d)
   LOOP=$(losetup -f)
 
-  SYSTEM_SIZE=512
+### PLEX
+  # If running debug on QT it gets really huge and we need a larger image size
+  if [ "$DEBUG" = "yes" -o "$PLEX_DEBUG" = "yes" ]; then
+    SYSTEM_SIZE=1280
+  else
+    SYSTEM_SIZE=256
+  fi
+### END PLEX
+
   STORAGE_SIZE=32 # STORAGE_SIZE must be >= 32 !
 
   DISK_SIZE=$(( $SYSTEM_SIZE + $STORAGE_SIZE + 4 ))
@@ -103,13 +111,26 @@ fi
   echo "image: creating filesystem on part1..."
   OFFSET=$(( 2048 * 512 ))
   SIZELIMIT=$(( $SYSTEM_SIZE * 1024 * 1024 ))
+
+### PLEX
+  # Sleep because of huge image size
+  if [ "$DEBUG" = "yes" -o "$PLEX_DEBUG" = "yes" ]; then
+    sleep 1
+  fi
+### END PLEX
+
   losetup -o $OFFSET --sizelimit $SIZELIMIT "$LOOP" "$DISK"
   if [ "$BOOTLOADER" = "syslinux" ]; then
     mkfs.vfat -i "$FAT_VOL_ID" "$LOOP"
   elif [ "$BOOTLOADER" = "bcm2835-bootloader" -o "$BOOTLOADER" = "u-boot" ]; then
     mkfs.vfat "$LOOP"
   fi
+
+### PLEX
+# give it an awesome name ! 
+  mlabel -i "$LOOP" ::PLEX
   sync
+### END PLEX
 
 # mount partition
   echo "image: mounting part1 on $OE_TMP..."

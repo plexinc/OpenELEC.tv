@@ -1,7 +1,10 @@
 [Unit]
 Description=OpenSSH server daemon
 ConditionKernelCommandLine=|ssh
-ConditionPathExists=|/storage/.cache/services/sshd.conf
+### PLEX
+ConditionPathExists=|/usr/share/sshd.conf
+### END PLEX
+After=network.target
 
 [Service]
 Restart=on-failure
@@ -15,3 +18,4 @@ StartLimitInterval=0
 
 [Install]
 WantedBy=multi-user.target
+
