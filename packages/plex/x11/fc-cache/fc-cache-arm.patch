@@ -1,0 +1,48 @@
+--- ./fc-cache/fc-cache.c	2014-12-24 09:42:48.000000000 +0100
++++ ./fc-cache/fc-cache.c	2015-09-07 14:39:45.168064912 +0200
+@@ -31,6 +31,8 @@
+ #define HAVE_GETOPT 1
+ #endif
+ 
++#include "fcint.h"
++
+ #include <fontconfig/fontconfig.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -133,6 +135,7 @@
+     FcBool	    was_valid, was_processed = FcFalse;
+     int		    i;
+     const FcChar8   *sysroot = FcConfigGetSysRoot (config);
++    FcChar8   *d;
+ 
+     /*
+      * Now scan all of the directories into separate databases
+@@ -157,7 +160,12 @@
+ 	    continue;
+ 	}
+ 
+-	if (stat ((char *) dir, &statb) == -1)
++	if (sysroot)
++	  d = FcStrBuildFilename (sysroot, dir, NULL);
++	else
++	  d = FcStrdup(dir);
++
++        if (stat ((char *) d, &statb) == -1)
+ 	{
+ 	    switch (errno) {
+ 	    case ENOENT:
+@@ -171,12 +179,14 @@
+ 		ret++;
+ 		break;
+ 	    }
++	    FcStrFree(d);
+ 	    continue;
+ 	}
+ 
+ 	if (!S_ISDIR (statb.st_mode))
+ 	{
+ 	    fprintf (stderr, "\"%s\": not a directory, skipping\n", dir);
++	    FcStrFree(d);
+ 	    continue;
+ 	}
+ 	was_processed = FcTrue;

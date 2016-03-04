@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="libass"
-PKG_VERSION="0.12.1"
+PKG_VERSION="0.12.3"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="BSD"
@@ -33,9 +33,6 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
 PKG_CONFIGURE_OPTS_TARGET="--disable-test \
-                           --enable-enca \
-                           --enable-fontconfig \
-                           --disable-harfbuzz \
                            --disable-silent-rules \
                            --with-gnu-ld"
 

@@ -1,0 +1,22 @@
+[Unit]
+Description=Plex Media Player
+After=graphical.target
+Requires=graphical.target
+
+[Service]
+Environment=DISPLAY=:0.0
+Environment=SDL_MOUSE_RELATIVE=0
+Environment=HOME=/storage
+ExecStartPre="rm -f /storage/.local/share/plexmediaplayer/plexmediaplayer.conf.* /storage/.local/share/plexmediaplayer/plexmediaplayer.pid"
+ExecStartPre=/bin/sh -c "mkdir -p /storage/.cache/fontconfig/; rm /storage/.cache/fontconfig/* ; cp -p /usr/share/plexmediaplayer/fc-cache/* /storage/.cache/fontconfig/"
+ExecStart=/bin/sh -c ". /etc/profile; /usr/share/plexmediaplayer/scripts/plex_update.sh ; if [ -f /storage/.plex_update/bin/plexmediaplayer ]; then exec /storage/.plex_update/bin/plexmediaplayer ; else exec /usr/bin/plexmediaplayer ; fi"
+# keep KillMode=process unless there is no good reason to switch to cgroup
+#KillMode=process
+TimeoutStopSec=5
+Restart=always
+RestartSec=2
+StartLimitInterval=0
+LimitNOFILE=16384
+
+[Install]
+WantedBy=plex.target

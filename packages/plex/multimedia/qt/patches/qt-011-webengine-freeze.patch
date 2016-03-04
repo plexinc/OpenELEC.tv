@@ -1,0 +1,25 @@
+Same as qt-patches/qt-5.6-alpha/0004-chromium-create-wakeup-pipe-with-O_CLOEXEC.patch,
+just with rebased paths.
+--- a/qtwebengine/src/3rdparty/chromium/content/browser/renderer_host/render_sandbox_host_linux.cc
++++ b/qtwebengine/src/3rdparty/chromium/content/browser/renderer_host/render_sandbox_host_linux.cc
+@@ -5,6 +5,8 @@
+ #include "content/browser/renderer_host/render_sandbox_host_linux.h"
+ 
+ #include <sys/socket.h>
++#include <fcntl.h>
++#include <unistd.h>
+ 
+ #include "base/memory/singleton.h"
+ #include "base/posix/eintr_wrapper.h"
+@@ -45,7 +47,7 @@ void RenderSandboxHostLinux::Init() {
+   PCHECK(0 == shutdown(browser_socket, SHUT_WR)) << "shutdown";
+ 
+   int pipefds[2];
+-  CHECK(0 == pipe(pipefds));
++  CHECK(0 == pipe2(pipefds, O_CLOEXEC));
+   const int child_lifeline_fd = pipefds[0];
+   childs_lifeline_fd_ = pipefds[1];
+ 
+-- 
+2.5.1
+

@@ -51,7 +51,7 @@
     PROJECT_CFLAGS="-mmmx -msse -msse2 -mfpmath=sse"
 
   # LTO (Link Time Optimization) support
-    LTO_SUPPORT="yes"
+    LTO_SUPPORT="no"
 
   # GOLD (Google Linker) support
     GOLD_SUPPORT="yes"
@@ -91,7 +91,7 @@
   # additional Firmware to use (dvb-firmware, misc-firmware, wlan-firmware)
   # Space separated list is supported,
   # e.g. FIRMWARE="dvb-firmware misc-firmware wlan-firmware"
-    FIRMWARE="misc-firmware wlan-firmware dvb-firmware iwlwifi-firmware"
+    FIRMWARE="misc-firmware wlan-firmware iwlwifi-firmware"
 
   # additional drivers to install:
   # for a list of additinoal drivers see packages/linux-drivers

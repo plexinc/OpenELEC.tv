@@ -48,7 +48,11 @@ post_install() {
     if [ -f $PROJECT_DIR/$PROJECT/installer/installer.conf ]; then
       cp $PROJECT_DIR/$PROJECT/installer/installer.conf $INSTALL/etc
     else
+      if [ "$DEBUG" = "yes" -o "$PLEX_DEBUG" = "yes" ]; then
+      cp $PKG_DIR/config/installer.conf.debug $INSTALL/etc/installer.conf
+      else
       cp $PKG_DIR/config/installer.conf $INSTALL/etc
+      fi
     fi
 
   enable_service installer.service

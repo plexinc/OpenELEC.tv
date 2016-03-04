@@ -50,6 +50,8 @@ else
   MESA_VDPAU="--disable-vdpau"
 fi
 
+### PLEX
+### We need to enable gles2 and disable gallium-osmesa
 PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            CXX_FOR_BUILD=$HOST_CXX \
                            CFLAGS_FOR_BUILD= \
@@ -65,7 +67,8 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --disable-selinux \
                            --enable-opengl \
                            --disable-gles1 \
-                           --disable-gles2 \
+                           --enable-gles2 \
+                           --disable-openvg \
                            --enable-dri \
                            --disable-dri3 \
                            --enable-glx \
@@ -84,6 +87,7 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --disable-xlib-glx \
                            --disable-r600-llvm-compiler \
                            --disable-gallium-tests \
+                           --disable-gallium-osmesa \
                            --enable-shared-glapi \
                            --enable-shader-cache \
                            --enable-sysfs \
@@ -96,6 +100,7 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --with-gallium-drivers=$GALLIUM_DRIVERS \
                            --with-dri-drivers=$DRI_DRIVERS \
                            --with-sysroot=$SYSROOT_PREFIX"
+### END PLEX
 
 post_makeinstall_target() {
   # rename and relink for cooperate with nvidia drivers

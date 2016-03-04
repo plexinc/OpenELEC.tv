@@ -1,0 +1,12 @@
+--- a/qtwebengine/src/core/qtwebengine_extras.gypi	2015-06-29 22:10:13.000000000 +0200
++++ b/qtwebengine/src/core/qtwebengine_extras.gypi	2015-08-28 08:16:21.348000000 +0200
+@@ -86,9 +86,6 @@
+           }],
+           ['_toolset=="target"', {
+             'libraries': [
+-              '-licui18n',
+-              '-licuuc',
+-              '-licudata',
+             ],
+           }],
+         ],
