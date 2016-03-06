@@ -99,16 +99,16 @@ case "$TARGET_FPU" in
   ;;
 esac
 
--### PLEX
--case $PROJECT in
--      Generic|Nvidia_Legacy)
--      ;;
--      RPi|RPi2)
--      FFMPEG_MMAL="--enable-mmal"
--      PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
--      ;;
--esac
--### END PLEX
+### PLEX
+case $PROJECT in
+      Generic|Nvidia_Legacy)
+      ;;
+      RPi|RPi2)
+      FFMPEG_MMAL="--enable-mmal"
+      PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
+      ;;
+esac
+### END PLEX
 
 pre_configure_target() {
   cd $ROOT/$PKG_BUILD
