@@ -173,7 +173,7 @@ configure_target() {
               --disable-x11grab \
               --enable-gnutls  \
               --enable-network \
-              --disable-gnutls --enable-libressl \
+              --disable-gnutls --enable-openssl \
               --disable-gray \
               --enable-swscale-alpha \
               --disable-small \
@@ -244,9 +244,8 @@ configure_target() {
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/share/ffmpeg/examples
-}
-
 ### PLEX 
 # We dont need the ffmpeg binaries
 rm -rf $INSTALL/usr/bin
 ### END PLEX
+}
