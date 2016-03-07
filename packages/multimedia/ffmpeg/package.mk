@@ -147,99 +147,31 @@ configure_target() {
               --build-suffix="" \
               --disable-static \
               --enable-shared \
-              --enable-gpl \
               --disable-version3 \
-              --disable-nonfree \
-              --enable-logging \
               --disable-doc \
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
               --pkg-config="$ROOT/$TOOLCHAIN/bin/pkg-config" \
-              --enable-optimizations \
-              --disable-extra-warnings \
+              --disable-armv5te --disable-armv6t2 \
               --disable-ffprobe \
               --disable-ffplay \
               --disable-ffserver \
-              --enable-ffmpeg \
-              --enable-avdevice \
-              --enable-avcodec \
-              --enable-avformat \
-              --enable-swscale \
-              --enable-postproc \
-              --enable-avfilter \
               --disable-devices \
-              --enable-pthreads \
-              --disable-w32threads \
               --disable-x11grab \
               --enable-gnutls  \
-              --enable-network \
-              --disable-gnutls --enable-openssl \
-              --disable-gray \
-              --enable-swscale-alpha \
-              --disable-small \
-              --enable-dct \
-              --enable-fft \
-              --enable-mdct \
-              --enable-rdft \
-              --disable-crystalhd \
               $FFMPEG_VAAPI \
               $FFMPEG_VDPAU \
-              --disable-dxva2 \
-              --enable-runtime-cpudetect \
-              $FFMPEG_TABLES \
-              --disable-memalign-hack \
               --disable-encoders \
               --enable-encoder=ac3 \
-              --enable-encoder=aac \
-              --enable-encoder=wmav2 \
-              --disable-decoder=mpeg_xvmc \
-              --enable-hwaccels \
               --disable-muxers \
               --enable-muxer=spdif \
-              --enable-muxer=adts \
-              --enable-muxer=asf \
-              --enable-muxer=ipod \
-              --enable-muxer=mpegts \
-              --enable-demuxers \
-              --enable-parsers \
-              --enable-bsfs \
-              --enable-protocol=http \
               --disable-indevs \
               --disable-outdevs \
-              --enable-filters \
-              --disable-avisynth \
-              --enable-bzlib \
-              --disable-frei0r \
-              --disable-libopencore-amrnb \
-              --disable-libopencore-amrwb \
-              --disable-libopencv \
-              --disable-libdc1394 \
-              $FFMPEG_LIBDCADEC \
-              --disable-libfaac \
-              --disable-libfreetype \
-              --disable-libgsm \
-              --disable-libmp3lame \
-              --disable-libnut \
-              --disable-libopenjpeg \
-              --disable-librtmp \
-              --disable-libschroedinger \
-              --disable-libspeex \
-              --disable-libtheora \
-              --disable-libvo-aacenc \
-              --disable-libvo-amrwbenc \
-              --enable-libvorbis --enable-muxer=ogg --enable-encoder=libvorbis \
-              --disable-libvpx \
-              --disable-libx264 \
-              --disable-libxavs \
-              --disable-libxvid \
-              --enable-zlib \
-              --enable-asm \
               --disable-altivec \
               $FFMPEG_CPU \
               $FFMPEG_FPU \
-              $FFMPEG_MMAL \
-              --enable-yasm \
-              --disable-symver
+              --disable-symver \
+              $FFMPEG_MMAL
 }
 
 post_makeinstall_target() {
