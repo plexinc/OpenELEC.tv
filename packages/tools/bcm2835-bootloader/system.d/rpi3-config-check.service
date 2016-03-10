@@ -1,0 +1,8 @@
+[Unit]
+Description=Fix config.txt if on RPi3
+
+[Service]
+ExecStart=/usr/share/bootloader/config-fix.sh
+
+[Install]
+WantedBy=multi-user.target
