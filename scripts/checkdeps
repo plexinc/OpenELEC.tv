@@ -54,6 +54,7 @@ case "$DISTRO" in
     ubuntu)
       deps="$deps g++ mkfontscale mkfontdir bdftopcf xsltproc java"
       deps_pkg="$deps_pkg g++ xfonts-utils xfonts-utils xfonts-utils xsltproc default-jre fontconfig:i386"
+      ;;
     *)
       deps="$deps g++ mkfontscale mkfontdir bdftopcf xsltproc java"
       deps_pkg="$deps_pkg g++ xfonts-utils xfonts-utils xfonts-utils xsltproc default-jre"
