@@ -37,7 +37,7 @@ files_pkg="libc6-dev libncurses5-dev"
 case "$DISTRO" in
     fedora|centos|rhel)
       deps="$deps g++ mkfontscale mkfontdir bdftopcf xsltproc java"
-      deps_pkg="$deps_pkg gcc-c++ xorg-x11-font-utils xorg-x11-font-utils xorg-x11-font-utils libxslt java-1.7.0-openjdk"
+      deps_pkg="$deps_pkg gcc-c++ xorg-x11-font-utils xorg-x11-font-utils xorg-x11-font-utils libxslt java-1.7.0-openjdk fontconfig.i686"
       [[ ! `rpm -qa glibc-static` ]] && deps="$deps glibc-static" && deps_pkg="$deps_pkg glibc-static"
       [[ ! `rpm -qa libstdc++-static` ]] && deps="$deps libstdc++-static" && deps_pkg="$deps_pkg libstdc++-static"
       files_pkg="glibc-headers ncurses-devel"
@@ -51,6 +51,9 @@ case "$DISTRO" in
       deps="$deps g++ mkfontscale mkfontdir bdftopcf xsltproc java"
       deps_pkg="$deps_pkg g++ xorg-mkfontscale xorg-mkfontdir xorg-bdftopcf libxslt java-runtime-common"
       ;;
+    ubuntu)
+      deps="$deps g++ mkfontscale mkfontdir bdftopcf xsltproc java"
+      deps_pkg="$deps_pkg g++ xfonts-utils xfonts-utils xfonts-utils xsltproc default-jre fontconfig:i386"
     *)
       deps="$deps g++ mkfontscale mkfontdir bdftopcf xsltproc java"
       deps_pkg="$deps_pkg g++ xfonts-utils xfonts-utils xfonts-utils xsltproc default-jre"
