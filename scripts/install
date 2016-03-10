@@ -162,6 +162,7 @@ if [ "$PLEX_DUMP_SYMBOLS" = "yes" ]; then
     mkdir -p $ROOT/target/qt
     cp $PKG_DIR/.symbols/* $ROOT/target/qt
   else
+    mkdir -p $ROOT/target
     cp $PKG_DIR/.symbols/* $ROOT/target
   fi
 fi
