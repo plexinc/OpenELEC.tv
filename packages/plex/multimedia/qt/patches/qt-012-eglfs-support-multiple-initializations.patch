@@ -1,0 +1,40 @@
+diff -aur qt-5.6.0-beta.orig/qtbase/src/plugins/platforms/eglfs/qeglfsintegration.cpp qt-5.6.0-beta/qtbase/src/plugins/platforms/eglfs/qeglfsintegration.cpp
+--- qt-5.6.0-beta.orig/qtbase/src/plugins/platforms/eglfs/qeglfsintegration.cpp	2015-12-05 01:05:24.000000000 +0100
++++ qt-5.6.0-beta/qtbase/src/plugins/platforms/eglfs/qeglfsintegration.cpp	2016-03-15 18:18:20.775122503 +0100
+@@ -125,9 +125,11 @@
+     if (!eglInitialize(m_display, &major, &minor))
+         qFatal("Could not initialize egl display");
+ 
+-    m_inputContext = QPlatformInputContextFactory::create();
++    if (m_firstInit) {
++        m_inputContext = QPlatformInputContextFactory::create();
+ 
+-    m_vtHandler.reset(new QFbVtHandler);
++        m_vtHandler.reset(new QFbVtHandler);
++    }
+ 
+     if (qt_egl_device_integration()->usesDefaultScreen())
+         addScreen(new QEglFSScreen(display()));
+@@ -135,8 +137,10 @@
+         qt_egl_device_integration()->screenInit();
+ 
+     // Input code may rely on the screens, so do it only after the screen init.
+-    if (!m_disableInputHandlers)
++    if (!m_disableInputHandlers && m_firstInit)
+         createInputHandlers();
++
++    m_firstInit = false;
+ }
+ 
+ void QEglFSIntegration::destroy()
+diff -aur qt-5.6.0-beta.orig/qtbase/src/plugins/platforms/eglfs/qeglfsintegration.h qt-5.6.0-beta/qtbase/src/plugins/platforms/eglfs/qeglfsintegration.h
+--- qt-5.6.0-beta.orig/qtbase/src/plugins/platforms/eglfs/qeglfsintegration.h	2015-12-05 01:05:24.000000000 +0100
++++ qt-5.6.0-beta/qtbase/src/plugins/platforms/eglfs/qeglfsintegration.h	2016-03-15 18:18:06.882792327 +0100
+@@ -100,6 +100,7 @@
+     QScopedPointer<QFbVtHandler> m_vtHandler;
+     QEvdevKeyboardManager *m_kbdMgr;
+     bool m_disableInputHandlers;
++    bool m_firstInit = true;
+ };
+ 
+ QT_END_NAMESPACE
