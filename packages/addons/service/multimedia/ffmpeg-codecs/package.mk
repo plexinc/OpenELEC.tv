@@ -76,7 +76,7 @@ makeinstall_target() {
   fi
 
   cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/Packages/* $ROOT/output/Packages/.
-  cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/konvergo-codecs-depends-linux-openelec-armv7-release*/lib/*.so* $INSTALL/usr/lib/.
+  cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/konvergo-codecs-depends-linux-openelec-*-release*/lib/*.so* $INSTALL/usr/lib/.
 }
 
 addon() {
