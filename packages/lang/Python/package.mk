@@ -24,7 +24,7 @@ PKG_LICENSE="OSS"
 PKG_SITE="http://www.python.org/"
 PKG_URL="http://www.python.org/ftp/python/$PKG_VERSION/$PKG_NAME-$PKG_VERSION.tar.xz"
 PKG_DEPENDS_HOST="zlib:host bzip2:host"
-PKG_DEPENDS_TARGET="toolchain Python:host expat zlib bzip2 openssl libffi"
+PKG_DEPENDS_TARGET="toolchain Python:host expat zlib bzip2 openssl libffi libressl:host"
 PKG_PRIORITY="optional"
 PKG_SECTION="lang"
 PKG_SHORTDESC="python: The Python programming language"
@@ -49,6 +49,7 @@ PKG_CONFIGURE_OPTS_TARGET="ac_cv_file_dev_ptc=no \
                            ac_cv_header_bluetooth_bluetooth_h=no \
                            ac_cv_header_bluetooth_h=no \
                            --with-threads \
+                           --with-ssl \
                            --enable-unicode=ucs4 \
                            --enable-ipv6 \
                            --disable-profiling \
