@@ -1,11 +1,11 @@
---- a/CMakeModules/WebClientResources.cmake	2015-09-25 09:51:19.252441592 +0200
-+++ b/CMakeModules/WebClientResources.cmake	2015-09-25 12:11:21.008441592 +0200
-@@ -13,7 +13,7 @@
-     EXPECTED_HASH SHA1=${WEB_CLIENT_HASH}
-     TIMEOUT 100
-     SHOW_PROGRESS
--    TLS_VERIFY ON
-+    TLS_VERIFY OFF
-   )
+--- a/CMakeModules/WebClientResources.cmake	2016-03-28 11:12:10.099683999 +0200
++++ b/CMakeModules/WebClientResources.cmake	2016-03-28 11:16:11.991683999 +0200
+@@ -22,7 +22,7 @@
+       EXPECTED_HASH SHA1=${WEB_CLIENT_HASH}
+       TIMEOUT 100
+       SHOW_PROGRESS
+-      TLS_VERIFY ON
++      TLS_VERIFY OFF
+     )
+   endif(NOT LOCAL_WEB_CLIENT)
  
-   find_program(BUNZIP2 bunzip2${CMAKE_EXECUTABLE_SUFFIX})
