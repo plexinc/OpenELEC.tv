@@ -47,13 +47,13 @@ fi
 
 if [ -z "$PMP_RELEASE_SHA" ]; then
   DEFAULT_GIT_REPO="${GIT_REPO:-dist-ninja}"
-  PLEX_GITSHA=`git ls-remote --heads git@github.com:plexinc/plex-media-player.git $DEFAULT_GIT_REPO|awk '{print substr($0,0,8)}'`
+  PLEX_GITSHA=`git ls-remote --heads git@github.com:plexinc/plex-media-player-private.git $DEFAULT_GIT_REPO|awk '{print substr($0,0,8)}'`
 else
   PLEX_GITSHA="`echo $PMP_RELEASE_SHA|cut -c -8`"
 fi
 
-if [ "`curl -sL -w "%{http_code}\\n" --user "plex-konvergo:$GIT_TOKEN" https://raw.githubusercontent.com/plexinc/plex-media-player/$PLEX_GITSHA/CMakeModules/VersionConfiguration.cmake -o /dev/null`" = "200" ]; then
-  PLEX_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/plex-media-player/$PLEX_GITSHA/CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g'`"
+if [ "`curl -sL -w "%{http_code}\\n" --user "plex-konvergo:$GIT_TOKEN" https://raw.githubusercontent.com/plexinc/plex-media-player-private/$PLEX_GITSHA/CMakeModules/VersionConfiguration.cmake -o /dev/null`" = "200" ]; then
+  PLEX_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/plex-media-player-private/$PLEX_GITSHA/CMakeModules/VersionConfiguration.cmake|awk '/MAJOR |MINOR |NANO / {gsub(/\)/,""); printf $2"."}  END {print ""}'|sed 's/.$//g'`"
 else
   PLEX_VERSION="dev"
 fi
