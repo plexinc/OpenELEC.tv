@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="ffmpeg-codecs"
-PKG_VERSION="pmp-codecs-oe"
+PKG_VERSION="konvergo-codecs"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPLv2.1+"
