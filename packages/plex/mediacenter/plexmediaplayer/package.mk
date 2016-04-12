@@ -67,22 +67,22 @@ if [ ! -z "$CI_CRASHDUMP_SECRET" ]; then
 fi
 
 unpack() {
-        if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
-          cd $BUILD/${PKG_NAME}-${PKG_VERSION} ; rm -rf build
-          git pull ; git reset --hard
-        else
+#        if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
+#          cd $BUILD/${PKG_NAME}-${PKG_VERSION} ; rm -rf build
+#          git pull ; git reset --hard
+#        else
           rm -rf $BUILD/${PKG_NAME}-${PKG_VERSION}
           git clone --depth 20 -b $PKG_VERSION git@github.com:plexinc/${PMP_REPO:-plex-media-player-private}.git $BUILD/${PKG_NAME}-${PKG_VERSION}
-          if [ ! -z "$PMP_RELEASE_SHA" ]; then
-            if [ "`git --git-dir=$BUILD/${PKG_NAME}-${PKG_VERSION}/.git --work-tree=$BUILD/${PKG_NAME}-${PKG_VERSION} log --pretty=%H|grep -c $PMP_RELEASE_SHA`" = "1" ]; then
-              git --git-dir=$BUILD/plexmediaplayer-${PKG_VERSION}/.git --work-tree=$BUILD/plexmediaplayer-${PKG_VERSION} checkout $PMP_RELEASE_SHA
-              echo "Checked out $PMP_RELEASE_SHA release from github."
-            else
-              echo "There are more than 20 commits in the REPO since the release build was initiated. Erroring out!"
-              exit 1
-            fi
-          fi
-        fi
+#          if [ ! -z "$PMP_RELEASE_SHA" ]; then
+#            if [ "`git --git-dir=$BUILD/${PKG_NAME}-${PKG_VERSION}/.git --work-tree=$BUILD/${PKG_NAME}-${PKG_VERSION} log --pretty=%H|grep -c $PMP_RELEASE_SHA`" = "1" ]; then
+#              git --git-dir=$BUILD/plexmediaplayer-${PKG_VERSION}/.git --work-tree=$BUILD/plexmediaplayer-${PKG_VERSION} checkout $PMP_RELEASE_SHA
+#              echo "Checked out $PMP_RELEASE_SHA release from github."
+#            else
+#              echo "There are more than 20 commits in the REPO since the release build was initiated. Erroring out!"
+#              exit 1
+#            fi
+#          fi
+#        fi
 
 	if [ "$PLEX_DEBUG" = yes ]; then
 		cd $BUILD/${PKG_NAME}-${PKG_VERSION}
