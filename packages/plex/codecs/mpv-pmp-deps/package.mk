@@ -60,9 +60,7 @@ unpack() {
 
   # Check file hash
   if [ "`sha1sum ${BUILD_DIR}/${DEPS_FILE} |awk '{print $1}'`" = "${FILE_HASH}" ]; then
-    set -x
     tar xjf ${BUILD_DIR}/${DEPS_FILE} -C ./${BUILD_DIR} --wildcards --no-anchored 'lib*so*' 'lib*pc' '*h' --exclude='*lib/components/*' --strip=1
-    set +x
     rm -f ${BUILD_DIR}/${DEPS_FILE}
   else
     exit 1
