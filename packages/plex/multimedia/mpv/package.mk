@@ -23,7 +23,7 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://nightlies.plex.tv"
 PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
-PKG_DEPENDS_TARGET="toolchain libass ffmpeg qt libdrm"
+PKG_DEPENDS_TARGET="toolchain libass qt libdrm"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="MPV Movie Player
@@ -37,6 +37,12 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-libsmbclient --disab
 PLEX_DUMP_SYMBOLS=yes
 
 MPV_EXTRA_CFLAGS="-I$PWD/$BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders"
+
+if [ "$CODECS" = yes ]; then
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET mpv-pmp-deps"
+else
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET ffmpeg"
+fi
 
 unpack() {
 

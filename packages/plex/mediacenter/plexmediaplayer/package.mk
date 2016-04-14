@@ -25,11 +25,12 @@ if [[ "$PMP_BRANCH" =~ .*/.* ]]; then
 fi
 
 case $PROJECT in
-     Generic|Nvidia_Legacy)
-     PKG_VERSION="${GIT_REPO:-dist-ninja}"
-     ;;
-     RPi|RPi2)
-     PKG_VERSION="${GIT_REPO:-dist-ninja}"
+     Generic|Nvidia_Legacy|RPi|RPi2)
+     if [ "${CODECS}" = "yes" ]; then
+       PKG_VERSION=codecs-oe
+     else
+       PKG_VERSION="${GIT_REPO:-dist-ninja}"
+     fi
      ;;
 esac
 
@@ -64,6 +65,18 @@ fi
 
 if [ ! -z "$CI_CRASHDUMP_SECRET" ]; then
   CRASHDUMP_SECRET="-DCRASHDUMP_SECRET=${CI_CRASHDUMP_SECRET}"
+fi
+
+if [ ! -z "${CODECS}" ]; then
+  ENABLE_CODECS="-DENABLE_CODECS=on"
+  case $PROJECT in
+     Generic|Nvidia_Legacy)
+     OE_ARCH="-DOE_ARCH=x86_64"
+     ;;
+     RPi|RPi2)
+     OE_ARCH="-DOE_ARCH=armv7"
+     ;;
+  esac
 fi
 
 unpack() {
@@ -132,6 +145,8 @@ configure_target() {
                         -DENABLE_MPV=on \
                         -DCMAKE_VERBOSE_MAKEFILE=on \
                         -DOPENELEC=on \
+			${OE_ARCH} \
+			${ENABLE_CODECS} \
                         -DENABLE_DUMP_SYMBOLS=on \
 			$CRASHDUMP_SECRET \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
@@ -151,6 +166,8 @@ configure_target() {
                         -DBUILD_TARGET="RPI" \
                         -DCMAKE_VERBOSE_MAKEFILE=on \
                         -DOPENELEC=on \
+                        ${OE_ARCH} \
+                        ${ENABLE_CODECS} \
                         -DENABLE_DUMP_SYMBOLS=on \
 			$CRASHDUMP_SECRET \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
