@@ -68,6 +68,7 @@ if [ ! -z "$CI_CRASHDUMP_SECRET" ]; then
 fi
 
 if [ ! -z "${CODECS}" ]; then
+  DEP_FOLDER="-DDEPENDCY_FOLDER=plexmediaplayer-openelec-codecs"
   ENABLE_CODECS="-DENABLE_CODECS=on"
   case $PROJECT in
      Generic|Nvidia_Legacy)
@@ -147,6 +148,7 @@ configure_target() {
                         -DOPENELEC=on \
 			${OE_ARCH} \
 			${ENABLE_CODECS} \
+			${DEP_FOLDER} \
                         -DENABLE_DUMP_SYMBOLS=on \
 			$CRASHDUMP_SECRET \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
@@ -168,6 +170,7 @@ configure_target() {
                         -DOPENELEC=on \
                         ${OE_ARCH} \
                         ${ENABLE_CODECS} \
+                        ${DEP_FOLDER} \
                         -DENABLE_DUMP_SYMBOLS=on \
 			$CRASHDUMP_SECRET \
                         $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
