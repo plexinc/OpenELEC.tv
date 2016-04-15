@@ -26,8 +26,8 @@ fi
 
 case $PROJECT in
      Generic|Nvidia_Legacy|RPi|RPi2)
-     if [ "${CODECS}" = "yes" ]; then
-       PKG_VERSION=codecs-oe
+     if [ "${CODECS}" = "true" ]; then
+       PKG_VERSION=master
      else
        PKG_VERSION="${GIT_REPO:-dist-ninja}"
      fi
