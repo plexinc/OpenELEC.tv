@@ -38,7 +38,7 @@ PLEX_DUMP_SYMBOLS=yes
 
 MPV_EXTRA_CFLAGS="-I$PWD/$BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders"
 
-if [ "$CODECS" = yes ]; then
+if [ "$CODECS" = true ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET mpv-pmp-deps"
 else
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET ffmpeg"
