@@ -20,8 +20,8 @@
 PKG_NAME="${MEDIACENTER,,}"
 
 # Edit CI repo name to exclude origin
-if [[ "$PMP_BRANCH" =~ .*/.* ]]; then
-  export GIT_REPO="`echo $PMP_BRANCH | sed 's/.*\///g'`"
+if [ ! -z "$PMP_BRANCH" ]; then
+  export GIT_REPO="`echo ${PMP_BRANCH/origin\//}`"
 fi
 
 case $PROJECT in
