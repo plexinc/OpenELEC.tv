@@ -77,6 +77,7 @@ make_target() {
 makeinstall_target() {
   cp -R lib/lib* ${SYSROOT_PREFIX}/usr/lib/
   cp -R include ${SYSROOT_PREFIX}/usr/
+  cp -R lib/pkgconfig/* ${SYSROOT_PREFIX/usr/lib/pkgconfig/
 
   echo $INSTALL
 
