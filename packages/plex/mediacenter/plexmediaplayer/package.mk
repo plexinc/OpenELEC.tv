@@ -69,12 +69,6 @@ if [ ! -z "${CODECS}" ]; then
   case $PROJECT in
      Generic|Nvidia_Legacy)
      OE_ARCH="-DOE_ARCH=x86_64"
-     if [ "$VAAPI_SUPPORT" = yes ]; then
-       PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libva-intel-driver"
-     fi
-     if [ "$VDPAU_SUPPORT" = yes ]; then
-       PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libvdpau"
-     fi
      ;;
      RPi|RPi2)
      OE_ARCH="-DOE_ARCH=armv7"
