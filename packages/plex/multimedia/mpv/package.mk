@@ -39,7 +39,15 @@ PLEX_DUMP_SYMBOLS=yes
 MPV_EXTRA_CFLAGS="-I$PWD/$BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders"
 
 if [ "$CODECS" = true ]; then
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET mpv-pmp-deps libva-intel-driver libvdpau"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET mpv-pmp-deps"
+  case $PROJECT in
+          Generic)
+          PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libva-intel-driver libvdpau"
+          ;;
+          Nvidia_Legacy)
+          PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libvdpau"
+          ;;
+  esac
 else
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET ffmpeg"
 fi
