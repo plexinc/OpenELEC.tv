@@ -32,6 +32,17 @@ PKG_LONGDESC="Special ffmpeg sauce"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+# Edit CI repo name to exclude origin
+if [ ! -z "$PMP_BRANCH" ]; then
+  export GIT_REPO="`echo ${PMP_BRANCH/origin\//}`"
+fi
+
+case $PROJECT in
+     Generic|Nvidia_Legacy|RPi|RPi2)
+       DEPS_PMP_REPO="${GIT_REPO:-dist-ninja}"
+     ;;
+esac
+
 unpack() {
   # Create build dir
   BUILD_DIR="${BUILD}/${PKG_NAME}-${PKG_VERSION}"
@@ -49,7 +60,7 @@ unpack() {
     ;;
   esac
 
-  PLEX_GITSHA=`git ls-remote --heads git@github.com:plexinc/${PMP_REPO:-plex-media-player}.git codecs-oe|awk '{print substr($0,0,8)}'`
+  PLEX_GITSHA=`git ls-remote --heads git@github.com:plexinc/${PMP_REPO:-plex-media-player}.git $DEPS_PMP_REPO |awk '{print substr($0,0,8)}'`
   DEPS_VERSION="`curl -s -u plex-konvergo:$GIT_TOKEN https://raw.githubusercontent.com/plexinc/${PMP_REPO:-plex-media-player}/$PLEX_GITSHA/CMakeModules/FetchDependencies.cmake|awk '/OPENELEC/ {getline;print $0}'|sed -n 's/.*NUMBER *\([^ ]*\))/\1/p'`"
   DEPS_HASH="`curl -s https://nightlies.plex.tv/directdl/plex-dependencies/plexmediaplayer-openelec-codecs/$DEPS_VERSION/hash.txt`"
   DEPS_FILE="konvergo-codecs-depends-$BUILD_TAG-release-$DEPS_HASH.tbz2"
