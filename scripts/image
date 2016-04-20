@@ -47,7 +47,7 @@ fi
 
 if [ -z "$PMP_RELEASE_SHA" ]; then
   DEFAULT_GIT_REPO="${GIT_REPO:-dist-ninja}"
-  PLEX_GITSHA=`git ls-remote --heads git@github.com:plexinc/${PMP_REPO:-plex-media-player}.git.git $DEFAULT_GIT_REPO|awk '{print substr($0,0,8)}'`
+  PLEX_GITSHA=`git ls-remote --heads git@github.com:plexinc/${PMP_REPO:-plex-media-player}.git $DEFAULT_GIT_REPO|awk '{print substr($0,0,8)}'`
 else
   PLEX_GITSHA="`echo $PMP_RELEASE_SHA|cut -c -8`"
 fi
