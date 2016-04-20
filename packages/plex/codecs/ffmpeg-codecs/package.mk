@@ -44,6 +44,7 @@ fi
 case $PROJECT in
         RPi|RPi2)
         BUILD_TAG="linux-openelec-armv7"
+        PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
         ;;
 
         Generic|Nvidia_Legacy)
